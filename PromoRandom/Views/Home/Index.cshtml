@@ -1,171 +1,9 @@
 ﻿@{
     ViewBag.Title = "Генератор промокодов";
-    Layout = null;
+   
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewBag.Title</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(160deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
-            touch-action: manipulation;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 100%;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.75);
-            padding: 20px 15px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            border: 2px solid gold;
-        }
-
-        h1 {
-            color: gold;
-            margin: 0 0 15px 0;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .slot-machine {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin: 15px 0;
-            perspective: 800px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-       
-
-        .generate-btn {
-            background: linear-gradient(45deg, #ff0000, #ff8c00);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
-            outline: none;
-            position: relative;
-            overflow: hidden;
-            font-weight: bold;
-            width: 100%;
-            max-width: 200px;
-            margin: 10px auto 0;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-
-            .generate-btn:active {
-                transform: scale(0.98);
-                box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
-            }
-
-            .generate-btn:disabled {
-                background: #555;
-                cursor: not-allowed;
-                transform: none !important;
-                box-shadow: none;
-            }
-
-        .jackpot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-size: 2rem;
-            color: gold;
-            font-weight: bold;
-            text-shadow: 0 0 8px red;
-            z-index: 100;
-            opacity: 0;
-            transition: all 0.5s;
-            white-space: nowrap;
-        }
-
-            .jackpot.active {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            .promo-char {
-            width: 40px;
-            height: 50px;
-            background-color: #111;
-            border: 2px solid gold;
-            color: gold;
-            font-size: 1.6rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .promo-display {
-            display: flex;
-            gap: 5px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .reel {
-            width: 40px;
-            height: 50px;
-            overflow: hidden;
-            border: 2px solid gold;
-            border-radius: 6px;
-            background: #111;
-            box-shadow: 0 0 10px gold;
-            position: relative;
-        }
-
-        .symbols {
-            color: gold;
-            font-weight: bold;
-            font-size: 1.5rem;
-            line-height: 50px; /* высота одной буквы */
-            user-select: none;
-        }
-
-        .setting {
-         width:30px;
-         height:30px;
-         display:block;
-         position:absolute;
-         top:0px;
-
-        }
-    </style>
-</head>
-<body>
    <div class="setting"><a href="/Home/Setting"><img src="~/image/настройки.png" alt="Alternate Text" /></a></div>
     <div class="container">
         <h1>ГЕНЕРАТОР ПРОМОКОДОВ</h1>
@@ -182,89 +20,34 @@
             <div class="reel"><div class="symbols">?</div></div>
         </div>
 
-        <div class="prize-text" id="prizeText" style="margin-top: 10px; font-size: 1.2rem; color: gold;">
+       @*  <div class="prize-text" id="prizeText" style="margin-top: 10px; font-size: 1.2rem; color: gold;">
             <!-- Здесь появится приз -->
-        </div>
+        </div> *@
 
         <button class="generate-btn" id="generateBtn">SPIN</button>
     </div>
 
+    <!-- modal okno -->
+<div id="resultModal" class="modal">
+    <div id="container"></div>
+    <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <h2 id="prizeTitle">Приз</h2>
+        <h3 style="font-size: 1.1rem;">Вы выиграли этот приз!</h3>
+
+        <div id="winnerName" class="winner-name"></div>
 
 
+        <div id="promoCodeText" style="font-size: 0.8rem; color: white; margin-top: 5px;"></div>
+      
+
+    </div>
+</div>
  <script>
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-        const reelCount = 8;
-
-        const promoDisplay = document.getElementById("promoDisplay");
-
-        // Создаем 8 барабанов при загрузке страницы (если не созданы в HTML)
-        function createReels() {
-            promoDisplay.innerHTML = "";
-            for (let i = 0; i < reelCount; i++) {
-                const reel = document.createElement("div");
-                reel.className = "reel";
-
-                const symbols = document.createElement("div");
-                symbols.className = "symbols";
-
-                // Добавляем все символы как строки
-                symbols.innerHTML = chars.join("<br>");
-                reel.appendChild(symbols);
-                promoDisplay.appendChild(reel);
-            }
-        }
-        createReels();
-
-        document.getElementById("generateBtn").addEventListener("click", () => {
-            fetch("/Home/GetPromoCode")
-                .then((res) => res.json())
-                .then((data) => {
-                    const code = data.promoCode.toUpperCase();
-                    const reels = document.querySelectorAll(".reel .symbols");
-
-                    reels.forEach((symbolsDiv, i) => {
-                        let position = 0;
-                        const targetChar = code[i];
-                        const targetIndex = chars.indexOf(targetChar);
-
-                        // Запускаем анимацию кручения (прокрутки вниз)
-                        let speed = 5; // ms между шагами прокрутки
-                        let steps = 20;
-                        const maxSteps = 180 + i * 95; // разная длительность для каждого барабана
-
-                        function spin() {
-                            steps++;
-                            position += 1; // смещение вниз на 1px
-                            if (position > 50 * chars.length) position = 0; // зациклить
-
-                            symbolsDiv.style.transform = `translateY(-${position}px)`;
-
-                            if (steps < maxSteps) {
-                                setTimeout(spin, speed);
-                            } else {
-                                // Останавливаемся на нужном символе
-                                // Смещаем точно, чтобы показать нужный символ сверху
-                                const finalPosition = 50 * targetIndex;
-                                symbolsDiv.style.transition = "transform 0.8s ease-out";
-                                symbolsDiv.style.transform = `translateY(-${finalPosition}px)`;
-                            }
-                        }
-                        spin();
-                    });
-
-                    // Показываем приз через время, когда все барабаны остановятся
-                    setTimeout(() => {
-                        document.getElementById("prizeText").textContent = data.prize;
-                    }, 8000);
-                })
-                .catch(() => {
-                    document.getElementById("prizeText").textContent = "Ошибка получения промокода";
-                });
-        });
+     
 </script>
 
 
 
 
-</body>
-</html>

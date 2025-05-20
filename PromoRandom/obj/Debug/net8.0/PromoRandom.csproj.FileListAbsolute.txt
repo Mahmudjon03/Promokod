@@ -35,6 +35,7 @@ C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.C
 C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cache
 C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cs
+C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.sourcelink.json
 C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\User\Desktop\Promokod\PromoRandom\obj\Debug\net8.0\staticwebassets\msbuild.PromoRandom.Microsoft.AspNetCore.StaticWebAssets.props

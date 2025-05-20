@@ -20,3 +20,217 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(160deg, #1a2a6c, #b21f1f, #fdbb2d);
+    color: white;
+    touch-action: manipulation;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.75);
+    padding: 20px 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    border: 2px solid gold;
+}
+
+h1 {
+    color: gold;
+    margin: 0 0 15px 0;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.slot-machine {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 15px 0;
+    perspective: 800px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+
+.generate-btn {
+    background: linear-gradient(45deg, #ff0000, #ff8c00);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    font-weight: bold;
+    width: 100%;
+    max-width: 200px;
+    margin: 10px auto 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+    .generate-btn:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+    }
+
+    .generate-btn:disabled {
+        background: #555;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none;
+    }
+
+.jackpot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 2rem;
+    color: gold;
+    font-weight: bold;
+    text-shadow: 0 0 8px red;
+    z-index: 100;
+    opacity: 0;
+    transition: all 0.5s;
+    white-space: nowrap;
+}
+
+    .jackpot.active {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+.promo-char {
+    width: 40px;
+    height: 50px;
+    background-color: #111;
+    border: 2px solid gold;
+    color: gold;
+    font-size: 1.6rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.promo-display {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.reel {
+    width: 40px;
+    height: 50px;
+    overflow: hidden;
+    border: 2px solid gold;
+    border-radius: 6px;
+    background: #111;
+    box-shadow: 0 0 10px gold;
+    position: relative;
+}
+
+.symbols {
+    color: gold;
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 50px; /* ¬Ó¬í¬ã¬à¬ä¬Ñ ¬à¬Õ¬ß¬à¬Û ¬Ò¬å¬Ü¬Ó¬í */
+    user-select: none;
+}
+
+.setting {
+    width: 30px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    top: 0px;
+}
+/*style modal okno*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background: linear-gradient(160deg, #1a2a6c, #b21f1f, #fdbb2d);
+    margin: 15% auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 65%;
+    text-align: center;
+    border-radius: 20px;
+    font-size:50px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+    margin-left:88%;
+    margin-bottom:20px;
+}
+
+    .close:hover {
+        color: #ff5555;
+    }
+
+.confetti {
+    position: fixed;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.winner-name {
+    font-family: cursive;
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: gold;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotateZ(360deg);
+        opacity: 0;
+    }
+}
