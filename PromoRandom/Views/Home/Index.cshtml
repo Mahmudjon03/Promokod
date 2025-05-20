@@ -1,12 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Генератор промокодов";
+    ViewBag.Title = "Чархи «ИМКОН»";
    
 }
 
-
    <div class="setting"><a href="/Home/Setting"><img src="~/image/настройки.png" alt="Alternate Text" /></a></div>
     <div class="container">
-        <h1>ГЕНЕРАТОР ПРОМОКОДОВ</h1>
+    <h1>Чархи «ИМКОН»</h1>
 
         <div class="promo-display" id="promoDisplay">
             <!-- 8 барабанов с символами -->
@@ -19,35 +18,16 @@
             <div class="reel"><div class="symbols">?</div></div>
             <div class="reel"><div class="symbols">?</div></div>
         </div>
-
-       @*  <div class="prize-text" id="prizeText" style="margin-top: 10px; font-size: 1.2rem; color: gold;">
-            <!-- Здесь появится приз -->
-        </div> *@
-
-        <button class="generate-btn" id="generateBtn">SPIN</button>
+    <button class="generate-btn" id="generateBtn">Чарх</button>
     </div>
 
     <!-- modal okno -->
 <div id="resultModal" class="modal">
     <div id="container"></div>
     <div class="modal-content">
-        <span class="close">&times;</span>
-
         <h2 id="prizeTitle">Приз</h2>
         <h3 style="font-size: 1.1rem;">Вы выиграли этот приз!</h3>
-
         <div id="winnerName" class="winner-name"></div>
-
-
         <div id="promoCodeText" style="font-size: 0.8rem; color: white; margin-top: 5px;"></div>
-      
-
     </div>
 </div>
- <script>
-     
-</script>
-
-
-
-

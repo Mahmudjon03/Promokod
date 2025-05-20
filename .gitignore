@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+out/
+
+# ASP.NET
+wwwroot/lib/
+wwwroot/node_modules/
+
+# OS generated files
+.DS_Store
+Thumbs.db
