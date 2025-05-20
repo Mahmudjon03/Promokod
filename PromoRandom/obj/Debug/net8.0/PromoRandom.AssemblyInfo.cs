@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PromoRandom")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65c62fce9cf2c9100a06de470af486374ba10c74")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c15106a439a840334847f9ea93d640607135cfd")]
 [assembly: System.Reflection.AssemblyProductAttribute("PromoRandom")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PromoRandom")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

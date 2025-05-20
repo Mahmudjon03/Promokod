@@ -2,11 +2,11 @@
 using System.Data;
 
 
-namespace AksiyaBot
+namespace PromoRandom.Services
 {
     public class DatabaseService()
     {
-        private readonly string _connectionString = "Server=localhost;Database=promokod_db;Uid=root;Pwd=;";
+        private readonly string _connectionString = "Server=localhost;Database=imkon_aksiya;Uid=root;Pwd=;";
 
         public async Task<List<string>> GetPromoCodesByUserAsync()
         {
@@ -16,8 +16,7 @@ namespace AksiyaBot
             var query = @"
                 SELECT p.code
                 FROM promo_codes p
-                JOIN users u ON p.user_id = u.id LIMIT 0, 25;
-               ";
+                JOIN users u ON p.user_id = u.id LIMIT 0, 25;";
             using var cmd = new MySqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
@@ -28,9 +27,8 @@ namespace AksiyaBot
             return codes;
         }
 
-        public async Task<string> GetUserViePromokod(string promokod)
+        public async Task<string> GetUserByPromokod(string promokod)
         {
-            var codes = new List<string>();
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
             var query = @"select name from users 
@@ -42,6 +40,5 @@ namespace AksiyaBot
             await reader.ReadAsync();
             return reader.GetString(0);
         }
-
     }
 }
