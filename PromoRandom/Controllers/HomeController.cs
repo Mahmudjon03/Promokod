@@ -4,15 +4,12 @@ using PromoRandom.Services;
 
 namespace PromoRandom.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(WinnerNotificationService winnerNotifier) : Controller
     {
 
-        private readonly DatabaseService _databaseService;
+        private readonly DatabaseService _databaseService = new();
+        private readonly WinnerNotificationService _winnerNotifier = winnerNotifier;
 
-        public HomeController()
-        {
-            _databaseService = new DatabaseService();
-        }
         public IActionResult Index()
         {
             return View();
@@ -25,17 +22,20 @@ namespace PromoRandom.Controllers
             var promoCodes = await _databaseService.GetPromoCodesByUserAsync();
             string code = promoCodes[random.Next(promoCodes.Count)];
 
-            string user = await _databaseService.GetUserByPromokod(code);
+            var user = await _databaseService.GetUserByPromokodAsync(code);
 
+            if (user != null)
+            {
+                await _winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language);
+            }
 
-            return Json(new { promoCode = code, prize = $"{user} 🎁 IPhone 16 Pro Max 😍!" });
-
+            return Json(new { promoCode = code, prize = $"{user.Name} 🎁 IPhone 16 Pro Max 😍!" });
         }
 
         [HttpGet]
         public IActionResult Setting()
         {
-            return View();  
+            return View();
         }
     }
 }

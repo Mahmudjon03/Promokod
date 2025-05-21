@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using PromoRandom.Models;
 using System.Data;
 
 
@@ -39,6 +40,34 @@ namespace PromoRandom.Services
             using var reader = await cmd.ExecuteReaderAsync();
             await reader.ReadAsync();
             return reader.GetString(0);
+        }
+
+        public async Task<User?> GetUserByPromokodAsync(string promokod)
+        {
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            var query = @"
+                SELECT id, language, name, phone, chat_id 
+                FROM users 
+                WHERE id = (SELECT user_id FROM promo_codes WHERE code = @promokod);";
+
+            using var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@promokod", promokod);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                return new User
+                {
+                    Id = reader.GetInt32("id"),
+                    Language = reader["language"] as string,
+                    Name = reader["name"] as string,
+                    Phone = reader["phone"] as string,
+                    ChatId = reader.GetInt64("chat_id")
+                };
+            }
+            return null; // Если промокод не найден
         }
     }
 }
