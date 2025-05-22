@@ -26,7 +26,7 @@ namespace PromoRandom.Controllers
 
             if (user != null)
             {
-                await _winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language);
+                await _winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language, "IPhone 16 Pro Max");
             }
 
             return Json(new { promoCode = code, prize = $"{user.Name} 🎁 IPhone 16 Pro Max 😍!" });
