@@ -6,7 +6,7 @@ namespace PromoRandom.Services
 {
     public class DatabaseService()
     {
-        private readonly string _connectionString = "Server=localhost;Database=imkon_aksiya;Uid=root;Pwd=;";
+        private readonly string _connectionString = "Server=localhost;Database=promokod_db;Uid=root;Pwd=;";
 
         public async Task<List<string>> GetPromoCodesByUserAsync()
         {

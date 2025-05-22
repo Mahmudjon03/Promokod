@@ -86,9 +86,11 @@ document.getElementById("generateBtn").addEventListener("click", () => {
             document.getElementById("prizeText").textContent = "Ошибка получения промокода";
         });
 });
+
 document.querySelector(".close").addEventListener("click", () => {
     document.getElementById("resultModal").style.display = "none";
 });
+
 window.addEventListener("click", (event) => {
     const modal = document.getElementById("resultModal");
     if (event.target === modal) modal.style.display = "none";
