@@ -1,37 +1,53 @@
 ﻿@{
     ViewBag.Title = "Чархи «ИМКОН»";
-   
+
 }
 
-<div class="setting"><a href="/Home/Setting"><img src="~/image/настройки.png" alt="Alternate Text" /></a></div>
-    <div class="container">
-
+@model List<Prize>
+<div class="container">
+    <select name="prizeId" id="prizeSelect">
+       <option disabled selected value="">-- Интихоби приз --</option>
+        @foreach (var prize in Model)
+        {
+            <option value="@prize.Id">@prize.Name</option>
+        }
+    </select>
     <h1>Чархи «ИМКОН» </h1>
     <div class="promo-display" id="promoDisplay">
-            <!-- 8 барабанов с символами -->
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-        </div>
-    <button class="generate-btn" id="generateBtn">Чарх</button>
+        <!-- 8 барабанов с символами -->
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
+        <div class="reel"><div class="symbols">?</div></div>
     </div>
+    <button class="generate-btn" id="generateBtn">Чарх</button>
+</div>
 
-    <!-- modal okno -->
+<!-- modal okno -->
 <div id="resultModal" class="modal">
     <div id="container"></div>
     <div class="modal-content">
-        <h2 id="prizeTitle">Приз</h2>
-        <h3 style="font-size: 1.1rem;">Вы выиграли этот приз!</h3>
+        <h2 id="prizeTitle"></h2>
+        <h3 style="font-size: 1.2rem; color:gold;">Вы выиграли этот приз!</h3>
         <div id="winnerName" class="winner-name"></div>
-        <div id="promoCodeText" style="font-size: 0.8rem; color: white; margin-top: 5px;"></div>
-              <div class="btn-mok">
-            <button class="btn-next">  </button>
-       <button class ="btn-next"> >> </button>
-   </div>
+        <div id="promoCodeText" style="font-size: 1.2rem; color: gold; margin-top: 5px;"></div>
+        <div class="btn-mok">
+            <div style=" display:flex;">
+                <button class="btn-next" onclick="location.href='/Home/Setting'">
+                   <img src="~/image/setting.png" alt="Alternate Text" />
+                </button>
+                <button class="btn-next" id="updateBtn">
+                    <img src="~/image/update.png" alt="Alternate Text" />
+                </button>
+
+            </div>
+            <button class="btn-next" id="nextBtn">
+                <img src="~/image/next.png" alt="Alternate Text" />
+            </button>
+        </div>
     </div>
 </div>

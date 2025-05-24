@@ -1,4 +1,4 @@
-﻿@model List<Priz>
+﻿@model List<Prize>
 @{
     ViewBag.Title = "Настройки Спинера";
 }
@@ -16,7 +16,7 @@
     <h2>Добавить приз</h2>
 
     <form method="post" asp-action="AddPrize">
-        <input type="text" name="prizName" placeholder="Введите название приза" required />
+        <input type="text" name="Name" placeholder="Введите название приза" required />
         <button type="submit">Добавить</button>
     </form>
 
@@ -29,7 +29,7 @@
             @foreach (var prize in Model)
             {
                 <li>
-                    @prize.PrizName - @(prize.PrizState ? "Выдан" : "Не выдан")
+                    @prize.Name 
                 </li>
             }
         </ul>
@@ -39,7 +39,7 @@
         <p>Призы ещё не добавлены.</p>
     }
 
-    <button class="btn-spin" onclick="location.href='/Home/Index'">
-        Повторно выкрутить
+    <button class="btn-spin" onclick="location.href='/Home/Index/Id?'">
+         Выкрутить
     </button>
 </div>

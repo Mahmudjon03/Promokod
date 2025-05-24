@@ -14,13 +14,13 @@ namespace PromoRandom.Controllers
         {
             _databaseService = new DatabaseService();
         }
-        public IActionResult Index()
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            var prizeList = HttpContext.Session.GetObjectFromJson<List<Priz>>("PrizeList") ?? new List<Priz>();
-            var getPriz = prizeList.Where(z => z.PrizState = false).ToList();
+            var priz = await _databaseService.GetPrizes();
 
-
-            return View(getPriz.FirstOrDefault());
+            return View(priz);
         }
 
         [HttpGet]
@@ -32,31 +32,43 @@ namespace PromoRandom.Controllers
 
             string user = await _databaseService.GetUserByPromokod(code);
 
-
-            return Json(new { promoCode = code, prize = $"{user} 🎁 IPhone 16 Pro Max 😍!" });
+            return Json(new { promoCode = code, prize = $"{user} 🎁 priz😍!" });
 
         }
 
         [HttpGet]
-        public IActionResult Setting()
+        public async Task<IActionResult> Setting()
         {
-            var prizeList = HttpContext.Session.GetObjectFromJson<List<Priz>>("PrizeList") ?? new List<Priz>();
-            return View(prizeList);
+            var prize = await _databaseService.GetPrizes();
+
+            return View(prize);
         }
 
-        
         [HttpPost]
-        public IActionResult AddPrize(string prizName)
+        public async Task<IActionResult> AddPrize(Prize model)
         {
-            if (string.IsNullOrWhiteSpace(prizName))
+            if (model == null)
                 return RedirectToAction("Setting");
 
-            var prizeList = HttpContext.Session.GetObjectFromJson<List<Priz>>("PrizeList") ?? new List<Priz>();
-            prizeList.Add(new Priz { PrizName = prizName });
-
-            HttpContext.Session.SetObjectAsJson("PrizeList", prizeList);
+            await _databaseService.AddPrizeAsync(model);
 
             return RedirectToAction("Setting");
+        }
+
+        [HttpPost]
+        public IActionResult AddPrizUser(AddPrizUserModel model)
+        {
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SavePrizeResult([FromBody]AddPrizUserModel model)
+        {
+            
+           await _databaseService.UpdatePrizeAsync(model);
+
+             return Ok();
         }
     }
 }

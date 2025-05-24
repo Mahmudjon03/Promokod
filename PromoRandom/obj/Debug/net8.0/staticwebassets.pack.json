@@ -13,6 +13,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\User\\Desktop\\Promokod\\Promokod\\PromoRandom\\wwwroot\\image\\next.png",
+      "PackagePath": "staticwebassets\\image\\next.png"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\Promokod\\Promokod\\PromoRandom\\wwwroot\\image\\setting.png",
+      "PackagePath": "staticwebassets\\image\\setting.png"
+    },
+    {
+      "Id": "C:\\Users\\User\\Desktop\\Promokod\\Promokod\\PromoRandom\\wwwroot\\image\\update.png",
+      "PackagePath": "staticwebassets\\image\\update.png"
+    },
+    {
       "Id": "C:\\Users\\User\\Desktop\\Promokod\\Promokod\\PromoRandom\\wwwroot\\image\\настройки.png",
       "PackagePath": "staticwebassets\\image\\настройки.png"
     },
