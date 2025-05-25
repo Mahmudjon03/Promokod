@@ -2,18 +2,11 @@
 using PromoRandom.Models;
 using PromoRandom.Services;
 
-
 namespace PromoRandom.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(WinnerNotificationService winnerNotifier) : Controller
     {
-
-        private readonly DatabaseService _databaseService;
-
-        public HomeController()
-        {
-            _databaseService = new DatabaseService();
-        }
+        private readonly DatabaseService _databaseService = new();
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -30,10 +23,14 @@ namespace PromoRandom.Controllers
             var promoCodes = await _databaseService.GetPromoCodesByUserAsync();
             string code = promoCodes[random.Next(promoCodes.Count)];
 
-            string user = await _databaseService.GetUserByPromokod(code);
+            var user = await _databaseService.GetUserByPromokodAsync(code);
+
+            if (user != null)
+            {
+                await winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language, "IPhone 16 Pro Max");
+            }
 
             return Json(new { promoCode = code, prize = $"{user} 🎁 priz😍!" });
-
         }
 
         [HttpGet]
@@ -58,17 +55,15 @@ namespace PromoRandom.Controllers
         [HttpPost]
         public IActionResult AddPrizUser(AddPrizUserModel model)
         {
-
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public async Task<IActionResult> SavePrizeResult([FromBody]AddPrizUserModel model)
+        public async Task<IActionResult> SavePrizeResult([FromBody] AddPrizUserModel model)
         {
-            
-           await _databaseService.UpdatePrizeAsync(model);
+            await _databaseService.UpdatePrizeAsync(model);
 
-             return Ok();
+            return Ok();
         }
     }
 }
