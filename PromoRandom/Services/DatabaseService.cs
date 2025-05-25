@@ -71,7 +71,7 @@ namespace PromoRandom.Services
         }
 
 
-        public async Task UpdatePrizeAsync(AddPrizUserModel prize)
+        public async Task UpdatePrizeAsync(AddPrizeUserModel prize)
         {
             try
             {
@@ -86,8 +86,8 @@ namespace PromoRandom.Services
                         where code = @promocode;";
 
                 using var cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@id", prize.PrizId);
-                cmd.Parameters.AddWithValue("@promocode", prize.Promocod);
+                cmd.Parameters.AddWithValue("@id", prize.PrizeId);
+                cmd.Parameters.AddWithValue("@promocode", prize.Promocode);
                 await cmd.ExecuteNonQueryAsync();
             }
             catch (Exception ex)
