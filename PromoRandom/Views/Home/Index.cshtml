@@ -6,13 +6,13 @@
 @model List<Prize>
 <div class="container">
     <select name="prizeId" id="prizeSelect">
-       <option disabled selected value="">-- Интихоби приз --</option>
+        <option disabled selected value="">-- Чархи «ИМКОН» --</option>
         @foreach (var prize in Model)
         {
             <option value="@prize.Id">@prize.Name</option>
         }
     </select>
-    <h1>Чархи «ИМКОН» </h1>
+    <h1>-- Интихоби приз --</h1>
     <div class="promo-display" id="promoDisplay">
         <!-- 8 барабанов с символами -->
         <div class="reel"><div class="symbols">?</div></div>

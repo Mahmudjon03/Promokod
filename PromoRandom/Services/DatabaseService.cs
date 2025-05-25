@@ -8,7 +8,7 @@ namespace PromoRandom.Services
 {
     public class DatabaseService()
     {
-        private readonly string _connectionString = "Server=localhost;Database=promokod_db;Uid=root;Pwd=;";
+        private readonly string _connectionString = "Server=localhost;Database=imkon_db;Uid=root;Pwd=;";
 
         public async Task<List<string>> GetPromoCodesByUserAsync()
         {
@@ -49,7 +49,7 @@ namespace PromoRandom.Services
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var query = @"INSERT INTO prize (prize_name) VALUES (@name);";
+            var query = @"INSERT INTO prizes (name) VALUES (@name);";
 
             using var cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@name", prize.Name);
@@ -79,24 +79,22 @@ namespace PromoRandom.Services
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.OpenAsync();
 
-                var query = @"UPDATE prize 
-                        SET  promokod_id = (select id from promo_codes where code = @promocod) 
+                var query = @"UPDATE prizes
+                        SET  promokod_id = (select id from promo_codes where code = @promocode) 
                         WHERE id = @id;
                         update promo_codes 
                         set state = 0 
-                        where code = @promocod;";
+                        where code = @promocode;";
 
                 using var cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", prize.PrizId);
-                cmd.Parameters.AddWithValue("@promocod", prize.Promocod);
+                cmd.Parameters.AddWithValue("@promocode", prize.Promocod);
                 await cmd.ExecuteNonQueryAsync();
             }
             catch (Exception ex)
             {
-
                 string error = ex.Message;
             }
-           
         }
 
         public async Task<List<Prize>> GetPrizes()
@@ -106,7 +104,7 @@ namespace PromoRandom.Services
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var query = "SELECT * FROM prize";
+            var query = "SELECT * FROM prizes";
             using var cmd = new MySqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
 
@@ -116,7 +114,6 @@ namespace PromoRandom.Services
                 {
                     Id = reader.GetInt16(0),
                     Name = reader.GetString(1),
-
                 };
                 list.Add(prize);
             }
@@ -127,7 +124,7 @@ namespace PromoRandom.Services
         {
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
-            var query = @"SELECT * FROM `prize` WHERE promokod_id = 0 LIMIT 1;";
+            var query = @"SELECT * FROM `prizes` WHERE promokod_id = 0 LIMIT 1;";
             using var cmd = new MySqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
             await reader.ReadAsync();
@@ -138,8 +135,5 @@ namespace PromoRandom.Services
             };
             return priz;
         }
-
-       
-
     }
 }
