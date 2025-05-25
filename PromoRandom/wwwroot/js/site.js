@@ -20,7 +20,7 @@ function createReels() {
     }
 }
 createReels();
-
+const selectedPrizeId = document.getElementById("prizeSelect").value;
 document.getElementById("generateBtn").addEventListener("click", () => {
     fetch("/Home/GetPromoCode")
         .then((res) => res.json())
@@ -34,14 +34,14 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                 const targetIndex = chars.indexOf(targetChar);
 
                 // Запускаем анимацию кручения (прокрутки вниз)
-                let speed = 5; // ms между шагами прокрутки
-                let steps = 20;
-                const maxSteps = 180 + i * 95; // разная длительность для каждого барабана
+                let speed = 10; // ms между шагами прокрутки
+                let steps = 80;
+                const maxSteps = 380 + i * 155; // разная длительность для каждого барабана
 
                 function spin() {
                     steps++;
-                    position += 1; // смещение вниз на 1px
-                    if (position > 50 * chars.length) position = 0; // зациклить
+                    position += 2; // смещение вниз на 1px
+                    if (position > 150 * chars.length) position = 0; // зациклить
 
                     symbolsDiv.style.transform = `translateY(-${position}px)`;
 
@@ -50,8 +50,8 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                     } else {
                         // Останавливаемся на нужном символе
                         // Смещаем точно, чтобы показать нужный символ сверху
-                        const finalPosition = 50 * targetIndex;
-                        symbolsDiv.style.transition = "transform 0.8s ease-out";
+                        const finalPosition = 150 * targetIndex;
+                        symbolsDiv.style.transition = "transform 1.3s ease-out";
                         symbolsDiv.style.transform = `translateY(-${finalPosition}px)`;
                     }
                 }
@@ -61,10 +61,11 @@ document.getElementById("generateBtn").addEventListener("click", () => {
             // Показываем приз через время, когда все барабаны остановятся
             setTimeout(() => {
                 const modal = document.getElementById("resultModal");
-                const prizeTitle = document.getElementById("prizeTitle");
+                const select = document.getElementById("prizeSelect");
+                const prizeTitle = select.options[select.selectedIndex].text;
                 const winnerName = document.getElementById("winnerName");
                 const promoCodeText = document.getElementById("promoCodeText");
-
+                console.log(prizeTitle);
                 // Распаковываем имя пользователя и приз
                 const prizeText = data.prize; // например: "Ali 🎁 IPhone 16 Pro Max 😍!"
                 const nameMatch = prizeText.match(/^(.+?)\s*🎁/);
@@ -78,21 +79,52 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                 promoCodeText.textContent = data.promoCode;
 
                 modal.style.display = "block";
-
+                document.getElementById("prizeTitle").textContent = prizeTitle;
                 createConfetti(false);
-            }, 8000);
+            }, 16000);
         })
         .catch(() => {
             document.getElementById("prizeText").textContent = "Ошибка получения промокода";
         });
 });
-document.querySelector(".close").addEventListener("click", () => {
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+    const selectedPrizeId = document.getElementById("prizeSelect").value;
+    const promoCode = document.getElementById("promoCodeText").textContent;
+    console.log(promoCode)
+    if (!selectedPrizeId || !promoCode) {
+        alert("Приз или промокод отсутствует");
+        return;
+    }
+
+    fetch("/Home/SavePrizeResult", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            PrizId: selectedPrizeId,
+            Promocod: promoCode
+        })
+    })
+        .then(res => {
+            if (res.ok) {
+               
+                location.reload(); // или перейти на другую страницу
+            } else {
+                alert("Ошибка при сохранении!");
+            }
+        });
+});
+
+
+document.getElementById("updateBtn").addEventListener("click", () => {
+    // Скрываем модальное окно
     document.getElementById("resultModal").style.display = "none";
+   
 });
-window.addEventListener("click", (event) => {
-    const modal = document.getElementById("resultModal");
-    if (event.target === modal) modal.style.display = "none";
-});
+
+
 
 
 function createConfetti(isGold = false) {

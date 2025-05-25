@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PromoRandom.Models;
 using PromoRandom.Services;
-
 
 namespace PromoRandom.Controllers
 {
     public class HomeController(WinnerNotificationService winnerNotifier) : Controller
     {
-
         private readonly DatabaseService _databaseService = new();
-        private readonly WinnerNotificationService _winnerNotifier = winnerNotifier;
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var priz = await _databaseService.GetPrizes();
+
+            return View(priz);
         }
 
         [HttpGet]
@@ -26,16 +27,43 @@ namespace PromoRandom.Controllers
 
             if (user != null)
             {
-                await _winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language, "IPhone 16 Pro Max");
+                await winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language, "IPhone 16 Pro Max");
             }
 
-            return Json(new { promoCode = code, prize = $"{user.Name} 🎁 IPhone 16 Pro Max 😍!" });
+            return Json(new { promoCode = code, prize = $"{user} 🎁 priz😍!" });
         }
 
         [HttpGet]
-        public IActionResult Setting()
+        public async Task<IActionResult> Setting()
         {
-            return View();
+            var prize = await _databaseService.GetPrizes();
+
+            return View(prize);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPrize(Prize model)
+        {
+            if (model == null)
+                return RedirectToAction("Setting");
+
+            await _databaseService.AddPrizeAsync(model);
+
+            return RedirectToAction("Setting");
+        }
+
+        [HttpPost]
+        public IActionResult AddPrizUser(AddPrizUserModel model)
+        {
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SavePrizeResult([FromBody] AddPrizUserModel model)
+        {
+            await _databaseService.UpdatePrizeAsync(model);
+
+            return Ok();
         }
     }
 }

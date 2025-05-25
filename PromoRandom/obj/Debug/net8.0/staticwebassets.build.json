@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "PnKu5FwDWs3cIlB8ClXFP/yU/Gtx4wqJaZZ+C8Zy9h4=",
+  "Hash": "MF3h3CCzUYClewIn6E8ntza9y+XAdx7EPKadQliDJYo=",
   "Source": "PromoRandom",
   "BasePath": "_content/PromoRandom",
   "Mode": "Default",
@@ -73,8 +73,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "byhkm8xgbg",
-      "Integrity": "4513Cer6FVo7yGQU+ataT/czHFwmSsZA4vorWGrokJ0=",
+      "Fingerprint": "7arh8yb46q",
+      "Integrity": "odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -99,6 +99,69 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\next.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/next#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "e7cby1dg90",
+      "Integrity": "dhf1wjo/zpPKKeX/Z+PrqNzIYzA0B+ECpe9FHqw8kZE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\next.png"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\setting.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/setting#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "khbrb5e44q",
+      "Integrity": "GI71xRXZE2S91r1s6e+IdE8tUqdJCs5A02dbb68Jres=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\setting.png"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\update.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/update#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "v92p9akedf",
+      "Integrity": "PVeP6ONAEGqxmlRzfAYKHHy8fF2tz9brz6a1dmYfSOc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\update.png"
     },
     {
       "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\настройки.png",
@@ -136,8 +199,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "n1dmo2u6wm",
-      "Integrity": "dVRifrJBjBDD+Os1WqWosA1W5xwVwmixmk5IKdzTYik=",
+      "Fingerprint": "odcdsqxrrg",
+      "Integrity": "7JPILmF1PpxVtZByvA4f4qIQCdzBF7sUj+MbfLFZIac=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
@@ -1342,7 +1405,7 @@
   ],
   "Endpoints": [
     {
-      "Route": "css/site.byhkm8xgbg.css",
+      "Route": "css/site.7arh8yb46q.css",
       "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1352,7 +1415,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4760"
+          "Value": "7883"
         },
         {
           "Name": "Content-Type",
@@ -1360,11 +1423,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"4513Cer6FVo7yGQU+ataT/czHFwmSsZA4vorWGrokJ0=\""
+          "Value": "\"odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 17:35:30 GMT"
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1374,7 +1437,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "byhkm8xgbg"
+          "Value": "7arh8yb46q"
         },
         {
           "Name": "label",
@@ -1382,7 +1445,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-4513Cer6FVo7yGQU+ataT/czHFwmSsZA4vorWGrokJ0="
+          "Value": "sha256-odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA="
         }
       ]
     },
@@ -1397,7 +1460,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4760"
+          "Value": "7883"
         },
         {
           "Name": "Content-Type",
@@ -1405,11 +1468,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"4513Cer6FVo7yGQU+ataT/czHFwmSsZA4vorWGrokJ0=\""
+          "Value": "\"odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 17:35:30 GMT"
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1419,7 +1482,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-4513Cer6FVo7yGQU+ataT/czHFwmSsZA4vorWGrokJ0="
+          "Value": "sha256-odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA="
         }
       ]
     },
@@ -1502,6 +1565,252 @@
         {
           "Name": "integrity",
           "Value": "sha256-Jtxf9L+5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="
+        }
+      ]
+    },
+    {
+      "Route": "image/next.e7cby1dg90.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\next.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1079"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"dhf1wjo/zpPKKeX/Z+PrqNzIYzA0B+ECpe9FHqw8kZE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7cby1dg90"
+        },
+        {
+          "Name": "label",
+          "Value": "image/next.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-dhf1wjo/zpPKKeX/Z+PrqNzIYzA0B+ECpe9FHqw8kZE="
+        }
+      ]
+    },
+    {
+      "Route": "image/next.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\next.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1079"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"dhf1wjo/zpPKKeX/Z+PrqNzIYzA0B+ECpe9FHqw8kZE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-dhf1wjo/zpPKKeX/Z+PrqNzIYzA0B+ECpe9FHqw8kZE="
+        }
+      ]
+    },
+    {
+      "Route": "image/setting.khbrb5e44q.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\setting.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1965"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"GI71xRXZE2S91r1s6e+IdE8tUqdJCs5A02dbb68Jres=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "khbrb5e44q"
+        },
+        {
+          "Name": "label",
+          "Value": "image/setting.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-GI71xRXZE2S91r1s6e+IdE8tUqdJCs5A02dbb68Jres="
+        }
+      ]
+    },
+    {
+      "Route": "image/setting.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\setting.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1965"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"GI71xRXZE2S91r1s6e+IdE8tUqdJCs5A02dbb68Jres=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-GI71xRXZE2S91r1s6e+IdE8tUqdJCs5A02dbb68Jres="
+        }
+      ]
+    },
+    {
+      "Route": "image/update.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\update.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "572"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PVeP6ONAEGqxmlRzfAYKHHy8fF2tz9brz6a1dmYfSOc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-PVeP6ONAEGqxmlRzfAYKHHy8fF2tz9brz6a1dmYfSOc="
+        }
+      ]
+    },
+    {
+      "Route": "image/update.v92p9akedf.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\update.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "572"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PVeP6ONAEGqxmlRzfAYKHHy8fF2tz9brz6a1dmYfSOc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "v92p9akedf"
+        },
+        {
+          "Name": "label",
+          "Value": "image/update.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-PVeP6ONAEGqxmlRzfAYKHHy8fF2tz9brz6a1dmYfSOc="
         }
       ]
     },
@@ -1598,7 +1907,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5705"
+          "Value": "6821"
         },
         {
           "Name": "Content-Type",
@@ -1606,11 +1915,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"dVRifrJBjBDD+Os1WqWosA1W5xwVwmixmk5IKdzTYik=\""
+          "Value": "\"7JPILmF1PpxVtZByvA4f4qIQCdzBF7sUj+MbfLFZIac=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 17:35:30 GMT"
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1620,12 +1929,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-dVRifrJBjBDD+Os1WqWosA1W5xwVwmixmk5IKdzTYik="
+          "Value": "sha256-7JPILmF1PpxVtZByvA4f4qIQCdzBF7sUj+MbfLFZIac="
         }
       ]
     },
     {
-      "Route": "js/site.n1dmo2u6wm.js",
+      "Route": "js/site.odcdsqxrrg.js",
       "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\js\\site.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1635,7 +1944,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5705"
+          "Value": "6821"
         },
         {
           "Name": "Content-Type",
@@ -1643,11 +1952,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"dVRifrJBjBDD+Os1WqWosA1W5xwVwmixmk5IKdzTYik=\""
+          "Value": "\"7JPILmF1PpxVtZByvA4f4qIQCdzBF7sUj+MbfLFZIac=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 20 May 2025 17:35:30 GMT"
+          "Value": "Sun, 25 May 2025 08:13:14 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1657,7 +1966,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "n1dmo2u6wm"
+          "Value": "odcdsqxrrg"
         },
         {
           "Name": "label",
@@ -1665,7 +1974,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-dVRifrJBjBDD+Os1WqWosA1W5xwVwmixmk5IKdzTYik="
+          "Value": "sha256-7JPILmF1PpxVtZByvA4f4qIQCdzBF7sUj+MbfLFZIac="
         }
       ]
     },
