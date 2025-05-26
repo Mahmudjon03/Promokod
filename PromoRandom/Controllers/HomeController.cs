@@ -30,7 +30,7 @@ namespace PromoRandom.Controllers
                 await winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language, "IPhone 16 Pro Max");
             }
 
-            return Json(new { promoCode = code, prize = $"{user} 🎁 priz😍!" });
+            return Json(new { promoCode = code, prize = $"{user} 🎁 prize 😍!" });
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace PromoRandom.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPrizUser(AddPrizeUserModel model)
+        public IActionResult AddPrizeUser(AddPrizeUserModel model)
         {
             return RedirectToAction("Index");
         }

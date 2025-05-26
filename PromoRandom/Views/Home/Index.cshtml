@@ -3,19 +3,17 @@
 
 }
 
-<<<<<<< HEAD
 @model List<Prize>
 <div class="container">
     <select name="prizeId" id="prizeSelect">
-        <option disabled selected value="">-- Чархи «ИМКОН» --</option>
+        <option disabled selected value="">-- Интихоби приз --</option>
         @foreach (var prize in Model)
         {
             <option value="@prize.Id">@prize.Name</option>
         }
     </select>
-    <h1>-- Интихоби приз --</h1>
+    <h1> -- Чархи «ИМКОН» --</h1>
     <div class="promo-display" id="promoDisplay">
-        <!-- 8 барабанов с символами -->
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
@@ -24,25 +22,6 @@
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
-=======
-   <div class="setting"><a href="/Home/Setting"><img src="~/image/настройки.png" alt="Alternate Text" /></a></div>
-    <div class="container">
-
-    <h1>Чархи «ИМКОН» </h1>
-
-        <div class="promo-display" id="promoDisplay">
-            <!-- 8 барабанов с символами -->
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-            <div class="reel"><div class="symbols">?</div></div>
-        </div>
-    <button class="generate-btn" id="generateBtn">Чарх</button>
->>>>>>> origin/main
     </div>
     <button class="generate-btn" id="generateBtn">Чарх</button>
 </div>
@@ -58,7 +37,7 @@
         <div class="btn-mok">
             <div style=" display:flex;">
                 <button class="btn-next" onclick="location.href='/Home/Setting'">
-                   <img src="~/image/setting.png" alt="Alternate Text" />
+                    <img src="~/image/setting.png" alt="Alternate Text" />
                 </button>
                 <button class="btn-next" id="updateBtn">
                     <img src="~/image/update.png" alt="Alternate Text" />
