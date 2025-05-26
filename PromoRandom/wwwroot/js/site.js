@@ -48,14 +48,13 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                     if (steps < maxSteps) {
                         setTimeout(spin, speed);
                     } else {
-                        // Останавливаемся на нужном символе
-                        // Смещаем точно, чтобы показать нужный символ сверху
                         const finalPosition = 150 * targetIndex;
                         symbolsDiv.style.transition = "transform 1.3s ease-out";
                         symbolsDiv.style.transform = `translateY(-${finalPosition}px)`;
                     }
                 }
                 spin();
+
             });
 
             // Показываем приз через время, когда все барабаны остановятся
@@ -81,7 +80,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                 modal.style.display = "block";
                 document.getElementById("prizeTitle").textContent = prizeTitle;
                 createConfetti(false);
-            }, 16000);
+            }, 20000);
         })
         .catch(() => {
             document.getElementById("prizeText").textContent = "Ошибка получения промокода";

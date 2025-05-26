@@ -55,18 +55,13 @@ namespace PromoRandom.Controllers
             return RedirectToAction("Setting");
         }
 
-        [HttpPost]
-        public IActionResult AddPrizUser(AddPrizUserModel model)
-        {
-
-            return RedirectToAction("Index");
-        }
+       
 
         [HttpPost]
         public async Task<IActionResult> SavePrizeResult([FromBody]AddPrizUserModel model)
         {
             
-           await _databaseService.UpdatePrizeAsync(model);
+             await _databaseService.UpdatePrizeAsync(model);
 
              return Ok();
         }
