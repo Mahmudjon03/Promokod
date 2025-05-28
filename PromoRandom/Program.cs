@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-using Microsoft.AspNetCore.Localization;
+п»їusing Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using PromoRandom.Services;
 using System.Globalization;
-=======
-п»їusing PromoRandom.Services;
->>>>>>> origin/main
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
-<<<<<<< HEAD
-// HttpClient и твой сервис
-builder.Services.AddHttpClient();
-builder.Services.AddTransient<WinnerNotificationService>();
-=======
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 // вњ… Р РµРіРёСЃС‚СЂРёСЂСѓРµРј WinnerNotificationService С‡РµСЂРµР· AddHttpClient
@@ -31,17 +22,13 @@ builder.Services.AddAuthentication("MyCookieAuth")
         options.Cookie.Name = "MyAppAuthCookie";
         options.SlidingExpiration = false;
     });
-
-builder.Services.AddAuthorization();
->>>>>>> origin/main
-
-// Локализация
+// Р›РѕРєР°Р»РёР·Р°С†РёСЏ
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 
-// Поддерживаемые культуры
+// РџРѕРґРґРµСЂР¶РёРІР°РµРјС‹Рµ РєСѓР»СЊС‚СѓСЂС‹
 var supportedCultures = new[]
 {
     new CultureInfo("ru"),
@@ -50,11 +37,11 @@ var supportedCultures = new[]
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    options.DefaultRequestCulture = new RequestCulture("tg"); // По умолчанию — таджикский
+    options.DefaultRequestCulture = new RequestCulture("tg"); // РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ вЂ” С‚Р°РґР¶РёРєСЃРєРёР№
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 
-    // добавим поддержку смены языка через ?culture=
+    // РґРѕР±Р°РІРёРј РїРѕРґРґРµСЂР¶РєСѓ СЃРјРµРЅС‹ СЏР·С‹РєР° С‡РµСЂРµР· ?culture=
     options.RequestCultureProviders =
     [
         new QueryStringRequestCultureProvider()
@@ -72,14 +59,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
-<<<<<<< HEAD
-// ВАЖНО: локализация перед авторизацией
-var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
-app.UseRequestLocalization(localizationOptions);
-
-=======
->>>>>>> origin/main
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
