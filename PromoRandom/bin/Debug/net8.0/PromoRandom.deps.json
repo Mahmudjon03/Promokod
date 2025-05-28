@@ -13,6 +13,11 @@
         },
         "runtime": {
           "PromoRandom.dll": {}
+        },
+        "resources": {
+          "ru/PromoRandom.resources.dll": {
+            "locale": "ru"
+          }
         }
       },
       "BouncyCastle.Cryptography/2.5.1": {

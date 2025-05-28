@@ -13,6 +13,26 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\car.png",
+      "PackagePath": "staticwebassets\\image\\car.png"
+    },
+    {
+      "Id": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-ru.png",
+      "PackagePath": "staticwebassets\\image\\flag-ru.png"
+    },
+    {
+      "Id": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-tj.png",
+      "PackagePath": "staticwebassets\\image\\flag-tj.png"
+    },
+    {
+      "Id": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\iphone.png",
+      "PackagePath": "staticwebassets\\image\\iphone.png"
+    },
+    {
+      "Id": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\money-bag.png",
+      "PackagePath": "staticwebassets\\image\\money-bag.png"
+    },
+    {
       "Id": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\next.png",
       "PackagePath": "staticwebassets\\image\\next.png"
     },

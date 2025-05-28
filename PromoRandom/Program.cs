@@ -1,38 +1,65 @@
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 using PromoRandom.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession(); 
+builder.Services.AddSession();
 
-// Добавляем доступ к appsettings.json
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-// Добавляем HttpClient
+// HttpClient и твой сервис
 builder.Services.AddHttpClient();
-
-// Регистрируем сервис рассылки победителям
 builder.Services.AddTransient<WinnerNotificationService>();
+
+// Локализация
+builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+// Поддерживаемые культуры
+var supportedCultures = new[]
+{
+    new CultureInfo("ru"),
+    new CultureInfo("tg")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("tg"); // По умолчанию — таджикский
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    // добавим поддержку смены языка через ?culture=
+    options.RequestCultureProviders =
+    [
+        new QueryStringRequestCultureProvider()
+    ];
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+// ВАЖНО: локализация перед авторизацией
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
+
 app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Setting}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

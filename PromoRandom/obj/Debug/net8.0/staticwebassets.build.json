@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "HvtDAoPq280c8ZBo4TDr5OWzET5PeZKlucZmre6oLNc=",
+  "Hash": "BZSZnexMOo67BgtRYV7G8sJEWKDsxICkeb6TCxRg+Gk=",
   "Source": "PromoRandom",
   "BasePath": "_content/PromoRandom",
   "Mode": "Default",
@@ -73,8 +73,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "7arh8yb46q",
-      "Integrity": "odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA=",
+      "Fingerprint": "tp21yx5aw5",
+      "Integrity": "/+WK4D1+I77lJEiHbRpG5cVwJWRMPBDuEX+4fwS6ERw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -99,6 +99,111 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\car.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/car#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "zt7sol3dij",
+      "Integrity": "pxIf7C4SZkUUyKs4slg2ZHopsrdaN+T6se0mDjwMU8I=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\car.png"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-ru.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/flag-ru#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "187hf5qlb6",
+      "Integrity": "Lz7ogoqbMYib3HfEZihKGNPHWW+J8nncqBFLdC+QlsI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\flag-ru.png"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-tj.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/flag-tj#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "825ge41a9k",
+      "Integrity": "YJQ8SmOLil+G9t3FSD7MCNeh5E5fgrCYMpk6RUGXnCY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\flag-tj.png"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\iphone.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/iphone#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "zvyn687ez2",
+      "Integrity": "X+aLaFVjhugYSTV/xazBZDQGnMppLvfc1iHMcBYY3d4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\iphone.png"
+    },
+    {
+      "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\money-bag.png",
+      "SourceId": "PromoRandom",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\",
+      "BasePath": "_content/PromoRandom",
+      "RelativePath": "image/money-bag#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yw1c8ai1wg",
+      "Integrity": "TpuygyQ8G7jAM0+ki/oYFMWJmGWo91zdsWHRUM0Cttw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\image\\money-bag.png"
     },
     {
       "Identity": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\next.png",
@@ -1405,51 +1510,6 @@
   ],
   "Endpoints": [
     {
-      "Route": "css/site.7arh8yb46q.css",
-      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\css\\site.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "7883"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sun, 25 May 2025 13:31:31 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "7arh8yb46q"
-        },
-        {
-          "Name": "label",
-          "Value": "css/site.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA="
-        }
-      ]
-    },
-    {
       "Route": "css/site.css",
       "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\css\\site.css",
       "Selectors": [],
@@ -1460,7 +1520,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "7883"
+          "Value": "8046"
         },
         {
           "Name": "Content-Type",
@@ -1468,11 +1528,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA=\""
+          "Value": "\"/+WK4D1+I77lJEiHbRpG5cVwJWRMPBDuEX+4fwS6ERw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 25 May 2025 13:31:31 GMT"
+          "Value": "Mon, 26 May 2025 17:30:11 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1482,7 +1542,52 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-odtfRZIWY5Oq71SorMeq0gtWlM0efJSWk9tWMwEmlpA="
+          "Value": "sha256-/+WK4D1+I77lJEiHbRpG5cVwJWRMPBDuEX+4fwS6ERw="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.tp21yx5aw5.css",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8046"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/+WK4D1+I77lJEiHbRpG5cVwJWRMPBDuEX+4fwS6ERw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 17:30:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "tp21yx5aw5"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/+WK4D1+I77lJEiHbRpG5cVwJWRMPBDuEX+4fwS6ERw="
         }
       ]
     },
@@ -1565,6 +1670,416 @@
         {
           "Name": "integrity",
           "Value": "sha256-Jtxf9L+5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="
+        }
+      ]
+    },
+    {
+      "Route": "image/car.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\car.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22237"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"pxIf7C4SZkUUyKs4slg2ZHopsrdaN+T6se0mDjwMU8I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 16:49:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-pxIf7C4SZkUUyKs4slg2ZHopsrdaN+T6se0mDjwMU8I="
+        }
+      ]
+    },
+    {
+      "Route": "image/car.zt7sol3dij.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\car.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22237"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"pxIf7C4SZkUUyKs4slg2ZHopsrdaN+T6se0mDjwMU8I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 16:49:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zt7sol3dij"
+        },
+        {
+          "Name": "label",
+          "Value": "image/car.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-pxIf7C4SZkUUyKs4slg2ZHopsrdaN+T6se0mDjwMU8I="
+        }
+      ]
+    },
+    {
+      "Route": "image/flag-ru.187hf5qlb6.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-ru.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3622"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Lz7ogoqbMYib3HfEZihKGNPHWW+J8nncqBFLdC+QlsI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 14:44:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "187hf5qlb6"
+        },
+        {
+          "Name": "label",
+          "Value": "image/flag-ru.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Lz7ogoqbMYib3HfEZihKGNPHWW+J8nncqBFLdC+QlsI="
+        }
+      ]
+    },
+    {
+      "Route": "image/flag-ru.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-ru.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3622"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Lz7ogoqbMYib3HfEZihKGNPHWW+J8nncqBFLdC+QlsI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 14:44:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Lz7ogoqbMYib3HfEZihKGNPHWW+J8nncqBFLdC+QlsI="
+        }
+      ]
+    },
+    {
+      "Route": "image/flag-tj.825ge41a9k.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-tj.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1614"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"YJQ8SmOLil+G9t3FSD7MCNeh5E5fgrCYMpk6RUGXnCY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 14:44:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "825ge41a9k"
+        },
+        {
+          "Name": "label",
+          "Value": "image/flag-tj.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-YJQ8SmOLil+G9t3FSD7MCNeh5E5fgrCYMpk6RUGXnCY="
+        }
+      ]
+    },
+    {
+      "Route": "image/flag-tj.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\flag-tj.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1614"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"YJQ8SmOLil+G9t3FSD7MCNeh5E5fgrCYMpk6RUGXnCY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 14:44:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-YJQ8SmOLil+G9t3FSD7MCNeh5E5fgrCYMpk6RUGXnCY="
+        }
+      ]
+    },
+    {
+      "Route": "image/iphone.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\iphone.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13268"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"X+aLaFVjhugYSTV/xazBZDQGnMppLvfc1iHMcBYY3d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 16:44:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-X+aLaFVjhugYSTV/xazBZDQGnMppLvfc1iHMcBYY3d4="
+        }
+      ]
+    },
+    {
+      "Route": "image/iphone.zvyn687ez2.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\iphone.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "13268"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"X+aLaFVjhugYSTV/xazBZDQGnMppLvfc1iHMcBYY3d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 16:44:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zvyn687ez2"
+        },
+        {
+          "Name": "label",
+          "Value": "image/iphone.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-X+aLaFVjhugYSTV/xazBZDQGnMppLvfc1iHMcBYY3d4="
+        }
+      ]
+    },
+    {
+      "Route": "image/money-bag.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\money-bag.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "31054"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TpuygyQ8G7jAM0+ki/oYFMWJmGWo91zdsWHRUM0Cttw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 16:47:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TpuygyQ8G7jAM0+ki/oYFMWJmGWo91zdsWHRUM0Cttw="
+        }
+      ]
+    },
+    {
+      "Route": "image/money-bag.yw1c8ai1wg.png",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\wwwroot\\image\\money-bag.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "31054"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TpuygyQ8G7jAM0+ki/oYFMWJmGWo91zdsWHRUM0Cttw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 26 May 2025 16:47:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yw1c8ai1wg"
+        },
+        {
+          "Name": "label",
+          "Value": "image/money-bag.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TpuygyQ8G7jAM0+ki/oYFMWJmGWo91zdsWHRUM0Cttw="
         }
       ]
     },

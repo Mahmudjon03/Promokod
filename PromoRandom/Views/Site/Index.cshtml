@@ -1,0 +1,188 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer L
+
+@{
+    ViewData["Title"] = L["Title"];
+}
+
+<section class="hero-section position-relative overflow-hidden">
+    <div class="container py-7 py-lg-8">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8 col-xl-7" data-aos="fade-up" data-aos-delay="100">
+                <h1 class="display-3 fw-bold mb-4 gradient-text">@L["Header"]</h1>
+                <h3 class="lead fs-2 text-bold mb-5">@L["Description"]</h3>
+                <a href="https://t.me/DeepSeekTelegabot"
+                   class="btn btn-primary btn-lg px-5 py-3 rounded-pill hover-lift">
+                    <i class="bi bi-telegram me-2"></i>@L["ParticipateButton"]
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="countdown-section bg-dark text-white">
+    <div class="container text-center">
+        <h2 class="h1 mb-5">@L["CountdownTitle"]</h2>
+        <div class="countdown-wrapper d-flex justify-content-center gap-4" id="countdown">
+            <div class="countdown-item">
+                <div class="number">00</div>
+                <div class="label">@L["Days"]</div>
+            </div>
+            <div class="countdown-item">
+                <div class="number">00</div>
+                <div class="label">@L["Hours"]</div>
+            </div>
+            <div class="countdown-item">
+                <div class="number">00</div>
+                <div class="label">@L["Minutes"]</div>
+            </div>
+            <div class="countdown-item">
+                <div class="number">00</div>
+                <div class="label">@L["Seconds"]</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="prizes-section bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5 display-5">@L["PrizesTitle"]</h2>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="zoom-in">
+                <div class="prize-card card h-100 border-0 shadow-lg hover-zoom">
+                    <div class="card-img-top prize-image">
+                        <img src="~/image/iphone.png" class="img-fluid p-4" alt="iPhone">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h4 card-title mb-0">@L["Prize1"]</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="prize-card card h-100 border-0 shadow-lg hover-zoom">
+                    <div class="card-img-top prize-image">
+                        <img src="~/image/money-bag.png" class="img-fluid p-4" alt="Money">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h4 card-title mb-0">@L["Prize2"]</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+                <div class="prize-card card h-100 border-0 shadow-lg hover-zoom">
+                    <div class="card-img-top prize-image">
+                        <img src="~/image/car.png" class="img-fluid p-4" alt="Opel Zafira">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h4 card-title mb-0">@L["Prize3"]</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="map-section bg-white">
+    <div class="container">
+        <h2 class="text-center mb-5 display-5">@L["MapTitle"]</h2>
+        <p class="text-center lead mb-5">@L["StoreAddress"]</p>
+        <div class="map-container rounded-4 shadow-lg overflow-hidden" data-aos="fade-up">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2953.6673155792446!2d68.7389681518374!3d38.57349121658064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38b5d221bd3603b3%3A0xbdfe88d9ec9b9eba!2sMilano%20Moda%20-%2084!5e0!3m2!1sru!2s!4v1748268968109!5m2!1sru!2s"
+                    class="w-100"
+                    style="height: 450px; border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        /* Увеличиваем внутренние отступы для каждой секции */
+        section {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        /* Добавляем отступы по бокам для контейнера, если требуется дополнительное пространство */
+        .container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            color: white;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            min-width: 120px;
+        }
+
+            .countdown-item .number {
+                font-size: 2.5rem;
+                font-weight: 700;
+                line-height: 1;
+            }
+
+        .hover-zoom {
+            transition: transform 0.3s ease;
+        }
+
+            .hover-zoom:hover {
+                transform: translateY(-10px);
+            }
+
+        .prize-image {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        const end = new Date("@(((DateTime)ViewBag.EndDate).ToString("o"))").getTime();
+        const countdownItems = {
+            days: document.querySelector('.countdown-item:nth-child(1) .number'),
+            hours: document.querySelector('.countdown-item:nth-child(2) .number'),
+            minutes: document.querySelector('.countdown-item:nth-child(3) .number'),
+            seconds: document.querySelector('.countdown-item:nth-child(4) .number')
+        };
+
+        function updateCountdown() {
+            const now = Date.now();
+            const diff = end - now;
+
+            if (diff < 0) {
+                document.getElementById('countdown').innerHTML = '<div class="h2">@L["PromoEnded"]</div>';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            countdownItems.days.textContent = days.toString().padStart(2, '0');
+            countdownItems.hours.textContent = hours.toString().padStart(2, '0');
+            countdownItems.minutes.textContent = minutes.toString().padStart(2, '0');
+            countdownItems.seconds.textContent = seconds.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+}
