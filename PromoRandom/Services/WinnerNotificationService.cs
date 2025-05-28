@@ -12,6 +12,11 @@ namespace PromoRandom.Services
 
         public async Task SendWinnerMessageAsync(long chatId, string languageCode, string prize)
         {
+
+            try
+            {
+
+           
             var message = GetLocalizedWinnerMessage(languageCode, prize);
 
             var url = $"https://api.telegram.org/bot{_botToken}/sendMessage";
@@ -25,14 +30,20 @@ namespace PromoRandom.Services
             var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(url, content);
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogWarning("❌ Не удалось отправить сообщение в Telegram chat_id {ChatId}. Ответ: {Response}",
-                    chatId, await response.Content.ReadAsStringAsync());
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("❌ Не удалось отправить сообщение в Telegram chat_id {ChatId}. Ответ: {Response}",
+                        chatId, await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    _logger.LogInformation("✅ Сообщение успешно отправлено в Telegram chat_id {ChatId}", chatId);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogInformation("✅ Сообщение успешно отправлено в Telegram chat_id {ChatId}", chatId);
+                string message = ex.Message;
+                throw;
             }
         }
 

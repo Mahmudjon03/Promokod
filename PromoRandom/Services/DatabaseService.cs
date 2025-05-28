@@ -9,23 +9,35 @@ namespace PromoRandom.Services
     {
         private readonly string _connectionString = "Server=localhost;Database=imkon_db;Uid=root;Pwd=;";
 
-        public async Task<List<string>> GetPromoCodesByUserAsync()
+        public async Task<List<string>> GetPromoCodesByUserAsync(string date)
         {
-            var codes = new List<string>();
-            using var connection = new MySqlConnection(_connectionString);
-            await connection.OpenAsync();
-            var query = @"
+            try
+            {
+                var codes = new List<string>();
+                using var connection = new MySqlConnection(_connectionString);
+                await connection.OpenAsync();
+                var query = @"
                 SELECT p.code
                 FROM promo_codes p
-                JOIN users u ON p.user_id = u.id LIMIT 0, 25;";
-            using var cmd = new MySqlCommand(query, connection);
-            using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+                JOIN users u ON p.user_id = u.id 
+                  where p.issued_at > @date limit 0,25;";
+                using var cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@date", date);
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    codes.Add(reader.GetString("code"));
+                }
+
+                return codes;
+            }
+            catch (Exception ex)
             {
-                codes.Add(reader.GetString("code"));
+
+                string error = ex.Message;
+                throw;
             }
 
-            return codes;
         }
 
         public async Task<string> GetUserByPromokod(string promokod)
@@ -41,6 +53,8 @@ namespace PromoRandom.Services
             await reader.ReadAsync();
             return reader.GetString(0);
         }
+
+
 
 
         public async Task AddPrizeAsync(Prize prize)
@@ -79,10 +93,10 @@ namespace PromoRandom.Services
                 await connection.OpenAsync();
 
                 var query = @"UPDATE prizes
-                        SET  promokod_id = (select id from promo_codes where code = @promocode) 
+                        SET  promo_code_id = (select id from promo_codes where code = @promocode) 
                         WHERE id = @id;
                         update promo_codes 
-                        set state = 0 
+                        set state = 1 
                         where code = @promocode;";
 
                 using var cmd = new MySqlCommand(query, connection);
@@ -103,10 +117,9 @@ namespace PromoRandom.Services
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var query = "SELECT * FROM prizes";
+            var query = "SELECT * FROM `prizes` WHERE promo_code_id = 0";
             using var cmd = new MySqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
-
             while (await reader.ReadAsync())
             {
                 var prize = new Prize
@@ -119,20 +132,22 @@ namespace PromoRandom.Services
 
             return list;
         }
-        public async Task<Prize> GetPrize()
+        public async Task<Prize> GetPrizeById(int id)
         {
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
-            var query = @"SELECT * FROM `prizes` WHERE promokod_id = 0 LIMIT 1;";
+
+            var query = "SELECT * FROM `prizes` WHERE id = @id";
             using var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", id);
             using var reader = await cmd.ExecuteReaderAsync();
             await reader.ReadAsync();
-            var priz = new Prize()
+
+            return new Prize
             {
                 Id = reader.GetInt16(0),
-                Name = reader.GetString(1)
+                Name = reader.GetString(1),
             };
-            return priz;
         }
 
         public async Task<User> GetUserByPromokodAsync(string promoCode)

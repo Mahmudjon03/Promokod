@@ -20,14 +20,21 @@ function createReels() {
     }
 }
 createReels();
-const selectedPrizeId = document.getElementById("prizeSelect").value;
+
 document.getElementById("generateBtn").addEventListener("click", () => {
-    fetch("/Home/GetPromoCode")
+    const select = document.getElementById("prizeSelect");
+    const selectedValue = select.value;
+    const prizeName = select.options[select.selectedIndex].text;
+    if (selectedValue === "0") {
+        showToast("Лутфан, аввал призро интихоб намоед.");
+        return;
+    }
+    fetch("/Home/GetPromoCode?prizeName=" + encodeURIComponent(prizeName))
         .then((res) => res.json())
         .then((data) => {
             const code = data.promoCode.toUpperCase();
             const reels = document.querySelectorAll(".reel .symbols");
-
+            console.log(code);
             reels.forEach((symbolsDiv, i) => {
                 let position = 0;
                 const targetChar = code[i];
@@ -48,14 +55,13 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                     if (steps < maxSteps) {
                         setTimeout(spin, speed);
                     } else {
-                        // Останавливаемся на нужном символе
-                        // Смещаем точно, чтобы показать нужный символ сверху
                         const finalPosition = 150 * targetIndex;
                         symbolsDiv.style.transition = "transform 1.3s ease-out";
                         symbolsDiv.style.transform = `translateY(-${finalPosition}px)`;
                     }
                 }
                 spin();
+
             });
 
             // Показываем приз через время, когда все барабаны остановятся
@@ -66,25 +72,21 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                 const winnerName = document.getElementById("winnerName");
                 const promoCodeText = document.getElementById("promoCodeText");
                 console.log(prizeTitle);
-                // Распаковываем имя пользователя и приз
-                const prizeText = data.prize; // например: "Ali 🎁 IPhone 16 Pro Max 😍!"
-                const nameMatch = prizeText.match(/^(.+?)\s*🎁/);
-                const prizeMatch = prizeText.match(/🎁\s*(.+)$/);
+             
 
-                const userName = nameMatch ? nameMatch[1] : "Пользователь";
-                const prizeName = prizeMatch ? prizeMatch[1] : "Приз";
-
-                prizeTitle.textContent = prizeName;
-                winnerName.textContent = userName;
+              
+                    
+                prizeTitle.textContent = prizeTitle;
+                winnerName.textContent = data.userName
                 promoCodeText.textContent = data.promoCode;
 
                 modal.style.display = "block";
                 document.getElementById("prizeTitle").textContent = prizeTitle;
                 createConfetti(false);
-            }, 16000);
+            }, 24000);
         })
         .catch(() => {
-            document.getElementById("prizeText").textContent = "Ошибка получения промокода";
+            showToast("Вахтро нодуруст интихоб кардед!");
         });
 });
 
@@ -125,8 +127,6 @@ document.getElementById("updateBtn").addEventListener("click", () => {
 });
 
 
-
-
 function createConfetti(isGold = false) {
     const colors = isGold
         ? ['gold', '#FFD700', '#FFDF00', '#FADA5E']
@@ -159,4 +159,40 @@ function createConfetti(isGold = false) {
             }, animationDuration * 1000);
         }, 0);
     }
+}
+
+function showToast(message, type = "info") {
+    let toast = document.getElementById("customToast");
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'customToast';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.padding = '10px 20px';
+        toast.style.borderRadius = '5px';
+        toast.style.zIndex = '9999';
+        toast.style.fontSize = '16px';
+        toast.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.5s ease';
+        document.body.appendChild(toast);
+    }
+
+    // Цвет по типу
+    const colors = {
+        info: 'rgba(51, 51, 51, 0.9)',
+        success: '#28a745',
+        error: '#dc3545',
+        warning: '#ffc107'
+    };
+
+    toast.style.backgroundColor = colors[type] || colors.info;
+    toast.innerText = message;
+    toast.style.opacity = '1';
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+    }, 3000);
 }

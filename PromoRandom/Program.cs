@@ -1,19 +1,26 @@
-using PromoRandom.Services;
+п»їusing PromoRandom.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession(); 
+builder.Services.AddSession();
 
-// Добавляем доступ к appsettings.json
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Добавляем HttpClient
-builder.Services.AddHttpClient();
+// вњ… Р РµРіРёСЃС‚СЂРёСЂСѓРµРј WinnerNotificationService С‡РµСЂРµР· AddHttpClient
+builder.Services.AddHttpClient<WinnerNotificationService>();
 
-// Регистрируем сервис рассылки победителям
-builder.Services.AddTransient<WinnerNotificationService>();
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.Cookie.Name = "MyAppAuthCookie";
+        options.SlidingExpiration = false;
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -21,14 +28,15 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

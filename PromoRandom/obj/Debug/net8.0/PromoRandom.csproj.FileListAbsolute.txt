@@ -110,15 +110,7 @@ C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\refint\PromoRandom
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.pdb
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.genruntimeconfig.cache
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ref\PromoRandom.dll
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.AssemblyReference.cache
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.AssemblyInfoInputs.cache
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.AssemblyInfo.cs
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.CoreCompileInputs.cache
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cache
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cs
-C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.sourcelink.json
+C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\appsettings.json
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\PromoRandom.staticwebassets.runtime.json
@@ -149,6 +141,15 @@ C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\runtimes\wi
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\runtimes\win-x64\native\krbcc64.dll
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.AssemblyInfo.cs
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cache
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cs
+C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.sourcelink.json
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\staticwebassets\msbuild.PromoRandom.Microsoft.AspNetCore.StaticWebAssets.props
@@ -165,4 +166,3 @@ C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\refint\Prom
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.pdb
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.genruntimeconfig.cache
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\ref\PromoRandom.dll
-C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\Newtonsoft.Json.dll
