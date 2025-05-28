@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Options;
 using PromoRandom.Services;
 using System.Globalization;
 

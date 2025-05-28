@@ -17,6 +17,9 @@
         "resources": {
           "ru/PromoRandom.resources.dll": {
             "locale": "ru"
+          },
+          "tg/PromoRandom.resources.dll": {
+            "locale": "tg"
           }
         }
       },
