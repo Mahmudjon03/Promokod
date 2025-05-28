@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "jMsHxcS1cr8HYWGC+P1y3hOVnChkh8ythfn5IbwysRo=",
+  "Hash": "emBfZSuvO8atmJWbBuWVZCfHd+I/B6aUDOr+So+Q+tI=",
   "Source": "PromoRandom",
   "BasePath": "_content/PromoRandom",
   "Mode": "Default",
@@ -31,8 +31,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "yeoqsuw2pz",
-      "Integrity": "GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg=",
+      "Fingerprint": "3bkjebpdwc",
+      "Integrity": "cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PromoRandom.styles.css"
@@ -52,8 +52,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "yeoqsuw2pz",
-      "Integrity": "GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg=",
+      "Fingerprint": "3bkjebpdwc",
+      "Integrity": "cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PromoRandom.bundle.scp.css"
@@ -7168,6 +7168,96 @@
       ]
     },
     {
+      "Route": "PromoRandom.3bkjebpdwc.bundle.scp.css",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PromoRandom.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2262"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 28 May 2025 19:26:49 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3bkjebpdwc"
+        },
+        {
+          "Name": "label",
+          "Value": "PromoRandom.bundle.scp.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4="
+        }
+      ]
+    },
+    {
+      "Route": "PromoRandom.3bkjebpdwc.styles.css",
+      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PromoRandom.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2262"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 28 May 2025 19:26:49 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3bkjebpdwc"
+        },
+        {
+          "Name": "label",
+          "Value": "PromoRandom.styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4="
+        }
+      ]
+    },
+    {
       "Route": "PromoRandom.bundle.scp.css",
       "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PromoRandom.bundle.scp.css",
       "Selectors": [],
@@ -7178,7 +7268,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1129"
+          "Value": "2262"
         },
         {
           "Name": "Content-Type",
@@ -7186,11 +7276,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg=\""
+          "Value": "\"cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 28 May 2025 18:48:28 GMT"
+          "Value": "Wed, 28 May 2025 19:26:49 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7200,7 +7290,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg="
+          "Value": "sha256-cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4="
         }
       ]
     },
@@ -7215,7 +7305,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1129"
+          "Value": "2262"
         },
         {
           "Name": "Content-Type",
@@ -7223,11 +7313,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg=\""
+          "Value": "\"cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 28 May 2025 18:48:28 GMT"
+          "Value": "Wed, 28 May 2025 19:26:49 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7237,97 +7327,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg="
-        }
-      ]
-    },
-    {
-      "Route": "PromoRandom.yeoqsuw2pz.bundle.scp.css",
-      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PromoRandom.bundle.scp.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1129"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 28 May 2025 18:48:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "yeoqsuw2pz"
-        },
-        {
-          "Name": "label",
-          "Value": "PromoRandom.bundle.scp.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg="
-        }
-      ]
-    },
-    {
-      "Route": "PromoRandom.yeoqsuw2pz.styles.css",
-      "AssetFile": "C:\\Users\\murod\\source\\repos\\Site\\PromoRandom\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PromoRandom.styles.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1129"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 28 May 2025 18:48:28 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "yeoqsuw2pz"
-        },
-        {
-          "Name": "label",
-          "Value": "PromoRandom.styles.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-GlIzIPLqEF0U8FiVhSuruys8el2mU40nzbt0N8JBJRg="
+          "Value": "sha256-cWjU7uA6y+KZxX5xZp+Z94H724ymYTf0HoAcHxrr1d4="
         }
       ]
     }
