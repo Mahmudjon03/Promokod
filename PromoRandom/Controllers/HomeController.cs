@@ -37,11 +37,10 @@ namespace PromoRandom.Controllers
             if (user != null)
             {
                 _ = Task.Run(() => NotifyUserAsync(prizeName, user)); // В фоне
+                return Json(new { promoCode = code, userName = user.Name });
             }
 
-
-            return Json(new { promoCode = code, userName = user.Name });
-
+            return Json(new { error = "User not found" });
         }
 
         private async Task NotifyUserAsync(string prizeName, User user)
@@ -63,10 +62,10 @@ namespace PromoRandom.Controllers
         public async Task<IActionResult> AddPrize(Prize model)
         {
             if (model == null)
-               
+
                 return RedirectToAction("Setting");
 
-                await _databaseService.AddPrizeAsync(model);
+            await _databaseService.AddPrizeAsync(model);
 
             return RedirectToAction("Setting");
         }
@@ -78,15 +77,15 @@ namespace PromoRandom.Controllers
             return Ok();
         }
 
-       
-        
+
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-           await _databaseService.DeletePrizeAsync(id);
-           
+            await _databaseService.DeletePrizeAsync(id);
 
-            return RedirectToAction("Setting"); 
+
+            return RedirectToAction("Setting");
         }
     }
 }

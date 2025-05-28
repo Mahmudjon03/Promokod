@@ -51,3 +51,7 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/murod/source/repos/Site/PromoRandom/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-a1k35xw3hl
+
+[C:/Users/murod/source/repos/Site/PromoRandom/Views/Shared/_SiteLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9TaXRlTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-o0dbzjwbnw

@@ -47,6 +47,7 @@ C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.source
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ru\PromoRandom.resources.dll
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\tg\PromoRandom.resources.dll
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\scopedcss\Views\Shared\_SiteLayout.cshtml.rz.scp.css
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\scopedcss\bundle\PromoRandom.styles.css
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\scopedcss\projectbundle\PromoRandom.bundle.scp.css
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets.build.json
@@ -58,10 +59,10 @@ C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets\ms
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.PromoRandom.props
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.PromoRandom.props
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRan.2CAE3C71.Up2Date
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.dll
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\refint\PromoRandom.dll
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.pdb
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.genruntimeconfig.cache
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ref\PromoRandom.dll
-C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

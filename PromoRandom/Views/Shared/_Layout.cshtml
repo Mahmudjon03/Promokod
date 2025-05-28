@@ -11,31 +11,6 @@
 
 </head>
 <body>
-    @* Вывод header, только если флаг HideHeaderFooter не установлен *@
-    @if (!(ViewBag.HideHeaderFooter ?? false))
-    {
-        <header class="bg-primary text-white py-2">
-            <div class="container d-flex justify-content-between">
-                <h1 class="text-white h4 mt-2">«ИМКОН» - Акция</h1>
-                <div class="language-switcher text-end p-2">
-                    <a href="?culture=ru">
-                        <img src="~/image/flag-ru.png" alt="Русский" width="32" />
-                    </a>
-                    <a href="?culture=tg" class="ms-2">
-                        <img src="~/image/flag-tj.png" alt="Тоҷикӣ" width="32" />
-                    </a>
-                </div>
-            </div>
-        </header>
-    }
-
-    @* Вывод footer, только если флаг HideHeaderFooter не установлен *@
-    @if (!(ViewBag.HideHeaderFooter ?? false))
-    {
-        <footer class="bg-light text-center py-4 mt-5">
-            &copy; 2025 Магазин «Имкон». Все права защищены.
-        </footer>
-    }
 
     <div class="container">
         <main role="main" class="pb-3">
