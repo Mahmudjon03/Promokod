@@ -385,16 +385,6 @@ ul {
         display: none;
     }
 
-<<<<<<< HEAD
-.transition {
-    transition: all 0.3s ease;
-}
-
-.hover-shadow:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    transform: translateY(-5px);
-}
-=======
 .date-promo {
     background-color: #222;
     color:white;
@@ -404,4 +394,12 @@ ul {
     text-align:center;
     box-shadow:none;
 }
->>>>>>> origin/main
+
+.transition {
+    transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}

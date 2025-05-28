@@ -167,7 +167,6 @@ C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.genruntimeconfig.cache
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\ref\PromoRandom.dll
 <<<<<<< HEAD
-C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\ru\PromoRandom.resources.dll
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.GenerateResource.cache
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ru\PromoRandom.resources.dll
