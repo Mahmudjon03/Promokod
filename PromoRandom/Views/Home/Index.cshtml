@@ -1,19 +1,31 @@
 ﻿@{
     ViewBag.Title = "Чархи «ИМКОН»";
+<<<<<<< HEAD
     ViewBag.HideHeaderFooter = true;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+=======
+}
+>>>>>>> origin/main
 @model List<Prize>
 <div class="container">
+    <h1 style="font-size:2.1em;"> Чархи «ИМКОН» </h1>
     <select name="prizeId" id="prizeSelect">
+<<<<<<< HEAD
         <option disabled selected value="">-- Интихоби приз --</option>
+=======
+        <option disabled selected value="0"> Интихоби Приз </option>
+>>>>>>> origin/main
         @foreach (var prize in Model)
         {
             <option value="@prize.Id">@prize.Name</option>
         }
     </select>
+<<<<<<< HEAD
     <h1> -- Чархи «ИМКОН» --</h1>
+=======
+>>>>>>> origin/main
     <div class="promo-display" id="promoDisplay">
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
@@ -23,6 +35,10 @@
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
         <div class="reel"><div class="symbols">?</div></div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
     </div>
     <button class="generate-btn" id="generateBtn">Чарх</button>
 </div>
@@ -36,15 +52,20 @@
         <div id="winnerName" class="winner-name"></div>
         <div id="promoCodeText" style="font-size: 1.2rem; color: gold; margin-top: 5px;"></div>
         <div class="btn-mok">
+<<<<<<< HEAD
             <div style=" display:flex;">
                 <button class="btn-next" onclick="location.href='/Home/Setting'">
                     <img src="~/image/setting.png" alt="Alternate Text" />
                 </button>
+=======
+          
+              
+>>>>>>> origin/main
                 <button class="btn-next" id="updateBtn">
                     <img src="~/image/update.png" alt="Alternate Text" />
                 </button>
 
-            </div>
+         
             <button class="btn-next" id="nextBtn">
                 <img src="~/image/next.png" alt="Alternate Text" />
             </button>

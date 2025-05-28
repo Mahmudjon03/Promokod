@@ -239,6 +239,20 @@ h1 {
 .settings-container {
     max-width: 400px;
     height:82vh;
+    margin: auto;
+    height:auto;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    border: 2px solid gold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.settings-container-login {
+    max-width: 400px;
+    height: 82vh;
     margin: 10px auto;
     padding: 25px;
     background: rgba(0, 0, 0, 0.8);
@@ -249,11 +263,11 @@ h1 {
     font-family: 'Segoe UI', sans-serif;
 }
 
-h2 {
-    color: gold;
-    text-align: center;
-    margin-bottom: 15px;
-}
+    h2 {
+        color: gold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
 
 label {
     display: block;
@@ -354,23 +368,24 @@ ul {
 
 
 #prizeSelect {
-        background: transparent;
-        color: gold;
-        font-size: 2em; /* Примерно как h1 */
-        border: none;
-        outline: none;
-        appearance: none; /* скрывает стандартную стрелку в большинстве браузеров */
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        text-align: center;
-        font-weight: bold;
-    }
+    background: rgba(0, 0, 0, 0.75);
+    color: gold;
+    font-size: 1.8em; /* Примерно как h1 */
+    border: none;
+    outline: none;
+    appearance: none; /* скрывает стандартную стрелку в большинстве браузеров */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-align: center;
+    font-weight: bold;
+}
 
     /* Чтобы скрыть стрелку в некоторых браузерах */
     #prizeSelect::-ms-expand {
         display: none;
     }
 
+<<<<<<< HEAD
 .transition {
     transition: all 0.3s ease;
 }
@@ -379,3 +394,14 @@ ul {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
 }
+=======
+.date-promo {
+    background-color: #222;
+    color:white;
+    padding:5px ;
+    border-radius:6px;
+    width:90%;
+    text-align:center;
+    box-shadow:none;
+}
+>>>>>>> origin/main

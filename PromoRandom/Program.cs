@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using PromoRandom.Services;
 using System.Globalization;
+=======
+Ôªøusing PromoRandom.Services;
+>>>>>>> origin/main
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +13,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
+<<<<<<< HEAD
 // HttpClient Ë Ú‚ÓÈ ÒÂ‚ËÒ
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<WinnerNotificationService>();
+=======
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+// ‚úÖ –†–µ–≥–∏—Å—Ç—Ä–∏—Ä—É–µ–º WinnerNotificationService —á–µ—Ä–µ–∑ AddHttpClient
+builder.Services.AddHttpClient<WinnerNotificationService>();
+
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.Cookie.Name = "MyAppAuthCookie";
+        options.SlidingExpiration = false;
+    });
+
+builder.Services.AddAuthorization();
+>>>>>>> origin/main
 
 // ÀÓÍ‡ÎËÁ‡ˆËˇ
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
@@ -51,11 +73,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+<<<<<<< HEAD
 // ¬¿∆ÕŒ: ÎÓÍ‡ÎËÁ‡ˆËˇ ÔÂÂ‰ ‡‚ÚÓËÁ‡ˆËÂÈ
 var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
 app.UseRequestLocalization(localizationOptions);
 
+=======
+>>>>>>> origin/main
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
