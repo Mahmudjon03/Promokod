@@ -1,4 +1,11 @@
+<<<<<<< HEAD
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
+using PromoRandom.Services;
+using System.Globalization;
+=======
 п»їusing PromoRandom.Services;
+>>>>>>> origin/main
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
+<<<<<<< HEAD
+// HttpClient и твой сервис
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<WinnerNotificationService>();
+=======
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 // вњ… Р РµРіРёСЃС‚СЂРёСЂСѓРµРј WinnerNotificationService С‡РµСЂРµР· AddHttpClient
@@ -21,10 +33,36 @@ builder.Services.AddAuthentication("MyCookieAuth")
     });
 
 builder.Services.AddAuthorization();
+>>>>>>> origin/main
+
+// Локализация
+builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+// Поддерживаемые культуры
+var supportedCultures = new[]
+{
+    new CultureInfo("ru"),
+    new CultureInfo("tg")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("tg"); // По умолчанию — таджикский
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    // добавим поддержку смены языка через ?culture=
+    options.RequestCultureProviders =
+    [
+        new QueryStringRequestCultureProvider()
+    ];
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -35,12 +73,19 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+<<<<<<< HEAD
+// ВАЖНО: локализация перед авторизацией
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
+
+=======
+>>>>>>> origin/main
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Setting}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

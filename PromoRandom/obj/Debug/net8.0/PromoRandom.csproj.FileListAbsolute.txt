@@ -166,3 +166,15 @@ C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\refint\Prom
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.pdb
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\PromoRandom.genruntimeconfig.cache
 C:\Users\User\Desktop\Promokod\Promokod\PromoRandom\obj\Debug\net8.0\ref\PromoRandom.dll
+<<<<<<< HEAD
+C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\ru\PromoRandom.resources.dll
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.csproj.GenerateResource.cache
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ru\PromoRandom.resources.dll
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.Resources.Views.Site.Index.tj.resources
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.Resources.Views.Site.Index.ru.resources
+C:\Users\murod\source\repos\Site\PromoRandom\bin\Debug\net8.0\tg\PromoRandom.resources.dll
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.Resources.Views.Site.Index.tg.resources
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\tg\PromoRandom.resources.dll
+=======
+>>>>>>> origin/main

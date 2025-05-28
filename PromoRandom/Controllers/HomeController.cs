@@ -39,8 +39,12 @@ namespace PromoRandom.Controllers
                 _ = Task.Run(() => NotifyUserAsync(prizeName, user)); // В фоне
             }
 
+<<<<<<< HEAD
+            return Json(new { promoCode = code, prize = $"{user} 🎁 prize 😍!" });
+=======
 
             return Json(new { promoCode = code, userName = user.Name });
+>>>>>>> origin/main
         }
 
         private async Task NotifyUserAsync(string prizeName, User user)
@@ -70,9 +74,17 @@ namespace PromoRandom.Controllers
             return RedirectToAction("Setting");
         }
 
+<<<<<<< HEAD
+        [HttpPost]
+        public IActionResult AddPrizeUser(AddPrizeUserModel model)
+        {
+            return RedirectToAction("Index");
+        }
+=======
 
 
 
+>>>>>>> origin/main
 
         [HttpPost]
         public async Task<IActionResult> SavePrizeResult([FromBody] AddPrizeUserModel model)
