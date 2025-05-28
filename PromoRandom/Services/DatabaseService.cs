@@ -1,6 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using PromoRandom.Models;
-using System.ComponentModel;
 using System.Data;
 
 
@@ -8,25 +7,37 @@ namespace PromoRandom.Services
 {
     public class DatabaseService()
     {
-        private readonly string _connectionString = "Server=localhost;Database=promokod_db;Uid=root;Pwd=;";
+        private readonly string _connectionString = "Server=localhost;Database=imkon_db;Uid=root;Pwd=;";
 
-        public async Task<List<string>> GetPromoCodesByUserAsync()
+        public async Task<List<string>> GetPromoCodesByUserAsync(string date)
         {
-            var codes = new List<string>();
-            using var connection = new MySqlConnection(_connectionString);
-            await connection.OpenAsync();
-            var query = @"
+            try
+            {
+                var codes = new List<string>();
+                using var connection = new MySqlConnection(_connectionString);
+                await connection.OpenAsync();
+                var query = @"
                 SELECT p.code
                 FROM promo_codes p
-                JOIN users u ON p.user_id = u.id LIMIT 0, 25;";
-            using var cmd = new MySqlCommand(query, connection);
-            using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+                JOIN users u ON p.user_id = u.id 
+                  where p.issued_at > @date limit 0,25;";
+                using var cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@date", date);
+                using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    codes.Add(reader.GetString("code"));
+                }
+
+                return codes;
+            }
+            catch (Exception ex)
             {
-                codes.Add(reader.GetString("code"));
+
+                string error = ex.Message;
+                throw;
             }
 
-            return codes;
         }
 
         public async Task<string> GetUserByPromokod(string promokod)
@@ -44,16 +55,18 @@ namespace PromoRandom.Services
         }
 
 
+
+
         public async Task AddPrizeAsync(Prize prize)
+
         {
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var query = @"INSERT INTO prize (prize_name) VALUES (@name);";
+            var query = @"INSERT INTO prizes (name) VALUES (@name);";
 
             using var cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@name", prize.Name);
-
 
             await cmd.ExecuteNonQueryAsync();
         }
@@ -79,24 +92,22 @@ namespace PromoRandom.Services
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.OpenAsync();
 
-                var query = @"UPDATE prize 
-                        SET  promokod_id = (select id from promo_codes where code = @promocod) 
+                var query = @"UPDATE prizes
+                        SET  promo_code_id = (select id from promo_codes where code = @promocode) 
                         WHERE id = @id;
                         update promo_codes 
-                        set state = 0 
-                        where code = @promocod;";
+                        set state = 1 
+                        where code = @promocode;";
 
                 using var cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@id", prize.PrizId);
-                cmd.Parameters.AddWithValue("@promocod", prize.Promocod);
+                cmd.Parameters.AddWithValue("@promocode", prize.Promocod);
                 await cmd.ExecuteNonQueryAsync();
             }
             catch (Exception ex)
             {
-
                 string error = ex.Message;
             }
-           
         }
 
         public async Task<List<Prize>> GetPrizes()
@@ -106,40 +117,65 @@ namespace PromoRandom.Services
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var query = "SELECT * FROM prize";
+            var query = "SELECT * FROM `prizes` WHERE promo_code_id = 0";
             using var cmd = new MySqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
-
             while (await reader.ReadAsync())
             {
                 var prize = new Prize
                 {
                     Id = reader.GetInt16(0),
                     Name = reader.GetString(1),
-
                 };
                 list.Add(prize);
             }
 
             return list;
         }
-        public async Task<Prize> GetPrize()
+        public async Task<Prize> GetPrizeById(int id)
         {
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
-            var query = @"SELECT * FROM `prize` WHERE promokod_id = 0 LIMIT 1;";
+
+            var query = "SELECT * FROM `prizes` WHERE id = @id";
             using var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", id);
             using var reader = await cmd.ExecuteReaderAsync();
             await reader.ReadAsync();
-            var priz = new Prize()
+
+            return new Prize
             {
                 Id = reader.GetInt16(0),
-                Name = reader.GetString(1)
+                Name = reader.GetString(1),
             };
-            return priz;
         }
 
-       
+        public async Task<User> GetUserByPromokodAsync(string promoCode)
+        {
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
 
+            var query = @"
+                SELECT id, language, name, phone, chat_id 
+                FROM users 
+                WHERE id = (SELECT user_id FROM promo_codes WHERE code = @promokod);";
+
+            using var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@promokod", promoCode);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                return new User
+                {
+                    Id = reader.GetInt32("id"),
+                    Language = reader["language"] as string,
+                    Name = reader["name"] as string,
+                    Phone = reader["phone"] as string,
+                    ChatId = reader.GetInt64("chat_id")
+                };
+            }
+            return null; // Если промокод не найден
+        }
     }
 }

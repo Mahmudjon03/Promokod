@@ -1,41 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PromoRandom.Models;
 using PromoRandom.Services;
-
+using System.Data;
 
 namespace PromoRandom.Controllers
 {
-    public class HomeController : Controller
+    [CheckLoginSession]
+    public class HomeController(WinnerNotificationService winnerNotifier) : Controller
     {
+        private readonly DatabaseService _databaseService = new();
+        private readonly WinnerNotificationService _winnerNotifier = winnerNotifier;
 
-        private readonly DatabaseService _databaseService;
-
-        public HomeController()
-        {
-            _databaseService = new DatabaseService();
-        }
-
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime date)
         {
+
+            HttpContext.Session.SetString("SelectedDate", date.ToString("O"));
+
+
             var priz = await _databaseService.GetPrizes();
 
             return View(priz);
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetPromoCode()
+        public async Task<JsonResult> GetPromoCode(string prizeName)
         {
+            string? dateString = HttpContext.Session.GetString("SelectedDate");
             var random = new Random();
-            var promoCodes = await _databaseService.GetPromoCodesByUserAsync();
-            string code = promoCodes[random.Next(promoCodes.Count)];
+            var promoCodes = await _databaseService.GetPromoCodesByUserAsync(dateString);
+            string code = "G7A9KZ3X"; // promoCodes[random.Next(promoCodes.Count)];
+            var user = await _databaseService.GetUserByPromokodAsync(code);
 
-            string user = await _databaseService.GetUserByPromokod(code);
+            if (user != null)
+            {
+                _ = Task.Run(() => NotifyUserAsync(prizeName, user)); // В фоне
+            }
 
-            return Json(new { promoCode = code, prize = $"{user} 🎁 priz😍!" });
 
+            return Json(new { promoCode = code, userName = user.Name });
         }
 
+        private async Task NotifyUserAsync(string prizeName, User user)
+        {
+            await Task.Delay(30000); // Подождать 30 сек
+            await _winnerNotifier.SendWinnerMessageAsync(user.ChatId, user.Language, prizeName);
+        }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Setting()
         {
@@ -48,22 +62,37 @@ namespace PromoRandom.Controllers
         public async Task<IActionResult> AddPrize(Prize model)
         {
             if (model == null)
+               
                 return RedirectToAction("Setting");
 
-            await _databaseService.AddPrizeAsync(model);
+                await _databaseService.AddPrizeAsync(model);
 
             return RedirectToAction("Setting");
         }
 
-       
+
 
         [HttpPost]
-        public async Task<IActionResult> SavePrizeResult([FromBody]AddPrizUserModel model)
+        public async Task<IActionResult> SavePrizeResult([FromBody] AddPrizUserModel model)
         {
-            
-             await _databaseService.UpdatePrizeAsync(model);
+            await _databaseService.UpdatePrizeAsync(model);
+            return Ok();
+        }
 
-             return Ok();
+        [HttpPost]
+        public async Task<IActionResult> SpinWithDate([FromBody] AddPrizUserModel model)
+        {
+            await _databaseService.UpdatePrizeAsync(model);
+            return Ok();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+           await _databaseService.DeletePrizeAsync(id);
+           
+
+            return RedirectToAction("Setting"); 
         }
     }
 }

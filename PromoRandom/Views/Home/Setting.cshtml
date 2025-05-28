@@ -6,30 +6,44 @@
 <div class="settings-container">
     <h2>Настройки Спинера</h2>
 
-    <label for="speedSelect">Скорость вращения:</label>
-    <select id="speedSelect" name="speed">
-        <option value="slow">Медленная</option>
-        <option value="normal" selected>Обычная</option>
-        <option value="fast">Быстрая</option>
-    </select>
 
-    <h2>Добавить приз</h2>
+
+
+
+    <h4>Добавить приз</h4>
 
     <form method="post" asp-action="AddPrize">
         <input type="text" name="Name" placeholder="Введите название приза" required />
-        <button type="submit">Добавить</button>
+        <button type="submit"> Добавить</button>
     </form>
 
     <hr />
 
-    <h3>Список призов</h3>
+    <h4>Список призов</h4>
     @if (Model.Any())
     {
         <ul>
             @foreach (var prize in Model)
             {
-                <li>
-                    @prize.Name 
+                <li style="display: flex; align-items: center; gap: 10px; justify-content: space-between">
+                    <span style="margin-left:10%;">@prize.Name</span>
+                    <form asp-action="Delete" asp-route-id="@prize.Id" method="post" style="margin: 0;">
+                        <button type="submit"
+                                onclick="return confirm('Вы уверены, что хотите удалить этот приз?');"
+                                style="
+                                margin:0;
+                                width: 30px;
+                                height: 15px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 0;
+                                border: none;
+                                background: transparent;
+                                                    ">
+                            <i class="bi bi-trash text-danger" style="font-size: 16px;"></i>
+                        </button>
+                    </form>
                 </li>
             }
         </ul>
@@ -38,8 +52,11 @@
     {
         <p>Призы ещё не добавлены.</p>
     }
-
-    <button class="btn-spin" onclick="location.href='/Home/Index/Id?'">
-         Выкрутить
-    </button>
+    <h4>Выберите дату oт:</h4>
+    <form method="get" asp-action="index">
+        <input class="date-promo" type="date" name="date" required />
+        <button class="btn-spin" type="submit">
+            Выкрутить
+        </button>
+    </form>
 </div>
