@@ -31,9 +31,10 @@ namespace PromoRandom.Controllers
             string? dateString = HttpContext.Session.GetString("SelectedDate");
             var random = new Random();
             var promoCodes = await _databaseService.GetPromoCodesByUserAsync(dateString);
-            string code = "G7A9KZ3X"; // promoCodes[random.Next(promoCodes.Count)];
+            var code = promoCodes[random.Next(promoCodes.Count)];
             var user = await _databaseService.GetUserByPromokodAsync(code);
 
+            /* string code = "4544B374"; //*/
             if (user != null)
             {
                 _ = Task.Run(() => NotifyUserAsync(prizeName, user)); // В фоне
@@ -61,10 +62,6 @@ namespace PromoRandom.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPrize(Prize model)
         {
-            if (model == null)
-
-                return RedirectToAction("Setting");
-
             await _databaseService.AddPrizeAsync(model);
 
             return RedirectToAction("Setting");
@@ -76,8 +73,6 @@ namespace PromoRandom.Controllers
             await _databaseService.UpdatePrizeAsync(model);
             return Ok();
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
