@@ -73,9 +73,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                 const promoCodeText = document.getElementById("promoCodeText");
                 console.log(prizeTitle);
              
-
-              
-                    
                 prizeTitle.textContent = prizeTitle;
                 winnerName.textContent = data.userName
                 promoCodeText.textContent = data.promoCode;
@@ -94,6 +91,7 @@ document.getElementById("nextBtn").addEventListener("click", () => {
     const selectedPrizeId = document.getElementById("prizeSelect").value;
     const promoCode = document.getElementById("promoCodeText").textContent;
     console.log(promoCode)
+    console.log(selectedPrizeId)
     if (!selectedPrizeId || !promoCode) {
         alert("Приз или промокод отсутствует");
         return;
@@ -105,8 +103,8 @@ document.getElementById("nextBtn").addEventListener("click", () => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            PrizId: selectedPrizeId,
-            Promocod: promoCode
+            PrizeId: selectedPrizeId,
+            Promocode: promoCode
         })
     })
         .then(res => {
