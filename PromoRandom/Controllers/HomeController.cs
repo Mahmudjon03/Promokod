@@ -72,19 +72,16 @@ namespace PromoRandom.Controllers
 
 
 
+
+
         [HttpPost]
-        public async Task<IActionResult> SavePrizeResult([FromBody] AddPrizUserModel model)
+        public async Task<IActionResult> SavePrizeResult([FromBody] AddPrizeUserModel model)
         {
             await _databaseService.UpdatePrizeAsync(model);
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SpinWithDate([FromBody] AddPrizUserModel model)
-        {
-            await _databaseService.UpdatePrizeAsync(model);
-            return Ok();
-        }
+       
         
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
