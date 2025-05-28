@@ -44,9 +44,7 @@ C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.MvcApp
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cache
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.RazorAssemblyInfo.cs
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.sourcelink.json
-C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ru\PromoRandom.resources.cs
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ru\PromoRandom.resources.dll
-C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\tg\PromoRandom.resources.cs
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\tg\PromoRandom.resources.dll
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\scopedcss\bundle\PromoRandom.styles.css
@@ -66,3 +64,4 @@ C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\refint\PromoRandom
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.pdb
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\PromoRandom.genruntimeconfig.cache
 C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\ref\PromoRandom.dll
+C:\Users\murod\source\repos\Site\PromoRandom\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
