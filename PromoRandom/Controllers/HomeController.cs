@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PromoRandom.Models;
 using PromoRandom.Services;
+using PromoRandom.ViewModel;
 using System.Data;
 
 namespace PromoRandom.Controllers
@@ -19,10 +20,16 @@ namespace PromoRandom.Controllers
 
             HttpContext.Session.SetString("SelectedDate", date.ToString("O"));
 
-
+            var prizpromuser = await _databaseService.GetPrizesWithPromoAndUser();
             var priz = await _databaseService.GetPrizes();
 
-            return View(priz);
+
+            var viewModel = new PrizeIndexViewModel
+            {
+                Prizes = priz,
+                PrizeWithPromoAndUsers = prizpromuser
+            };
+            return View(viewModel);
         }
 
         [HttpGet]

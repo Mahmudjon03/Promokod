@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using PromoRandom.Services;
 using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PromoRandom.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController() : Controller
     {
+        private readonly DatabaseService _databaseService = new();
+
+
         [HttpGet]
         public IActionResult Login() => View();
 
@@ -14,20 +18,24 @@ namespace PromoRandom.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            
-            if (username == "admin" && password == "1234")
+            var customers = await _databaseService.GetCustomers();
+            var customer = customers.FirstOrDefault(c =>
+                c.Name.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+                c.Password == password);
+
+            if (customer != null)
             {
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, username),
-                new Claim("MyAppRole", "Admin")
-            };
+        {
+            new Claim(ClaimTypes.Name, customer.Name),
+            new Claim("MyAppRole", customer.Role)
+        };
 
                 var claimsIdentity = new ClaimsIdentity(claims, "MyCookieAuth");
 
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = false 
+                    IsPersistent = false
                 };
 
                 await HttpContext.SignInAsync("MyCookieAuth",
@@ -48,6 +56,6 @@ namespace PromoRandom.Controllers
             return RedirectToAction("Login");
         }
 
-        
+
     }
 }

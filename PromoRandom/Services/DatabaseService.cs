@@ -177,5 +177,61 @@ namespace PromoRandom.Services
             }
             return null; // Если промокод не найден
         }
+
+
+        public async Task<List<Customer>> GetCustomers()
+        {
+            var list = new List<Customer>();
+
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            var query = "SELECT * FROM `customer`";
+            using var cmd = new MySqlCommand(query, connection);
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                var customer = new Customer
+                {
+                    Id = reader.GetInt32("id"),
+                    Name = reader.GetString("name"),
+                    Password = reader.GetString("password"),
+                    Role = reader.GetString("role")
+                };
+                list.Add(customer);
+            }
+
+            return list;
+        }
+        
+        public async Task<List<PrizeWithPromoAndUser>> GetPrizesWithPromoAndUser()
+        {
+            var list = new List<PrizeWithPromoAndUser>();
+
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            var query = @"
+            SELECT p.name AS prize_name, u.name AS user_name, pc.code AS promo_code
+            FROM prizes AS p
+            INNER JOIN promo_codes AS pc ON pc.id = p.promo_code_id   
+             INNER JOIN users AS u ON u.id = pc.user_id";
+
+            using var cmd = new MySqlCommand(query, connection);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                var result = new PrizeWithPromoAndUser
+                {
+                    PrizeName = reader.GetString("prize_name"),
+                    UserName = reader.GetString("user_name"),
+                    PromoCode = reader.GetString("promo_code")
+                };
+                list.Add(result);
+            }
+
+            return list;
+        }
     }
 }
