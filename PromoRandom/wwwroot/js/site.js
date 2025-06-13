@@ -20,35 +20,37 @@ function createReels() {
     }
 }
 createReels();
-
 document.getElementById("generateBtn").addEventListener("click", () => {
     const select = document.getElementById("prizeSelect");
     const selectedValue = select.value;
     const prizeName = select.options[select.selectedIndex].text;
+
     if (selectedValue === "0") {
         showToast("Лутфан, аввал призро интихоб намоед.");
         return;
     }
+
     fetch("/Home/GetPromoCode?prizeName=" + encodeURIComponent(prizeName))
         .then((res) => res.json())
         .then((data) => {
             const code = data.promoCode.toUpperCase();
             const reels = document.querySelectorAll(".reel .symbols");
-            console.log(code);
+            const totalReels = reels.length;
+            let finishedCount = 0;
+
             reels.forEach((symbolsDiv, i) => {
                 let position = 0;
                 const targetChar = code[i];
                 const targetIndex = chars.indexOf(targetChar);
 
-                // Запускаем анимацию кручения (прокрутки вниз)
-                let speed = 10; // ms между шагами прокрутки
+                let speed = 10;
                 let steps = 80;
-                const maxSteps = 380 + i * 155; // разная длительность для каждого барабана
+                const maxSteps = 380 + i * 155;
 
                 function spin() {
                     steps++;
-                    position += 2; // смещение вниз на 1px
-                    if (position > 150 * chars.length) position = 0; // зациклить
+                    position += 2;
+                    if (position > 150 * chars.length) position = 0;
 
                     symbolsDiv.style.transform = `translateY(-${position}px)`;
 
@@ -58,34 +60,36 @@ document.getElementById("generateBtn").addEventListener("click", () => {
                         const finalPosition = 150 * targetIndex;
                         symbolsDiv.style.transition = "transform 1.3s ease-out";
                         symbolsDiv.style.transform = `translateY(-${finalPosition}px)`;
+
+                        symbolsDiv.addEventListener("transitionend", () => {
+                            finishedCount++;
+                            if (finishedCount === totalReels) {
+                                setTimeout(() => {
+                                    const modal = document.getElementById("resultModal");
+                                    const prizeTitle = select.options[select.selectedIndex].text;
+                                    const winnerName = document.getElementById("winnerName");
+                                    const promoCodeText = document.getElementById("promoCodeText");
+
+                                    document.getElementById("prizeTitle").textContent = prizeTitle;
+                                    winnerName.textContent = data.userName;
+                                    promoCodeText.textContent = data.promoCode;
+
+                                    modal.style.display = "block";
+                                    createConfetti(false);
+                                }, 2000); // ⏳ Ждать 2 секунды (2000 мс)
+                            }
+                        }, { once: true }); // Слушаем событие один раз
                     }
                 }
+
                 spin();
-
             });
-
-            // Показываем приз через время, когда все барабаны остановятся
-            setTimeout(() => {
-                const modal = document.getElementById("resultModal");
-                const select = document.getElementById("prizeSelect");
-                const prizeTitle = select.options[select.selectedIndex].text;
-                const winnerName = document.getElementById("winnerName");
-                const promoCodeText = document.getElementById("promoCodeText");
-                console.log(prizeTitle);
-             
-                prizeTitle.textContent = prizeTitle;
-                winnerName.textContent = data.userName
-                promoCodeText.textContent = data.promoCode;
-
-                modal.style.display = "block";
-                document.getElementById("prizeTitle").textContent = prizeTitle;
-                createConfetti(false);
-            }, 24000);
         })
         .catch(() => {
             showToast("Вахтро нодуруст интихоб кардед!");
         });
 });
+
 
 document.getElementById("nextBtn").addEventListener("click", () => {
     const selectedPrizeId = document.getElementById("prizeSelect").value;
