@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CountdownTitle" xml:space="preserve">
-    <value> До окончания акции осталось</value>
+    <value>До окончания акции осталось</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Отправьте фото чека через наш Telegram-бот и получите шанс стать нашим победителем.</value>
@@ -127,10 +127,10 @@
     <value>Акция завершена</value>
   </data>
   <data name="Header" xml:space="preserve">
-    <value> Участвуйте в розыгрыше и выигрывайте потрясающие призы!</value>
+    <value>Участвуйте в розыгрыше и выигрывайте потрясающие призы!</value>
   </data>
   <data name="MapTitle" xml:space="preserve">
-    <value> Как нас найти</value>
+    <value>Как нас найти</value>
   </data>
   <data name="ParticipateButton" xml:space="preserve">
     <value>Участвовать</value>
@@ -145,7 +145,7 @@
     <value>Opel Zafira «Family Edition»</value>
   </data>
   <data name="PrizesTitle" xml:space="preserve">
-    <value> Наши призы</value>
+    <value>Наши призы</value>
   </data>
   <data name="StoreAddress" xml:space="preserve">
     <value>ш. Душанбе, куч. Рӯдаки...</value>
