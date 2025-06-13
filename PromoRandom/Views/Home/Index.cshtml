@@ -1,12 +1,13 @@
-﻿@{
+﻿@using PromoRandom.ViewModel
+@{
     ViewBag.Title = "Чархи «ИМКОН»";
 }
-@model List<Prize>
+@model PrizeIndexViewModel
 <div class="container">
     <h1 style="font-size:2.1em;"> Чархи «ИМКОН» </h1>
     <select name="prizeId" id="prizeSelect">
         <option disabled selected value="0"> Интихоби Приз </option>
-        @foreach (var prize in Model)
+        @foreach (var prize in Model.Prizes)
         {
             <option value="@prize.Id">@prize.Name</option>
         }
@@ -35,16 +36,47 @@
         <div id="winnerName" class="winner-name"></div>
         <div id="promoCodeText" style="font-size: 1.2rem; color: gold; margin-top: 5px;"></div>
         <div class="btn-mok">
-          
-              
-                <button class="btn-next" id="updateBtn">
-                    <img src="~/image/update.png" alt="Alternate Text" />
-                </button>
 
-         
+
+            <button class="btn-next" id="updateBtn">
+                <img src="~/image/update.png" alt="Alternate Text" />
+            </button>
+
+
             <button class="btn-next" id="nextBtn">
                 <img src="~/image/next.png" alt="Alternate Text" />
             </button>
         </div>
     </div>
 </div>
+
+<div class="prize-conteyner">
+    @if (Model.PrizeWithPromoAndUsers.Count != 0)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Приз</th>
+                    <th>Пользователь</th>
+                    <th>Промокод</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PrizeWithPromoAndUsers)
+                {
+                    <tr>
+                        <td>@item.PrizeName</td>
+                        <td>@item.UserName</td>
+                        <td>@item.PromoCode</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }else
+        {
+
+        <h5 style="color: gold; margin: 15px;">Список выигрышей пользователя пустой</h5>
+
+        }
+
+    </div>
