@@ -1,8 +1,8 @@
-﻿@using PromoRandom.ViewModel
+﻿@using PromoRandom.ViewModels
 @{
     ViewBag.Title = "Чархи «ИМКОН»";
 }
-@model PrizeIndexViewModel
+@* @model PrizeIndexViewModel *@
 <div class="container">
     <h1 style="font-size:2.1em;"> Чархи «ИМКОН» </h1>
     <select name="prizeId" id="prizeSelect">
@@ -70,13 +70,14 @@
                         <td>@item.PromoCode</td>
                     </tr>
                 }
-                </tbody>
-            </table>
-        }else
-        {
+            </tbody>
+        </table>
+    }
+    else
+    {
 
         <h5 style="color: gold; margin: 15px;">Список выигрышей пользователя пустой</h5>
 
-        }
+    }
 
-    </div>
+</div>

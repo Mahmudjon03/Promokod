@@ -1,4 +1,4 @@
-﻿namespace PromoRandom.ViewModels;
+﻿namespace PromoRandom.Models;
 
 public class PrizeWinner
 {

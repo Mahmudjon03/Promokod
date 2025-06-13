@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using PromoRandom.Services;
 using System.Globalization;
-using Microsoft.Extensions.Options; // ← обязательно для IOptions<>
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using PromoRandom.Models; // ← обязательно для IOptions<>
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,15 +14,16 @@ builder.Services.AddSingleton<DatabaseService>();
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+// Регистрируем привязку настроек для AdminUser (загружается из appsettings.json)
+builder.Services.Configure<AdminUserOptions>(builder.Configuration.GetSection("AdminUser"));
+
 builder.Services.AddHttpClient<WinnerNotificationService>();
 
-builder.Services.AddAuthentication("MyCookieAuth")
-    .AddCookie("MyCookieAuth", options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/AccessDenied";
-        options.Cookie.Name = "MyAppAuthCookie";
-        options.SlidingExpiration = false;
+        options.SlidingExpiration = true;
     });
 
 // ✅ Локализация
@@ -66,6 +69,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Site}/{action=Index}/{id?}");
+    pattern: "{controller=Admin}/{action=Index}/{id?}");
 
 app.Run();

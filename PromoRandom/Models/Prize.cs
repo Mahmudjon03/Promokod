@@ -1,9 +1,8 @@
-﻿namespace PromoRandom.Models
+﻿namespace PromoRandom.Models;
+
+public class Prize
 {
-    public class Prize
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string? PromocodeId { get; set; }
-    }
+    public int Id { get; set; }
+    public int GiveId { get; set; }
+    public string Name { get; set; } = "";
 }

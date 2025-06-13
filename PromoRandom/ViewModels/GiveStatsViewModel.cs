@@ -1,12 +1,12 @@
-﻿namespace PromoRandom.ViewModels
+﻿using PromoRandom.Models;
+
+namespace PromoRandom.ViewModels;
+
+public class WinnerStatModel
 {
-    public class WinnerStatModel
-    {
-        public string GiveawayName { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+    public string GiveawayName { get; set; } = "";
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 
-        public List<PrizeWinner> Winners { get; set; } = new();
-
-    }
+    public List<PrizeWinner> Winners { get; set; } = [];
 }

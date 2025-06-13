@@ -30,7 +30,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
         return;
     }
 
-    fetch("/Home/GetPromoCode?prizeName=" + encodeURIComponent(prizeName))
+    fetch("/Admin/GetPromoCode?prizeName=" + encodeURIComponent(prizeName))
         .then((res) => res.json())
         .then((data) => {
             const code = data.promoCode.toUpperCase();
@@ -101,7 +101,7 @@ document.getElementById("nextBtn").addEventListener("click", () => {
         return;
     }
 
-    fetch("/Home/SavePrizeResult", {
+    fetch("/Admin/SavePrizeResult", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

@@ -1,48 +1,49 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using PromoRandom.Services;
+using Microsoft.Extensions.Options;
+using PromoRandom.Models;
 using System.Security.Claims;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PromoRandom.Controllers
 {
-    public class AccountController() : Controller
+    public class AccountController(IOptionsMonitor<AdminUserOptions> adminOptions) : Controller
     {
-        private readonly DatabaseService _databaseService = new();
-
-
         [HttpGet]
         public IActionResult Login() => View();
 
-        // Обработка логина
+        // Обработка логина на основе данных из файла конфигурации
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var customers = await _databaseService.GetCustomers();
-            var customer = customers.FirstOrDefault(c =>
-                c.Name.Equals(username, StringComparison.OrdinalIgnoreCase) &&
-                c.Password == password);
+            // Получаем актуальные данные администратора из конфигурации
+            var adminUser = adminOptions.CurrentValue;
 
-            if (customer != null)
+            if (username.Equals(adminUser.Username, StringComparison.OrdinalIgnoreCase) &&
+                password == adminUser.Password)
             {
+                // Формирование списка claims, используя стандартные типы (Role и Name)
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, customer.Name),
-            new Claim("MyAppRole", customer.Role)
-        };
+                {
+                    new(ClaimTypes.Name, adminUser.Username),
+                    new(ClaimTypes.Role, adminUser.Role)
+                };
 
-                var claimsIdentity = new ClaimsIdentity(claims, "MyCookieAuth");
+                // Создаём identity с использованием стандартной схемы cookie-аутентификации
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = false
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
                 };
 
-                await HttpContext.SignInAsync("MyCookieAuth",
-                    new ClaimsPrincipal(claimsIdentity), authProperties);
+                // Подписываем пользователя: создаётся cookie, содержащая claims
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
 
-                HttpContext.Session.SetInt32("login", 1);
-                return RedirectToAction("Setting", "Home");
+                return RedirectToAction("Setting", "Admin");
             }
 
             ViewBag.Error = "Неверный логин или пароль";
@@ -52,10 +53,8 @@ namespace PromoRandom.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync("MyCookieAuth");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
-
-
     }
 }

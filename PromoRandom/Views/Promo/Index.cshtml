@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "Розыгрыш призов";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🎰 Розыгрыш промо-кодов</h1>
+
+    <div class="drum-container bg-light p-4 rounded shadow mb-4">
+        <div class="d-flex justify-content-center">
+            @for (int i = 0; i < 8; i++)
+            {
+                <div class="drum-slot mx-2">
+                    <div class="symbol display-4 font-weight-bold text-primary">?</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button id="spinButton" class="btn btn-danger btn-lg px-5 py-3">
+            <i class="fas fa-redo mr-2"></i> Крутить барабан
+        </button>
+    </div>
+
+    <div id="result" class="mt-4 text-center h3"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#spinButton').click(function() {
+                spinDrum();
+            });
+        });
+
+        async function spinDrum() {
+            // Блокируем кнопку на время анимации
+            $('#spinButton').prop('disabled', true);
+            $('#result').empty();
+
+            // Запускаем анимацию вращения
+            const slots = $('.symbol');
+            const spinDuration = 10000; // 10 секунды
+            const spinStart = Date.now();
+
+            // Анимация для каждого слота
+            slots.each((index, slot) => {
+                animateSlot(slot, spinStart + index * 200, spinDuration);
+            });
+
+            // Запрос к серверу
+            try {
+                const response = await fetch('@Url.Action("GetPromoCode", "Promo")');
+                const data = await response.json();
+
+                if (data.error) {
+                    setTimeout(() => alert(data.error), spinDuration + 800);
+                    return;
+                }
+
+                // Отображаем результат после анимации
+                setTimeout(() => {
+                    showResult(data.promoCode, data.userName);
+                }, spinDuration + 1000);
+
+            } catch (error) {
+                console.error(error);
+                alert('Ошибка при запросе');
+            } finally {
+                setTimeout(() => {
+                    $('#spinButton').prop('disabled', false);
+                }, spinDuration + 1500);
+            }
+        }
+
+        function animateSlot(slot, startTime, duration) {
+            const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let lastUpdate = 0;
+
+            function updateFrame(timestamp) {
+                if (!lastUpdate) lastUpdate = timestamp;
+                const progress = timestamp - lastUpdate;
+
+                if (progress > 100) { // Смена символа каждые 100мс
+                    const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    slot.textContent = randomSymbol;
+                    lastUpdate = timestamp;
+                }
+
+                if (timestamp < startTime + duration) {
+                    requestAnimationFrame(updateFrame);
+                }
+            }
+
+            requestAnimationFrame(updateFrame);
+        }
+
+        function showResult(promoCode, userName) {
+            // Показываем победителя
+            $('#result').html(
+                `<div class="alert alert-success">
+                    <strong>Победитель:</strong> ${userName}<br>
+                    <strong>Промо-код:</strong> ${promoCode.trim()}
+                </div>`
+            );
+
+            // Отображаем промо-код в барабане
+            $('.symbol').each(function(index) {
+                $(this).text(promoCode[index] || ' ');
+            });
+        }
+    </script>
+
+    <style>
+        .drum-slot {
+            width: 70px;
+            height: 100px;
+            border: 3px solid #0d6efd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .symbol {
+            transition: transform 0.1s;
+        }
+
+        #spinButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+}
