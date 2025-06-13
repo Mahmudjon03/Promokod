@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using PromoRandom.Services;
 using System.Globalization;
+using Microsoft.Extensions.Options; // ← обязательно для IOptions<>
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddSingleton<DatabaseService>();
 
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// ✅ Регистрируем WinnerNotificationService через AddHttpClient
 builder.Services.AddHttpClient<WinnerNotificationService>();
 
 builder.Services.AddAuthentication("MyCookieAuth")
@@ -21,13 +22,13 @@ builder.Services.AddAuthentication("MyCookieAuth")
         options.Cookie.Name = "MyAppAuthCookie";
         options.SlidingExpiration = false;
     });
-// Локализация
+
+// ✅ Локализация
 builder.Services.AddLocalization(opts => opts.ResourcesPath = "Resources");
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 
-// Поддерживаемые культуры
 var supportedCultures = new[]
 {
     new CultureInfo("ru"),
@@ -36,18 +37,19 @@ var supportedCultures = new[]
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    options.DefaultRequestCulture = new RequestCulture("tg"); // По умолчанию — таджикский
+    options.DefaultRequestCulture = new RequestCulture("tg");
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
-
-    // добавим поддержку смены языка через ?culture=
-    options.RequestCultureProviders =
-    [
+    options.RequestCultureProviders = [
         new QueryStringRequestCultureProvider()
     ];
 });
 
 var app = builder.Build();
+
+// ✅ Включаем локализацию (ты забыл это!)
+var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(locOptions);
 
 if (!app.Environment.IsDevelopment())
 {

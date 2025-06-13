@@ -1,0 +1,45 @@
+﻿@model List<PromoRandom.ViewModels.WinnerStatModel>
+
+@{
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Статистика розыгрышей</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">Нет данных для отображения.</div>
+    }
+    else
+    {
+        foreach (var giveaway in Model)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">@giveaway.GiveawayName</h5>
+                    <small>Период: @giveaway.StartDate.ToString("yyyy-MM-dd") — @giveaway.EndDate.ToString("yyyy-MM-dd")</small>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 60%">Приз</th>
+                                <th style="width: 40%">Победитель</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var winner in giveaway.Winners)
+                            {
+                                <tr>
+                                    <td>@winner.PrizeName</td>
+                                    <td>@winner.WinnerName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+</div>

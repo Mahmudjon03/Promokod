@@ -1,18 +1,26 @@
 ﻿using MySql.Data.MySqlClient;
 using PromoRandom.Models;
+using PromoRandom.ViewModels;
 using System.Data;
 
 
 namespace PromoRandom.Services
 {
-    public class DatabaseService()
+    public class DatabaseService
     {
-        private readonly string _connectionString = "Server=localhost;Database=imkon_db;Uid=root;Pwd=;";
+        private readonly string _connectionString;
+
+        // Fix for CS8862 and CS8618: Added 'this' initializer and ensured '_connectionString' is initialized.
+        public DatabaseService(IConfiguration configuration)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            _connectionString = configuration.GetConnectionString("DefaultConnection")
+                                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+        }
 
         public async Task<List<string>> GetPromoCodesByUserAsync(string date)
         {
-            try
-            {
                 var codes = new List<string>();
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.OpenAsync();
@@ -30,13 +38,6 @@ namespace PromoRandom.Services
                 }
 
                 return codes;
-            }
-            catch (Exception ex)
-            {
-
-                string error = ex.Message;
-                throw;
-            }
 
         }
 
@@ -53,9 +54,6 @@ namespace PromoRandom.Services
             await reader.ReadAsync();
             return reader.GetString(0);
         }
-
-
-
 
         public async Task AddPrizeAsync(Prize prize)
 
@@ -87,27 +85,20 @@ namespace PromoRandom.Services
 
         public async Task UpdatePrizeAsync(AddPrizeUserModel prize)
         {
-            try
-            {
-                using var connection = new MySqlConnection(_connectionString);
-                await connection.OpenAsync();
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
 
-                var query = @"UPDATE prizes
+            var query = @"UPDATE prizes
                         SET  promo_code_id = (select id from promo_codes where code = @promocode) 
                         WHERE id = @id;
                         update promo_codes 
                         set state = 1 
                         where code = @promocode;";
 
-                using var cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@id", prize.PrizeId);
-                cmd.Parameters.AddWithValue("@promocode", prize.Promocode);
-                await cmd.ExecuteNonQueryAsync();
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message;
-            }
+            using var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@id", prize.PrizeId);
+            cmd.Parameters.AddWithValue("@promocode", prize.Promocode);
+            await cmd.ExecuteNonQueryAsync();
         }
 
         public async Task<List<Prize>> GetPrizes()
@@ -178,60 +169,67 @@ namespace PromoRandom.Services
             return null; // Если промокод не найден
         }
 
-
-        public async Task<List<Customer>> GetCustomers()
+        public async Task<List<WinnerStatModel>> GetWinnerStatisticsAsync()
         {
-            var list = new List<Customer>();
-
             using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var query = "SELECT * FROM `customer`";
-            using var cmd = new MySqlCommand(query, connection);
-            using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                var customer = new Customer
-                {
-                    Id = reader.GetInt32("id"),
-                    Name = reader.GetString("name"),
-                    Password = reader.GetString("password"),
-                    Role = reader.GetString("role")
-                };
-                list.Add(customer);
-            }
-
-            return list;
-        }
-        
-        public async Task<List<PrizeWithPromoAndUser>> GetPrizesWithPromoAndUser()
-        {
-            var list = new List<PrizeWithPromoAndUser>();
-
-            using var connection = new MySqlConnection(_connectionString);
-            await connection.OpenAsync();
-
+            // Corrected SQL query with proper table relationships
             var query = @"
-            SELECT p.name AS prize_name, u.name AS user_name, pc.code AS promo_code
-            FROM prizes AS p
-            INNER JOIN promo_codes AS pc ON pc.id = p.promo_code_id   
-             INNER JOIN users AS u ON u.id = pc.user_id";
+                SELECT 
+                    g.id AS GiveawayId,
+                    g.name AS GiveawayName,
+                    g.start_date,
+                    g.end_date,
+                    p.id AS PrizeId,
+                    p.name AS PrizeName,
+                    u.name AS WinnerName
+                FROM gives g
+                LEFT JOIN prizes p ON p.give_id = g.id
+                LEFT JOIN winners w ON w.prize_id = p.id
+                LEFT JOIN promo_codes pc ON pc.id = w.promo_code_id
+                LEFT JOIN users u ON u.chat_id = pc.user_chat_id
+                ORDER BY g.start_date DESC, g.id, p.id;
+            ";
 
             using var cmd = new MySqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
 
+            var giveawayDict = new Dictionary<int, WinnerStatModel>();
+
             while (await reader.ReadAsync())
             {
-                var result = new PrizeWithPromoAndUser
+                var giveawayId = reader.GetInt32("GiveawayId");
+
+                if (!giveawayDict.TryGetValue(giveawayId, out var giveaway))
                 {
-                    PrizeName = reader.GetString("prize_name"),
-                    UserName = reader.GetString("user_name"),
-                    PromoCode = reader.GetString("promo_code")
-                };
-                list.Add(result);
+                    giveaway = new WinnerStatModel
+                    {
+                        GiveawayName = reader.GetString("GiveawayName"),
+                        StartDate = reader.GetDateTime("start_date"),
+                        EndDate = reader.GetDateTime("end_date"),
+                        Winners = []
+                    };
+                    giveawayDict[giveawayId] = giveaway;
+                }
+
+                // Only add prize information if PrizeName exists
+                if (!reader.IsDBNull(reader.GetOrdinal("PrizeName")))
+                {
+                    var prizeName = reader.GetString("PrizeName");
+                    var winnerName = reader.IsDBNull(reader.GetOrdinal("WinnerName"))
+                        ? "-"
+                        : reader.GetString("WinnerName");
+
+                    giveaway.Winners.Add(new PrizeWinner
+                    {
+                        PrizeName = prizeName,
+                        WinnerName = winnerName
+                    });
+                }
             }
 
-            return list;
+            return [.. giveawayDict.Values];
         }
     }
 }
