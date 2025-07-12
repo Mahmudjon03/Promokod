@@ -120,6 +120,9 @@
   <data name="CountdownTitle" xml:space="preserve">
     <value>До окончания акции осталось</value>
   </data>
+  <data name="Days" xml:space="preserve">
+    <value>Дней</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Отправьте фото чека через наш Telegram-бот и получите шанс стать нашим победителем.</value>
   </data>
@@ -129,23 +132,29 @@
   <data name="Header" xml:space="preserve">
     <value>Участвуйте в розыгрыше и выигрывайте потрясающие призы!</value>
   </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Час</value>
+  </data>
   <data name="MapTitle" xml:space="preserve">
     <value>Как нас найти</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Минут</value>
+  </data>
+  <data name="NoPrizesDescription" xml:space="preserve">
+    <value>Призы не найдены</value>
+  </data>
+  <data name="NoPrizesMessage" xml:space="preserve">
+    <value>В текущем розыгрыше пока нет призов. Пожалуйста, проверьте позже.</value>
   </data>
   <data name="ParticipateButton" xml:space="preserve">
     <value>Участвовать</value>
   </data>
-  <data name="Prize1" xml:space="preserve">
-    <value>iPhone 16 Pro</value>
-  </data>
-  <data name="Prize2" xml:space="preserve">
-    <value>Денежные конверты</value>
-  </data>
-  <data name="Prize3" xml:space="preserve">
-    <value>Opel Zafira «Family Edition»</value>
-  </data>
   <data name="PrizesTitle" xml:space="preserve">
     <value>Наши призы</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>Секунд</value>
   </data>
   <data name="StoreAddress" xml:space="preserve">
     <value>ш. Душанбе, куч. Рӯдаки...</value>

@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null; // Убираем стандартный layout
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Нет активных розыгрышей</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="card shadow-lg mx-auto" style="max-width: 600px;">
+            <div class="card-header bg-danger text-white">
+                <h3 class="card-title text-center mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Нет активных розыгрышей
+                </h3>
+            </div>
+            <div class="card-body text-center py-4">
+                <div class="mb-4">
+                    <i class="fas fa-calendar-times fa-5x text-danger"></i>
+                </div>
+                <h4 class="mb-3">В данный момент нет активных розыгрышей</h4>
+                <p class="text-muted">Для создания нового розыгрыша перейдите в панель администратора</p>
+            </div>
+            <div class="card-footer bg-white border-0 pb-4 text-center">
+                <a href="http://localhost:5238/Admin/Gives" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-cogs me-2"></i>Перейти в админ-панель
+                </a>
+                <div class="mt-3">
+                    <a href="/" class="text-decoration-none">
+                        <i class="fas fa-arrow-left me-1"></i> Вернуться на главную
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

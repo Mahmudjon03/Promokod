@@ -1,4 +1,4 @@
-﻿html {
+﻿/*html {
     font-size: 14px;
 }
 
@@ -150,9 +150,9 @@ h1 {
 }
 
 .reel {
-    width: 120px; /* 40px * 3 */
-    height: 150px; /* 50px * 3 */
-    overflow: hidden;
+    width: 120px;*/ /* 40px * 3 */
+    /*height: 150px;*/ /* 50px * 3 */
+    /*overflow: hidden;
     border: 4px solid gold;
     border-radius: 18px;
     background: #111;
@@ -163,9 +163,9 @@ h1 {
 .symbols {
     color: gold;
     font-weight: bold;
-    font-size: 4.5rem; /* 1.5rem * 3 */
-    line-height: 150px; /* 50px * 3 */
-    user-select: none;
+    font-size: 4.5rem;*/ /* 1.5rem * 3 */
+    /*line-height: 150px;*/ /* 50px * 3 */
+    /*user-select: none;
 }
 
 
@@ -177,9 +177,9 @@ h1 {
     background-color: aqua;
     position: absolute;
     top: 50px;
-}
+}*/
 /*style modal okno*/
-.modal {
+/*.modal {
     display: none;
     position: fixed;
     z-index: 10000;
@@ -322,10 +322,10 @@ button[type="submit"] {
 
     .btn-spin:hover {
         background: linear-gradient(45deg, #cc0000, #cc6a00);
-    }
+    }*/
 
 /* Новый стиль для списка призов */
-ul {
+/*ul {
     list-style-type: none;
     padding-left: 0;
     margin-top: 10px;
@@ -333,13 +333,13 @@ ul {
     overflow-y: auto;
     border: 1px solid #444;
     border-radius: 6px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
+    scrollbar-width: none;*/ /* Firefox */
+    /*-ms-overflow-style: none;*/ /* Internet Explorer 10+ */
+/*}
 
     ul::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Edge */
-    }
+        display: none;*/ /* Chrome, Safari, Edge */
+    /*}
 
     ul li {
         background-color: #222;
@@ -374,18 +374,18 @@ ul {
 #prizeSelect {
     background: rgba(0, 0, 0, 0.75);
     color: gold;
-    font-size: 1.8em; /* Примерно как h1 */
-    border: none;
+    font-size: 1.8em;*/ /* Примерно как h1 */
+    /*border: none;
     outline: none;
-    appearance: none; /* скрывает стандартную стрелку в большинстве браузеров */
-    -webkit-appearance: none;
+    appearance: none;*/ /* скрывает стандартную стрелку в большинстве браузеров */
+    /*-webkit-appearance: none;
     -moz-appearance: none;
     text-align: center;
     font-weight: bold;
-}
+}*/
 
     /* Чтобы скрыть стрелку в некоторых браузерах */
-    #prizeSelect::-ms-expand {
+    /*#prizeSelect::-ms-expand {
         display: none;
     }
 
@@ -410,12 +410,12 @@ ul {
     position: absolute;
     bottom: -110px;
     left: 0px;
-    overflow-y: auto; /* включаем вертикальную прокрутку */
-    scrollbar-width: none; /* Firefox */
-}
+    overflow-y: auto;*/ /* включаем вертикальную прокрутку */
+    /*scrollbar-width: none;*/ /* Firefox */
+/*}*/
 
     /* Chrome, Edge, Safari */
-    .prize-conteyner::-webkit-scrollbar {
+    /*.prize-conteyner::-webkit-scrollbar {
         width: 0;
         height: 0;
     }
@@ -424,11 +424,137 @@ ul {
         width: 100%;
         font-size: 14px;
         border-collapse: collapse;
-        color: gold; /* золотой текст */
-    }
+        color: gold;*/ /* золотой текст */
+    /*}
 
     .prize-conteyner th,
     .prize-conteyner td {
         text-align: left;
         padding: 4px;
+    }*/
+
+
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+
+.badge {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.article-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+.card-img-top {
+    transition: transform 0.5s ease;
+}
+
+.article-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+
+.btn-outline-light {
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+    .btn-outline-light:hover {
+        color: #0d6efd !important;
+        background-color: white;
+        border-color: white;
+    }
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    padding: 8px 15px !important;
+    margin: 0 3px;
+}
+
+    .nav-link:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateY(-2px);
+    }
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+.card-header {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.btn-outline-custom {
+    transition: all 0.3s ease;
+}
+
+    .btn-outline-custom:hover {
+        color: white !important;
+    }
+
+
+.news-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+    .news-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+    }
+
+    .news-content h2, .news-content h3 {
+        margin-top: 2rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .news-content blockquote {
+        border-left: 4px solid #0d6efd;
+        padding-left: 1.5rem;
+        margin-left: 0;
+        font-style: italic;
+        color: #555;
     }

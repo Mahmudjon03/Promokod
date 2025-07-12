@@ -1,0 +1,70 @@
+﻿@model PromoRandom.Models.Prize
+
+<div class="modal-header bg-warning text-white">
+    <h5 class="modal-title">Редактирование приза</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form id="editPrizeForm" asp-action="EditPrize" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Выберите розыгрыш</label>
+            <select asp-for="GiveId" class="form-control" required>
+                @if (ViewBag.Gives != null)
+                {
+                    foreach (var give in (List<PromoRandom.Models.Give>)ViewBag.Gives)
+                    {
+                                        <option value="@give.Id" selected="@(give.Id == Model.GiveId ? "selected" : null)">@give.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Название приза</label>
+            <input type="text" asp-for="Name" class="form-control" required />
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Количество призов</label>
+                    <input type="number" asp-for="Quantity" class="form-control" min="1" required />
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Требуется промокодов</label>
+                    <input type="number" asp-for="RequiredPromoCodeCount" class="form-control" min="1" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Приоритет (целое число)</label>
+                    <input type="number" asp-for="Priority" class="form-control" min="0" required />
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Длительность вращения (с)</label>
+                    <input type="number" asp-for="SpinDuration" class="form-control" min="1" required />
+                </div>
+            </div>
+        <div class="form-group">
+            <label>Текущее изображение</label>
+            <div>
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                            <img src="@Model.ImagePath" alt="Нет изображения" class="img-thumbnail mb-2" style="max-height: 200px;" />
+                }
+                else
+                {
+                            <p>Изображение отсутствует</p>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Новое изображение (оставьте пустым, чтобы сохранить текущее)</label>
+            <input type="file" name="PrizeImage" class="form-control-file">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-warning">Сохранить изменения</button>
+    </div>
+</form>

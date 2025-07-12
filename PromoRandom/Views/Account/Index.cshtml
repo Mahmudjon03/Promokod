@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Вход";
+}
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Вход</h2>
+
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+            <form method="post" asp-controller="Account" asp-action="Login">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Логин:</label>
+                    <input type="text" autocomplete="off" class="form-control" id="username" name="username" required />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль:</label>
+                    <input type="password" autocomplete="new-password" class="form-control" id="password" name="password" required />
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

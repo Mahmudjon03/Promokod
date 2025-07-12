@@ -1,0 +1,116 @@
+﻿@model PromoRandom.ViewModels.PromoCodeViewModel
+
+<div class="container-fluid py-3">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-info-circle"></i> Основная информация
+                </div>
+                <div class="card-body p-2">
+                    <table class="table table-sm mb-0">
+                        <tr><th>Промо-код:</th><td>@Model.Code</td></tr>
+                        <tr>
+                            <th>Статус:</th>
+                            <td>
+                                @if (Model.Status == "active")
+                                {
+                                    <span class="badge bg-success">Активен</span>
+                                }
+                                else if (Model.Status == "won")
+                                {
+                                    <span class="badge bg-warning text-dark">Победитель</span>
+                                }
+                                else if (Model.Status == "disabled")
+                                {
+                                    <span class="badge bg-secondary">Отключён</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-dark">Истекший</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr><th>Дата отправки:</th><td><i class="far fa-calendar-alt"></i> @Model.SubmittedAt.ToString("g")</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-secondary text-white">
+                    <i class="fas fa-user"></i> Пользователь
+                </div>
+                <div class="card-body p-2">
+                    <table class="table table-sm mb-0">
+                        <tr><th>Имя:</th><td>@(Model.User?.Name ?? "не указано")</td></tr>
+                        <tr><th>Телефон:</th><td>@(Model.User?.Phone ?? "не указан")</td></tr>
+                        <tr><th>Chat ID:</th><td>@Model.User?.ChatId</td></tr>
+                        <tr><th>Язык:</th><td>@Model.User?.Language</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-shopping-cart"></i> Заказ
+                </div>
+                <div class="card-body p-2">
+                    <table class="table table-sm mb-0">
+                        <tr><th>ID заказа:</th><td>@Model.Order?.OrderId</td></tr>
+                        <tr><th>Сумма заказа:</th><td>@Model.Order?.Amount.ToString("0.00")</td></tr>
+                        <tr><th>Дата заказа:</th><td><i class="far fa-calendar-alt"></i> @Model.Order?.Date.ToString("g")</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-gift"></i> Розыгрыш
+                </div>
+                <div class="card-body p-2">
+                    <table class="table table-sm mb-0">
+                        <tr><th>Название:</th><td>@Model.Give?.Name</td></tr>
+                        <tr><th>Дата начала:</th><td>@Model.Give?.StartDate.ToString("d")</td></tr>
+                        <tr><th>Дата окончания:</th><td>@Model.Give?.EndDate.ToString("d")</td></tr>
+                        <tr><th>Статус:</th><td>@(Model.Give?.IsCompleted == true ? "Завершён" : "Активен")</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Prize != null && !string.IsNullOrWhiteSpace(Model.Prize.Name))
+        {
+            <div class="container-fluid">
+                <div class="d-flex justify-content-center">
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-sm mt-3">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-award"></i> Приз
+                            </div>
+                            <div class="card-body p-2">
+                                <table class="table table-sm mb-0">
+                                    <tr><th>Название:</th><td>@Model.Prize.Name</td></tr>
+                                    <tr>
+                                        <th>Изображение:</th>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.Prize.ImagePath))
+                                            {
+                                                <img src="@Url.Content(Model.Prize.ImagePath)" alt="Приз" class="img-fluid" style="max-height: 100px;" />
+                                            }
+                                            else
+                                            {
+                                                <span>Нет изображения</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

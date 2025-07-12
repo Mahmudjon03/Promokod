@@ -1,0 +1,33 @@
+﻿@model PromoRandom.Models.Give
+
+<div class="modal-header bg-warning text-white">
+    <h5 class="modal-title">Редактирование розыгрыша</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span>&times;</span>
+    </button>
+</div>
+<form id="editGiveForm" asp-action="EditGive" method="post">
+    <div class="modal-body">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="form-group">
+            <label>Название розыгрыша</label>
+            <input type="text" name="Name" class="form-control" value="@Model.Name" required />
+        </div>
+        <div class="form-group">
+            <label>Дата начала</label>
+            <input type="datetime-local" name="StartDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" required />
+        </div>
+        <div class="form-group">
+            <label>Дата окончания</label>
+            <input type="datetime-local" name="EndDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" required />
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" name="IsCompleted" class="form-check-input" id="isCompleted" value="true" @(Model.IsCompleted ? "checked" : "") />
+            <label class="form-check-label" for="isCompleted">Завершён</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-warning">Сохранить изменения</button>
+    </div>
+</form>

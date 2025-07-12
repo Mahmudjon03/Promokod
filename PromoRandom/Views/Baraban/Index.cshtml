@@ -1,0 +1,739 @@
+﻿@using PromoRandom.ViewModels;
+@{
+    Layout = "~/Views/Shared/_BarabanLayout.cshtml";
+    ViewData["Title"] = "Чархи «ИМКОН»";
+    var prizes = ViewBag.Prizes as List<PrizeViewModel> ?? new List<PrizeViewModel>();
+    var currentPrize = ViewBag.CurrentPrize as PrizeViewModel;
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4 main-title">🎰 Чархи «ИМКОН» 🎰</h1>
+
+    <!-- Барабан с кнопкой -->
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <div class="drum-container p-4 rounded">
+            <div class="d-flex justify-content-center">
+                @for (int i = 0; i < 8; i++)
+                {
+                    <div class="drum-slot mx-2 position-relative">
+                        <div class="symbol display-4 font-weight-bold">?</div>
+                        <div class="slot-highlight"></div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Красная круглая кнопка справа -->
+        <div class="spin-button-container ml-4">
+            <button id="spinButton" class="btn btn-danger rounded-circle spin-button">
+                <i class="fas fa-redo"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Остальной код -->
+    <div id="result" class="mt-4 text-center h3 result-text"></div>
+
+    <!-- Блок текущего приза -->
+    @if (currentPrize != null)
+    {
+        <div class="current-prize mb-4 p-3 rounded text-center">
+            <h3>Сейчас разыгрывается:</h3>
+            <div class="d-flex align-items-center justify-content-center">
+                @if (!string.IsNullOrEmpty(currentPrize.ImagePath))
+                {
+                    <img src="@currentPrize.ImagePath" class="mr-3 prize-image" alt="@currentPrize.Name">
+                }
+                <h3 class="mb-0 font-weight-bold text-uppercase" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.3); letter-spacing: 1px;">
+                    @currentPrize.Name
+                </h3>
+            </div>
+        </div>
+    }
+
+    <!-- Кнопка для показа/скрытия таблицы призов -->
+    <div class="text-center mb-3">
+        <button id="togglePrizes" class="btn btn-toggle">
+            <i class="fas fa-gift mr-2"></i> Показать статистику
+        </button>
+    </div>
+
+    <!-- Таблица призов (изначально скрыта) -->
+    <div class="card mb-5 prize-table-container" style="display: none;">
+        <div class="card-header">
+            <h3 class="mb-0">Призы текущего розыгрыша</h3>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Статус</th>
+                        <th>Приз</th>
+                        <th>Победитель</th>
+                        <th>Имкон-код</th> <!-- Новый столбец -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 1;
+                        var expandedPrizes = new List<PrizeViewModel>();
+                        foreach (var prize in prizes.OrderBy(p => p.Priority))
+                        {
+                            for (int i = 0; i < prize.Quantity; i++)
+                            {
+                                var prizeCopy = new PrizeViewModel
+                    {
+                        Id = prize.Id,
+                        Name = prize.Name,
+                        ImagePath = prize.ImagePath,
+                        Priority = prize.Priority,
+                        SpinDuration = prize.SpinDuration,
+                        Quantity = 1,
+                        RequiredPromoCodeCount = prize.RequiredPromoCodeCount,
+                        Status = i < prize.WonCount ? "won" :
+                    i == prize.WonCount && prize.Status == "in-progress" ? "in-progress" : "waiting",
+                        WinnerName = i < prize.WinnerNames.Count ? prize.WinnerNames[i] : "",
+                                    // Новое свойство для промокода
+                        WinnerPromoCode = i < prize.WinnerPromoCodes.Count ? prize.WinnerPromoCodes[i] : ""
+                    };
+                                expandedPrizes.Add(prizeCopy);
+                            }
+                        }
+                    }
+                    @foreach (var prize in expandedPrizes)
+                    {
+                        <tr class="@(prize.Status == "won" ? "table-won" :
+                            prize.Status == "in-progress" ? "table-in-progress" : "")">
+                            <td>@(counter++)</td>
+                            <td>
+                                @if (prize.Status == "won")
+                                {
+                                    <span class="badge badge-won">Разыгран</span>
+                                }
+                                else if (prize.Status == "in-progress")
+                                {
+                                    <span class="badge badge-in-progress">Разыгрывается</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-waiting">Ожидает</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    @if (!string.IsNullOrEmpty(prize.ImagePath))
+                                    {
+                                        <img src="@prize.ImagePath" class="mr-2 table-prize-image" alt="@prize.Name" style="width: 50px; height: 50px; object-fit: cover;">
+                                    }
+                                    <span>@prize.Name</span>
+                                </div>
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(prize.WinnerName))
+                                {
+                                    <span>@prize.WinnerName</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(prize.WinnerPromoCode))
+                                {
+                                    <code>@prize.WinnerPromoCode</code>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Модальное окно выигрыша -->
+    <div class="modal fade" id="winModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">🎉 Поздравляем победителя!</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="prizeImageContainer" class="mb-3">
+                        <img id="winPrizeImage" src="" class="img-fluid rounded win-prize-image" alt="Приз">
+                    </div>
+                    <h4 id="winPrizeName" class="text-primary mb-2"></h4>
+                    <p class="mb-1"><strong>Победитель:</strong> <span id="winUserName" class="font-weight-bold"></span></p>
+                    <p><strong>Промо-код:</strong> <span id="winPromoCode" class="text-monospace"></span></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <!-- Новая кнопка "Повторить" -->
+                    <button id="retryButton" type="button" class="btn btn-secondary mr-2">
+                        <i class="fas fa-redo mr-1"></i> Повторить
+                    </button>
+                    <!-- Новая кнопка "Следующий" -->
+                    <button id="confirmButton" type="button" class="btn btn-primary">
+                        Следующий <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Контейнер для салюта -->
+    <div id="confetti-container" class="confetti-container"></div>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                // Переключение таблицы призов
+                $('#togglePrizes').click(function() {
+                    const container = $('.prize-table-container');
+                    const isVisible = container.is(':visible');
+
+                    container.slideToggle(300);
+                    $(this).html(isVisible
+                        ? '<i class="fas fa-gift mr-2"></i> Показать статистику'
+                        : '<i class="fas fa-times mr-2"></i> Скрыть статистику');
+                });
+
+                // Запуск барабана
+                $('#spinButton').click(function () {
+                    spinDrum();
+                });
+            });
+
+            async function spinDrum() {
+                const $btn       = $('#spinButton');
+                const $drum      = $('.drum-container');
+                const $slots     = $('.symbol');
+                const $slotsWrap = $('.drum-slot');
+
+                // блокируем кнопку, ставим спиннер
+                $btn.prop('disabled', true)
+                    .html('<i class="fas fa-spinner fa-spin"></i>')
+                    .addClass('spinning');
+
+                // Запрос на бек
+                let data;
+                try {
+                    const resp = await fetch('@Url.Action("GetPromoCode", "Baraban")');
+                    data = await resp.json();
+                } catch (e) {
+                    alert('Ошибка при запросе');
+                    resetButton();
+                    return;
+                }
+
+                if (data.error) {
+                    alert(data.error);
+                    resetButton();
+                    return;
+                }
+
+                // определяем базовую длительность (сек -> мс)
+                const baseMs = (parseInt(data.spinDuration, 10) || 10) * 1000;
+
+                // стартуем визуальный спин
+                $drum.addClass('spinning');
+                $slotsWrap.addClass('blur-effect');
+
+                // готовим промисы для каждого слота
+                const animations = $slots.map((i, slot) => {
+                    // рассинхронизация: каждые 200 мс позже
+                    const totalMs = baseMs + i * 200;
+                    const finalCh = data.promoCode[i] || ' ';
+                    return animateSlot(slot, totalMs, finalCh);
+                }).get();
+
+                // ждём, пока все слоты закончат крутиться
+                await Promise.all(animations);
+
+                // останавливаем барабан и эффекты
+                $drum.removeClass('spinning');
+                $slotsWrap.removeClass('blur-effect')
+                          .addClass('win-effect');
+                $slots.css({ transform: 'scale(1.3)', color: '#1e88e5' });
+
+                // сброс подсветки через секунду
+                setTimeout(() => {
+                    $slotsWrap.removeClass('win-effect');
+                    $slots.css({ transform: 'scale(1)', color: '#333' });
+                    resetButton();
+                }, 1000);
+
+                // показываем результат
+                showResult(data);
+            }
+
+            function animateSlot(slot, totalDuration, finalChar) {
+                const symbols = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                const startTime = performance.now();
+                const spinEnd = startTime + totalDuration;
+                const slowdownDuration = 600;
+                const fullStopTime = spinEnd + slowdownDuration;
+
+                return new Promise(resolve => {
+                    function spin(timestamp) {
+                        if (timestamp < spinEnd) {
+                            slot.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                            requestAnimationFrame(spin);
+                        } else if (timestamp < fullStopTime) {
+                            const slowdownProgress = (timestamp - spinEnd) / slowdownDuration;
+                            const interval = 80 + slowdownProgress * 500;
+                            if (!slot.lastChange || (timestamp - slot.lastChange > interval)) {
+                                slot.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                                slot.lastChange = timestamp;
+                            }
+                            requestAnimationFrame(spin);
+                        } else {
+                            slot.textContent = finalChar;
+
+                            // Подсветка слота
+                            $(slot).parent().find('.slot-highlight').addClass('active');
+                            setTimeout(() => {
+                                $(slot).parent().find('.slot-highlight').removeClass('active');
+                            }, 300);
+
+                            resolve();
+                        }
+                    }
+
+                    requestAnimationFrame(spin);
+                });
+            }
+
+                    // Глобальные переменные для хранения текущих данных
+            let currentPrizeData = null;
+
+            function showResult(data) {
+                // Сохраняем данные для последующих действий
+
+                console.log("Received data from server:", data); // Отладочное сообщение
+
+                // Проверяем наличие обязательных полей
+                if (!data.prizeId || !data.promoCodeId) {
+                    alert("Ошибка: отсутствуют ID приза или промокода!");
+                    console.error("Missing prizeId or promoCodeId in response:", data);
+                    return;
+                }
+
+                currentPrizeData = {
+                    promoCode: data.promoCode,
+                    userName: data.userName,
+                    userChatId: data.userChatId,
+                    prizeName: data.prizeName,
+                    prizeImage: data.prizeImage,
+                    prizeId: data.prizeId,          // Используем ID приза
+                    promoCodeId: data.promoCodeId   // Используем ID промо-кода
+                };
+
+                $('#winPrizeImage').attr('src', data.prizeImage || '');
+                $('#winPrizeName').text(data.prizeName);
+                $('#winUserName').text(data.userName);
+                $('#winPromoCode').text(data.promoCode.trim());
+
+                // Показываем модальное окно с блокировкой фона
+                $('#winModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                }).modal('show'); // Явно вызываем показ модального окна
+                registerWinModalCloseHandlers();
+
+                // Обработчики для новых кнопок
+                $('#retryButton').off('click').on('click', function() {
+                     $('#winModal').modal('hide');
+                     location.reload(); // Обновление страницы
+                    // // При нажатии "Повторить" просто скрываем модалку и запускаем барабан снова
+                    // $('#winModal').modal('hide');
+                    // spinDrum();
+                });
+
+                $('#confirmButton').off('click').on('click', function() {
+                    confirmPrize(); // Подтверждение приза
+                });
+
+                setTimeout(fireConfetti, 500);
+            }
+
+            async function confirmPrize() {
+                try {
+                        const payload = {
+                            promoCodeId: currentPrizeData.promoCodeId,
+                            prizeId: currentPrizeData.prizeId,
+                            userChatId: currentPrizeData.userChatId
+                        };
+
+                        const response = await fetch('@Url.Action("ConfirmPrize", "Baraban")', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+
+                    if (response.ok) {
+                        $('#winModal').modal('hide');
+                        location.reload();
+                    } else {
+                        const errorText = await response.text();
+                        alert(`Ошибка подтверждения приза: ${errorText}`);
+                    }
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    alert('Ошибка сети: ' + error.message);
+                }
+            }
+
+            function registerWinModalCloseHandlers() {
+                $('#winModal').on('hidden.bs.modal', function () {
+                    location.reload();
+                });
+            }
+
+            function fireConfetti() {
+                // Основной салют
+                confetti({
+                    particleCount: 200,
+                    spread: 90,
+                    origin: { y: 0.6 },
+                    colors: ['#42a5f5', '#29b6f6', '#4fc3f7']
+                });
+
+                // Дополнительные эффекты
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 150,
+                        angle: 60,
+                        spread: 70,
+                        origin: { x: 0 },
+                        colors: ['#42a5f5', '#29b6f6']
+                    });
+
+                    confetti({
+                        particleCount: 150,
+                        angle: 120,
+                        spread: 70,
+                        origin: { x: 1 },
+                        colors: ['#42a5f5', '#29b6f6']
+                    });
+                }, 400);
+            }
+
+            function resetButton() {
+                setTimeout(() => {
+                    $('#spinButton').html('<i class="fas fa-redo"></i>');
+                    $('#spinButton').prop('disabled', false);
+                    $('#spinButton').removeClass('spinning');
+                }, 1000);
+            }
+        </script>
+
+        <style>
+            /* Основные цвета */
+            :root {
+                --primary-color: #0AB0F0; /* Синий */
+                --secondary-color: #42a5f5; /* Светло-синий */
+                --accent-color: #4caf50; /* Зеленый для акцентов */
+                --light-bg: #f8f9fa; /* Светлый фон */
+                --card-bg: #ffffff; /* Фон карточек */
+                --text-color: #222222; /* Основной цвет текста */
+                --light-text: #777777; /* Светлый текст */
+            }
+
+            body {
+                background-color: #f5f7fb;
+                color: var(--text-color);
+                font-family: 'Arial', sans-serif;
+            }
+
+            .container {
+                max-width: 1200px;
+                background-color: white;
+                border-radius: 15px;
+                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+                padding: 30px;
+                margin-top: 20px;
+                margin-bottom: 30px;
+            }
+
+            /* Заголовок */
+            .main-title {
+                font-size: 2.8rem;
+                color: var(--primary-color);
+                font-weight: bold;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 30px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #e0e0e0;
+            }
+
+            /* Барабан */
+            .drum-container {
+                background: var(--card-bg);
+                border: 2px solid #e0e0e0;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+                padding: 25px;
+                border-radius: 12px;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .drum-container.spinning {
+                    animation: drum-glow 1.5s infinite alternate;
+                }
+
+            .drum-slot {
+                width: 85px;
+                height: 115px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--card-bg);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+                .drum-slot.blur-effect {
+                    filter: blur(2px);
+                }
+
+                .drum-slot.win-effect {
+                    animation: slot-win 0.5s ease 3;
+                }
+
+            .symbol {
+                font-size: 3.2rem;
+                font-weight: bold;
+                color: var(--text-color);
+                z-index: 2;
+                transition: all 0.5s ease;
+            }
+
+            .slot-highlight {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(66, 165, 245, 0.15) 0%, rgba(66, 165, 245, 0) 70%);
+                opacity: 0;
+                transition: opacity 0.3s;
+                pointer-events: none;
+                z-index: 1;
+            }
+
+                .slot-highlight.active {
+                    opacity: 1;
+                }
+
+            /* Круглая кнопка */
+            .spin-button-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-left: 30px;
+            }
+
+            .spin-button {
+                width: 80px;
+                height: 80px;
+                font-size: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                transition: all 0.3s ease;
+            }
+
+                .spin-button:hover {
+                    transform: scale(1.05);
+                }
+
+                .spin-button:active {
+                    transform: scale(0.95);
+                }
+
+                .spin-button.spinning {
+                    animation: spin 1s linear infinite;
+                }
+
+
+            /* Текущий приз */
+            .current-prize {
+                background: var(--card-bg);
+                border: 2px solid #e0e0e0;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                animation: pulse 3s infinite;
+            }
+
+            .prize-image {
+                max-height: 85px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            /* Кнопка переключения таблицы */
+            .btn-toggle {
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                font-weight: 600;
+                padding: 10px 25px;
+                border-radius: 20px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+            }
+
+                .btn-toggle:hover {
+                    background: #0675A0;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 15px rgba(30, 136, 229, 0.4);
+                }
+
+            /* Таблица призов */
+            .prize-table-container {
+                border: 1px solid #e0e0e0;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+
+            .card-header {
+                background: var(--primary-color);
+                border-bottom: 1px solid #e0e0e0;
+                color: #222222;
+                font-size: 1.2rem;
+            }
+
+            .table {
+                color: var(--text-color);
+                background: var(--card-bg);
+            }
+
+                .table th {
+                    background: #f1f8ff;
+                    color: #222222;
+                    font-weight: 600;
+                }
+
+            .table-won {
+                background: rgba(76, 175, 80, 0.05) !important;
+            }
+
+            .table-in-progress {
+                background: rgba(30, 136, 229, 0.05) !important;
+            }
+
+            .table-prize-image {
+                max-height: 50px;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+            }
+
+            .badge-won {
+                background: var(--accent-color);
+                color: white;
+            }
+
+            .badge-in-progress {
+                background: var(--primary-color);
+                color: white;
+            }
+
+            .badge-waiting {
+                background: #b0bec5;
+                color: white;
+            }
+
+            /* Модальное окно */
+            .modal-content {
+                background: var(--card-bg);
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            }
+
+            .modal-header {
+                background: var(--primary-color);
+                border-bottom: none;
+                color: white;
+                border-radius: 12px 12px 0 0 !important;
+            }
+
+            .close {
+                color: white;
+                opacity: 0.8;
+            }
+
+            .win-prize-image {
+                max-height: 220px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            .result-text {
+                color: var(--primary-color);
+                font-weight: 600;
+            }
+
+            /* Анимации */
+            @@keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @@keyframes drum-glow {
+                0% {
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+                }
+
+                100% {
+                    box-shadow: 0 8px 25px rgba(30, 136, 229, 0.2);
+                }
+            }
+
+            @@keyframes slot-win {
+                0% {
+                    background: var(--card-bg);
+                }
+
+                50% {
+                    background: rgba(30, 136, 229, 0.1);
+                }
+
+                100% {
+                    background: var(--card-bg);
+                }
+            }
+
+            @@keyframes pulse {
+                0% {
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                }
+
+                50% {
+                    box-shadow: 0 5px 20px rgba(30, 136, 229, 0.15);
+                }
+
+                100% {
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                }
+            }
+        </style>
+    }

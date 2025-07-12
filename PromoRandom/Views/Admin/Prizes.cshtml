@@ -1,0 +1,271 @@
+﻿@model List<PromoRandom.Models.Prize>
+@{
+    ViewData["Title"] = "Управление призами";
+    var gives = ViewBag.Gives as List<Give> ?? new List<Give>();
+
+    // Получаем текущие параметры сортировки из запроса
+    var currentSortField = Context.Request.Query["sortField"];
+    var currentSortDirection = Context.Request.Query["sortDirection"];
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🎁 Управление призами</h2>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addPrizeModal">
+            <i class="fas fa-plus"></i> Добавить приз
+        </button>
+    </div>
+
+    <!-- Фильтры и сортировка -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="form-inline flex-wrap">
+
+                <!-- Название -->
+                <div class="form-group mr-2 mb-2">
+                    <input type="text" name="nameFilter" class="form-control"
+                           placeholder="Поиск по названию"
+                           value="@Context.Request.Query["nameFilter"]" />
+                </div>
+
+                <!-- Розыгрыш -->
+                <div class="form-group mr-2 mb-2">
+                    <select name="giveFilter" class="form-control">
+                        <option value="">Все розыгрыши</option>
+                        @foreach (var give in gives)
+                        {
+                            <option value="@give.Id"
+                                    selected="@(Context.Request.Query["giveFilter"] == give.Id.ToString() ? "selected" : null)">
+                                @give.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Поле сортировки -->
+                <div class="form-group mr-2 mb-2">
+                    <select name="sortField" class="form-control">
+                        <option value="">Сортировка</option>
+                        <option value="Priority"
+                                selected="@(currentSortField == "Priority" ? "selected" : null)">
+                            Приоритет
+                        </option>
+                        <option value="SpinDuration"
+                                selected="@(currentSortField == "SpinDuration" ? "selected" : null)">
+                            Длительность
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Направление -->
+                <div class="form-group mr-2 mb-2">
+                    <select name="sortDirection" class="form-control">
+                        <option value="asc" selected="@(currentSortDirection == "asc" ? "selected" : null)">↑</option>
+                        <option value="desc" selected="@(currentSortDirection == "desc" ? "selected" : null)">↓</option>
+                    </select>
+                </div>
+
+                <!-- Кнопки -->
+                <button type="submit" class="btn btn-primary mb-2 mr-2">
+                    Применить
+                </button>
+                <a href="@Url.Action("Prizes")" class="btn btn-secondary mb-2">Сбросить</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Таблица призов -->
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Розыгрыш</th>
+                        <th>Название приза</th>
+                        <th>Приоритет</th>
+                        <th>Время (с)</th>
+                        <th>Мин кодов</th>
+                        <th>Кол-во</th>
+                        <th>Остаток</th> <!-- Новый столбец -->
+                        <th class="text-center">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prize in Model)
+                    {
+                        <tr>
+                            <td>
+                                @(gives.FirstOrDefault(g => g.Id == prize.GiveId)?.Name ?? "Неизвестный розыгрыш")
+                            </td>
+                            <td>@prize.Name</td>
+                            <td>@prize.Priority</td>
+                            <td>@prize.SpinDuration</td>
+                            <td>@prize.RequiredPromoCodeCount</td>
+                            <td>@prize.Quantity</td>
+                            <td class="@(prize.Remaining == 0 ? "text-danger" : "text-success")">
+                                @prize.Remaining
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm btn-warning btn-edit-prize" data-id="@prize.Id" title="Редактировать">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" title="Удалить"
+                                        data-toggle="modal" data-target="#deletePrizeModal"
+                                        data-id="@prize.Id" data-name="@prize.Name">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно добавления приза -->
+<div class="modal fade" id="addPrizeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Добавить новый приз</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form asp-action="CreatePrize" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Выберите розыгрыш</label>
+                        <select name="GiveId" class="form-control" required>
+                            @if (gives != null)
+                            {
+                                @foreach (var give in gives)
+                                {
+                                    <option value="@give.Id">@give.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Название приза</label>
+                        <input type="text" name="Name" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Количество призов</label>
+                            <input type="number" name="Quantity" class="form-control" min="1" value="1" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Требуется промокодов</label>
+                            <input type="number" name="RequiredPromoCodeCount" class="form-control" min="1" value="1" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Приоритет (целое число)</label>
+                            <input type="number" name="Priority" class="form-control" min="0" value="0" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Длительность вращения (с)</label>
+                            <input type="number" name="SpinDuration" class="form-control" min="1" value="1" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Изображение приза</label>
+                        <input type="file" name="PrizeImage" class="form-control-file" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления приза -->
+<div class="modal fade" id="deletePrizeModal" tabindex="-1" role="dialog" aria-labelledby="deletePrizeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="DeletePrize" method="post">
+            <input type="hidden" name="id" id="deletePrizeId" value="" />
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deletePrizeModalLabel">Подтверждение удаления</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Вы действительно хотите удалить приз <strong id="deletePrizeName"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования приза (контейнер для частичного представления) -->
+<div class="modal fade" id="editPrizeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" id="editPrizeContent">
+            <!-- Частичное представление _EditPrizePartial.cshtml будет загружено сюда через AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Загрузка частичного представления редактирования приза через AJAX
+                $(document).ready(function () {
+            $('.btn-edit-prize').on('click', function () {
+                var prizeId = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("GetEditPrizePartial", "Admin")',
+                    data: { id: prizeId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#editPrizeContent').html(data);
+                        $('#editPrizeModal').modal('show');
+
+                        // Повторная привязка событий для кнопок внутри загруженного контента
+                        registerModalCloseHandlers();
+                    },
+                    error: function () {
+                        alert("Ошибка загрузки данных для редактирования.");
+                    }
+                });
+            });
+
+            // Удаление
+            $('#deletePrizeModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var prizeId = button.data('id');
+                var prizeName = button.data('name');
+                var modal = $(this);
+                modal.find('#deletePrizeId').val(prizeId);
+                modal.find('#deletePrizeName').text(prizeName);
+            });
+
+             // Сброс фильтров
+            $('#resetFilters').on('click', function() {
+                // Очищаем все поля формы
+                $('#filterForm input, #filterForm select').val('');
+                // Отправляем форму
+                $('#filterForm').submit();
+            });
+        });
+
+        function registerModalCloseHandlers() {
+            $('#editPrizeModal .close, #editPrizeModal [data-dismiss="modal"]').on('click', function () {
+                $('#editPrizeModal').modal('hide');
+            });
+        }
+    </script>
+}

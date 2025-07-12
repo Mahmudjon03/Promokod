@@ -22,7 +22,7 @@ builder.Services.AddHttpClient<WinnerNotificationService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";
+        options.LoginPath = "/Account/Index";
         options.SlidingExpiration = true;
     });
 
@@ -44,8 +44,10 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
     options.RequestCultureProviders = [
-        new QueryStringRequestCultureProvider()
+        new CookieRequestCultureProvider(),
+        new QueryStringRequestCultureProvider(),
     ];
+
 });
 
 var app = builder.Build();
@@ -69,6 +71,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Admin}/{action=Index}/{id?}");
+    pattern: "{controller=Site}/{action=Index}/{id?}");
 
 app.Run();

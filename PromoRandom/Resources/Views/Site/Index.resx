@@ -120,6 +120,9 @@
   <data name="CountdownTitle" xml:space="preserve">
     <value>123</value>
   </data>
+  <data name="Days" xml:space="preserve">
+    <value>123</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>123</value>
   </data>
@@ -129,22 +132,28 @@
   <data name="Header" xml:space="preserve">
     <value>231</value>
   </data>
+  <data name="Hours" xml:space="preserve">
+    <value>123</value>
+  </data>
   <data name="MapTitle" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="NoPrizesDescription" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="NoPrizesMessage" xml:space="preserve">
     <value>123</value>
   </data>
   <data name="ParticipateButton" xml:space="preserve">
     <value>123</value>
   </data>
-  <data name="Prize1" xml:space="preserve">
-    <value>123</value>
-  </data>
-  <data name="Prize2" xml:space="preserve">
-    <value>123</value>
-  </data>
-  <data name="Prize3" xml:space="preserve">
-    <value>123</value>
-  </data>
   <data name="PrizesTitle" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
     <value>123</value>
   </data>
   <data name="StoreAddress" xml:space="preserve">

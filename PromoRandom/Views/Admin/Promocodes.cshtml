@@ -1,0 +1,303 @@
+﻿@using PromoRandom.ViewModels
+@model List<PromoCodeViewModel>
+@{
+    ViewData["Title"] = "Управление промо-кодами";
+    string search = ViewBag.Search;
+    int? giveId = ViewBag.GiveId;
+    int? orderId = ViewBag.OrderId;
+    string status = ViewBag.Status;
+    var gives = ViewBag.Gives as List<Give> ?? new List<Give>();
+    var statuses = ViewBag.Statuses as List<string> ?? new List<string>();
+    int currentPage = ViewBag.Page;
+    int pageSize = ViewBag.PageSize;
+    int totalCount = ViewBag.TotalCount;
+    int totalPages = ViewBag.TotalPages;
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">🎫 Управление промо-кодами</h2>
+
+    <!-- Фильтры -->
+    <div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="form-inline">
+            <!-- Существующие поля фильтрации -->
+            <div class="form-group mr-2 mb-2">
+                <input type="text" name="search" class="form-control" placeholder="Поиск по промо-коду" value="@search">
+            </div>
+            
+            <!-- Новое поле для поиска по номеру заказа -->
+            <div class="form-group mr-2 mb-2">
+                    <input type="number" name="orderId" class="form-control" placeholder="№ заказа" value="@orderId">
+            </div>
+            
+            <!-- Остальные поля фильтрации -->
+            <div class="form-group mr-2 mb-2">
+                <select name="giveId" class="form-control">
+                    <option value="">Все розыгрыши</option>
+                    @foreach (var give in gives)
+                    {
+                        <option value="@give.Id" selected="@(giveId == give.Id)">@give.Name</option>
+                    }
+                </select>
+            </div>
+            
+            <div class="form-group mr-2 mb-2">
+                <select name="status" class="form-control">
+                    <option value="">Все статусы</option>
+                    @foreach (var st in statuses)
+                    {
+                        <option value="@st" selected="@(status == st)">@st</option>
+                    }
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary mb-2">Применить фильтры</button>
+            <a href="@Url.Action("PromoCodes")" class="btn btn-secondary mb-2 ml-2">Сбросить</a>
+        </form>
+    </div>
+</div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <span>Найдено записей: @totalCount</span>
+            <span>Страница @currentPage из @totalPages</span>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Промо-код</th>
+                            <th>Пользователь</th>
+                            <th>№ Заказа</th>
+                            <th>Розыгрыш</th>
+                            <th>Статус</th>
+                            <th>Дата отправки</th>
+                            <th class="text-center">Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var code in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="font-weight-bold">@code.Code</span>
+                                </td>
+                                <td>@(string.IsNullOrEmpty(code.UserName) ? "N/A" : code.UserName)</td>
+                                <td>@code.OrderId</td>
+                                <td>@code.GiveName</td>
+                                <td>
+                                    @if (code.Status == "active")
+                                    {
+                                        <span class="badge badge-success">Активен</span>
+                                    }
+                                    else if (code.Status == "won")
+                                    {
+                                        <span class="badge badge-warning">Победитель</span>
+                                    }
+                                    else if (code.Status == "disabled")
+                                    {
+                                        <span class="badge badge-dark">Отключён</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-secondary">Истекший</span>
+                                    }
+                                </td>
+                                <td>@code.SubmittedAt.ToString("g")</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-warning edit-btn"
+                                            data-id="@code.Id"
+                                            data-code="@code.Code"
+                                            data-status="@code.Status"
+                                            title="Редактировать">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-info details-btn"
+                                            data-id="@code.Id"
+                                            title="Детали">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Пагинация -->
+    @if (totalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                @if (currentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Action("PromoCodes", new {
+                               search = search,
+                               giveId = giveId,
+                               status = status,
+                               page = currentPage - 1
+                           })">
+                            &laquo; Назад
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Action("PromoCodes", new {
+                               search = search,
+                               orderId = orderId,  // Добавляем параметр
+                               giveId = giveId,
+                               status = status,
+                               page = i
+                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                @if (currentPage < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Action("PromoCodes", new {
+                               search = search,
+                               giveId = giveId,
+                               status = status,
+                               page = currentPage + 1
+                           })">
+                            Вперед &raquo;
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
+
+<!-- Модальное окно деталей промо-кода -->
+<div class="modal fade" id="promoCodeDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">Детали промо-кода</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="promoCodeDetailsBody">
+                <!-- Контент будет загружаться через AJAX -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно редактирования -->
+<div class="modal fade" id="editPromoCodeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title">Редактирование промо-кода</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form id="editPromoCodeForm" asp-action="EditPromoCode" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="editPromoId" />
+                    <div class="form-group">
+                        <label>Промо-код</label>
+                        <input type="text" id="editPromoCode" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Статус</label>
+                        <select name="Status" class="form-control" id="editPromoStatus">
+                            <option value="active">Активен</option>
+                            <option value="won">Победитель</option>
+                            <option value="expired">Истекший</option>
+                            <option value="disabled">Отключён</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-warning">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Открытие модалки редактирования
+            $('.edit-btn').click(function () {
+                const id = $(this).data('id');
+                const code = $(this).data('code');
+                const status = $(this).data('status');
+
+                $('#editPromoId').val(id);
+                $('#editPromoCode').val(code);
+                $('#editPromoStatus').val(status);
+                $('#editPromoCodeModal').modal('show');
+                registerModalCloseHandlers();
+
+            });
+
+            // Отправка формы редактирования
+            $('#editPromoCodeForm').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '@Url.Action("EditPromoCode")',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function () {
+                        $('#editPromoCodeModal').modal('hide');
+                        location.reload(); // Перезагружаем страницу
+                    },
+                    error: function () {
+                        alert('Ошибка при сохранении');
+                    }
+                });
+            });
+
+            $('.details-btn').click(function () {
+                const id = $(this).data('id');
+
+                $.ajax({
+                    url: '@Url.Action("GetPromoCodeDetails")',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (data) {
+                        $('#promoCodeDetailsBody').html(data);
+                        $('#promoCodeDetailsModal').modal('show');
+                        registerModalCloseHandlers();
+                    },
+                    error: function () {
+                        alert('Ошибка при загрузке данных');
+                    }
+                });
+            });
+        });
+                    // Функция для привязки обработчиков закрытия модальных окон
+            function registerModalCloseHandlers() {
+                $('.modal .close, .modal [data-dismiss="modal"]').on('click', function () {
+                    $(this).closest('.modal').modal('hide');
+                });
+            }
+    </script>
+}

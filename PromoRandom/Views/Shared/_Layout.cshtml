@@ -3,14 +3,59 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PromoRandom</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PromoRandom.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - ImkonShow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary py-3">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Admin" asp-action="Index">
+                    <i class="fas fa-crown me-2"></i> Главное
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="adminNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Admin" asp-action="Prizes">
+                                <i class="fas fa-gift me-1"></i> Призы
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Admin" asp-action="Gives">
+                                <i class="fas fa-trophy me-1"></i> Розыгрыши
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Admin" asp-action="PromoCodes">
+                                <i class="fas fa-ticket-alt me-1"></i> Промокоды
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Broadcast" asp-action="SendBroadcast">
+                                <i class="fas fa-bullhorn me-1"></i> Рассылка
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Article" asp-action="Index">
+                                <i class="fas fa-newspaper me-1"></i> Новости
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="text-end">
+                        <a class="btn btn-outline-light" asp-controller="Account" asp-action="Logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Выход
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
 
     <div class="container">
         <main role="main" class="pb-3">
@@ -22,7 +67,27 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var current = location.pathname;
+            $('.nav-link').each(function() {
+                var $this = $(this);
+                var href = $this.attr('href');
+
+                if (href === "/") {
+                    // Для ссылки на главную активной она будет только при точном совпадении
+                    if (current === "/") {
+                        $this.addClass('active bg-white text-primary').removeClass('text-white');
+                    }
+                }
+                else if (current.startsWith(href)) {
+                    $this.addClass('active bg-white text-primary').removeClass('text-white');
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

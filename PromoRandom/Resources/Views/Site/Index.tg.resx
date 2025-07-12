@@ -120,6 +120,9 @@
   <data name="CountdownTitle" xml:space="preserve">
     <value>То поёни озмун мондааст</value>
   </data>
+  <data name="Days" xml:space="preserve">
+    <value>Руз</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Аксҳои чекатонро тавассути бот фиристед ва имкони ғолиб шуданро пайдо кунед!</value>
   </data>
@@ -129,23 +132,29 @@
   <data name="Header" xml:space="preserve">
     <value>Дар озмун иштирок кунед ва ҷоизаҳои беназири моро ба даст оред!</value>
   </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Соат</value>
+  </data>
   <data name="MapTitle" xml:space="preserve">
     <value>Моро чӣ тавр метавон ёфт</value>
+  </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Дақиқа</value>
+  </data>
+  <data name="NoPrizesDescription" xml:space="preserve">
+    <value>Ҷоизаҳо ёфт нашуданд</value>
+  </data>
+  <data name="NoPrizesMessage" xml:space="preserve">
+    <value>Ҷоизаҳо дар ҳоли ҳозир дастрас нестанд, дертар тафтиш намоед.</value>
   </data>
   <data name="ParticipateButton" xml:space="preserve">
     <value>Иштирок кардан</value>
   </data>
-  <data name="Prize1" xml:space="preserve">
-    <value>iPhone 16 Pro</value>
-  </data>
-  <data name="Prize2" xml:space="preserve">
-    <value>Конвертҳои пулӣ</value>
-  </data>
-  <data name="Prize3" xml:space="preserve">
-    <value>Opel Zafira «Family Edition»</value>
-  </data>
   <data name="PrizesTitle" xml:space="preserve">
     <value>Ҷоизаҳои мо</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>Сония</value>
   </data>
   <data name="StoreAddress" xml:space="preserve">
     <value>ш. Душанбе, куч. Рӯдаки...</value>

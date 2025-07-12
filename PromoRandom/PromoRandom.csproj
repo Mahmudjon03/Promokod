@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Account\" />
+    <Folder Include="wwwroot\images\prizes\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

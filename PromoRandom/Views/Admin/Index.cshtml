@@ -1,83 +1,100 @@
-﻿@using PromoRandom.ViewModels
-@{
-    ViewBag.Title = "Чархи «ИМКОН»";
+﻿@{
+    ViewData["Title"] = "Админ-панель";
 }
-@* @model PrizeIndexViewModel *@
-<div class="container">
-    <h1 style="font-size:2.1em;"> Чархи «ИМКОН» </h1>
-    <select name="prizeId" id="prizeSelect">
-        <option disabled selected value="0"> Интихоби Приз </option>
-        @foreach (var prize in Model.Prizes)
-        {
-            <option value="@prize.Id">@prize.Name</option>
-        }
-    </select>
-    <div class="promo-display" id="promoDisplay">
-        <!-- 8 барабанов с символами -->
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
-        <div class="reel"><div class="symbols">?</div></div>
 
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4">🎮 Панель управления розыгрышами</h1>
+        <p class="lead">Управляйте призами, розыгрышами и промо-кодами</p>
     </div>
-    <button class="generate-btn" id="generateBtn">Чарх</button>
-</div>
 
-<!-- modal okno -->
-<div id="resultModal" class="modal">
-    <div id="container"></div>
-    <div class="modal-content">
-        <h2 id="prizeTitle"></h2>
-        <h3 style="font-size: 1.2rem; color:gold;">Вы выиграли этот приз!</h3>
-        <div id="winnerName" class="winner-name"></div>
-        <div id="promoCodeText" style="font-size: 1.2rem; color: gold; margin-top: 5px;"></div>
-        <div class="btn-mok">
+    <div class="row">
+        <!-- Карточка призов -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-primary h-100 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">🎁 Управление призами</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Добавляйте и редактируйте призы для розыгрышей</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-action="Prizes" class="btn btn-outline-primary w-100">
+                        Перейти к призам
+                    </a>
+                </div>
+            </div>
+        </div>
 
+        <!-- Карточка розыгрышей -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-success h-100 shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">🏆 Управление розыгрышами</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Создавайте новые розыгрыши и управляйте текущими</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-action="Gives" class="btn btn-outline-success w-100">
+                        Перейти к розыгрышам
+                    </a>
+                </div>
+            </div>
+        </div>
 
-            <button class="btn-next" id="updateBtn">
-                <img src="~/image/update.png" alt="Alternate Text" />
-            </button>
-
-
-            <button class="btn-next" id="nextBtn">
-                <img src="~/image/next.png" alt="Alternate Text" />
-            </button>
+        <!-- Карточка промокодов -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-info h-100 shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">🎫 Управление промо-кодами</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Просмотр и управление промо-кодами участников</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-action="PromoCodes" class="btn btn-outline-info w-100">
+                        Перейти к промокодам
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-warning h-100 shadow">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">📢 Массовая рассылка</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Отправляйте сообщения всем пользователям</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-controller="Broadcast" asp-action="SendBroadcast" class="btn btn-outline-warning w-100">
+                        Перейти к рассылке
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-info h-100 shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">📰 Управление новостями</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Создавайте и публикуйте новости для пользователей</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-controller="Article" asp-action="Index" class="btn btn-outline-info w-100">
+                        Перейти к новостям
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="prize-conteyner">
-    @if (Model.PrizeWithPromoAndUsers.Count != 0)
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Приз</th>
-                    <th>Пользователь</th>
-                    <th>Промокод</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.PrizeWithPromoAndUsers)
-                {
-                    <tr>
-                        <td>@item.PrizeName</td>
-                        <td>@item.UserName</td>
-                        <td>@item.PromoCode</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-
-        <h5 style="color: gold; margin: 15px;">Список выигрышей пользователя пустой</h5>
-
-    }
-
+    <!-- Кнопка барабана -->
+    <div class="text-center mt-5">
+        <a asp-controller="Baraban" asp-action="Index" class="btn btn-danger btn-lg py-3 px-5">
+            <i class="fas fa-dice mr-2"></i> Запустить барабан розыгрыша
+        </a>
+    </div>
 </div>

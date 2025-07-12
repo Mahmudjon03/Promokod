@@ -1,0 +1,175 @@
+﻿@model List<PromoRandom.Models.Give>
+@{
+    ViewData["Title"] = "Управление розыгрышами";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🏆 Управление розыгрышами</h2>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addGiveModal">
+            <i class="fas fa-plus"></i> Добавить розыгрыш
+        </button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Название</th>
+                        <th>Дата начала</th>
+                        <th>Дата окончания</th>
+                        <th>Статус</th>
+                        <th class="text-center">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var give in Model)
+                    {
+                        <tr class="@(give.IsCompleted ? "table-secondary" : "")">
+                            <td>@give.Name</td>
+                            <td>@give.StartDate.ToString("dd.MM.yyyy")</td>
+                            <td>@give.EndDate.ToString("dd.MM.yyyy")</td>
+                            <td>
+                                @if (give.IsCompleted)
+                                {
+                                    <span class="badge badge-secondary">Завершен</span>
+                                }
+                                else if (DateTime.Now < give.StartDate)
+                                {
+                                    <span class="badge badge-info">Ожидает</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Активен</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-warning btn-edit-give" data-id="@give.Id" title="Редактировать">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" title="Удалить"
+                                        data-toggle="modal" data-target="#deleteGiveModal"
+                                        data-id="@give.Id" data-name="@give.Name">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно добавления розыгрыша -->
+<div class="modal fade" id="addGiveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Добавить новый розыгрыш</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form asp-action="CreateGive" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Название розыгрыша</label>
+                        <input type="text" name="Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата начала</label>
+                        <input type="datetime-local" name="StartDate" class="form-control"
+                               value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата окончания</label>
+                        <input type="datetime-local" name="EndDate" class="form-control"
+                               value="@DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm")" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления розыгрыша -->
+<div class="modal fade" id="deleteGiveModal" tabindex="-1" role="dialog" aria-labelledby="deleteGiveModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="DeleteGive" method="post">
+            <input type="hidden" name="id" id="deleteGiveId" value="" />
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteGiveModalLabel">Подтверждение удаления</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Вы действительно хотите удалить розыгрыш <strong id="deleteGiveName"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования розыгрыша (контейнер для частичного представления) -->
+<div class="modal fade" id="editGiveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" id="editGiveContent">
+            <!-- Частичное представление будет загружено тут через AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Удаление розыгрыша
+        $('#deleteGiveModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var giveId = button.data('id');
+            var giveName = button.data('name');
+            var modal = $(this);
+            modal.find('#deleteGiveId').val(giveId);
+            modal.find('#deleteGiveName').text(giveName);
+        });
+
+        $(document).ready(function () {
+            // Редактирование розыгрыша
+            $('.btn-edit-give').on('click', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("GetEditGivePartial", "Admin")',
+                    data: { id: id },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#editGiveContent').html(data);
+                        $('#editGiveModal').modal('show');
+
+                        // Обновление обработчиков после загрузки частичного представления
+                        registerGiveModalCloseHandlers();
+                    },
+                    error: function () {
+                        alert("Ошибка загрузки данных для редактирования.");
+                    }
+                });
+            });
+        });
+
+        // Функция для привязки обработчиков закрытия модального окна
+        function registerGiveModalCloseHandlers() {
+            $('#editGiveModal .close, #editGiveModal [data-dismiss="modal"]').on('click', function () {
+                $('#editGiveModal').modal('hide');
+            });
+        }
+    </script>
+}
