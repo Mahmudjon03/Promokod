@@ -9,4 +9,7 @@ public class PromoCode
     public int GiveId { get; set; }
     public string Status { get; set; } = "active"; // Статус может быть 'active', 'won', 'expired', 'disabled'
     public DateTime SubmittedAt { get; set; }
+
+    public string GiveTitle { get; set; } = "";
+
 }

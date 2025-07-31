@@ -14,17 +14,22 @@ namespace PromoRandom.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GiveEnded()
-        {
-            var activeGive = await databaseService.GetFirstActiveGiveAsync();
-            var givePromocodes = (await databaseService.GetAllPromoCodesAsync()).Where(p => p.GiveId == activeGive.Id && p.Status == "active");
-            foreach (var item in givePromocodes)
-            {
-                await databaseService.UpdatePromoCodeStatusAsync(item.Id, "expired");
-            }
-            return View();
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GiveEnded()
+        //{
+        //    await ExpireActivePromoCodesAsync();
+        //    return View();
+        //}
+
+        //private async Task ExpireActivePromoCodesAsync()
+        //{
+        //    var activeGive = await databaseService.GetFirstActiveGiveAsync();
+        //    var givePromocodes = (await databaseService.GetAllPromoCodesAsync()).Where(p => p.GiveId == activeGive.Id && p.Status == "active");
+        //    foreach (var item in givePromocodes)
+        //    {
+        //        await databaseService.UpdatePromoCodeStatusAsync(item.Id, "expired");
+        //    }
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -142,8 +147,11 @@ namespace PromoRandom.Controllers
                 {
                     var userPromoCodes = await databaseService.GetAllPromoCodesForUserAsync(model.UserChatId, "active");
                     Random random = new();
-                    var randomPromocode = userPromoCodes[random.Next(userPromoCodes.Count)];
-                    await databaseService.UpdatePromoCodeStatusAsync(randomPromocode.Id, "won");
+                    for (int i = 0; i < prize.RequiredPromoCodeCount; i++)
+                    {
+                        var randomPromocode = userPromoCodes[random.Next(userPromoCodes.Count)];
+                        await databaseService.UpdatePromoCodeStatusAsync(randomPromocode.Id, "won");
+                    }
                 }
                 return Ok();
 
@@ -168,14 +176,14 @@ namespace PromoRandom.Controllers
             foreach (var adminChatId in adminChatIds)
             {
                 var message = $"🏆 Приз: {prizeName}\n" +
-                              $"👤 Победитель: {winner.Name ?? "Имя не указано"}\n" +
-                              $"📱 Телефон: {winner.Phone ?? "не указан"}\n" +
+                              $"👤 Победитель: {(string.IsNullOrWhiteSpace(winner.Name) ? "не указано" : winner.Name)}\n" +
+                              $"📱 Телефон: {(string.IsNullOrWhiteSpace(winner.Phone) ? "не указан" : winner.Phone)}\n" +
+                              $"📞 Доп. телефон: {(string.IsNullOrWhiteSpace(winner.PersonalPhone) ? "не указан" : winner.PersonalPhone)}\n" +
                               $"💬 Язык: {winner.Language}";
 
                 await winnerNotification.SendAdminNotificationAsync(adminChatId, message);
             }
         }
-
 
         private async Task NotifyUserAsync(string prizeName, User user)
         {

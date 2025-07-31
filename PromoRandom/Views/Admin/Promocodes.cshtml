@@ -5,7 +5,9 @@
     string search = ViewBag.Search;
     int? giveId = ViewBag.GiveId;
     int? orderId = ViewBag.OrderId;
+    long? userChatId = ViewBag.UserChatId;
     string status = ViewBag.Status;
+    string prizeName = ViewBag.PrizeName;
     var gives = ViewBag.Gives as List<Give> ?? new List<Give>();
     var statuses = ViewBag.Statuses as List<string> ?? new List<string>();
     int currentPage = ViewBag.Page;
@@ -17,46 +19,78 @@
 <div class="container py-4">
     <h2 class="mb-4">🎫 Управление промо-кодами</h2>
 
+    <div id="no-results" style="display:none; color:#dc3545; padding:5px;">
+        Пользователи не найдены
+    </div>
+
     <!-- Фильтры -->
     <div class="card mb-4">
-    <div class="card-body">
-        <form method="get" class="form-inline">
-            <!-- Существующие поля фильтрации -->
-            <div class="form-group mr-2 mb-2">
-                <input type="text" name="search" class="form-control" placeholder="Поиск по промо-коду" value="@search">
-            </div>
-            
-            <!-- Новое поле для поиска по номеру заказа -->
-            <div class="form-group mr-2 mb-2">
+        <div class="card-body">
+            <form method="get" class="form-inline">
+                <!-- Существующие поля фильтрации -->
+                <div class="form-group mr-2 mb-2">
+                    <input type="text" name="search" class="form-control" placeholder="Поиск по промо-коду" value="@search">
+                </div>
+
+                <!-- В разделе фильтров замените блок поиска пользователей на этот: -->
+                <div class="form-group mr-2 mb-2" style="position: relative;">
+                    <input type="text" id="userSearch" name="userSearch" class="form-control"
+                           placeholder="Поиск по пользователю" value="@ViewBag.UserSearch">
+                    <!-- Кнопка очистки -->
+                    @if (!string.IsNullOrEmpty(ViewBag.UserSearch))
+                    {
+                        <span class="clear-user-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    }
+                </div>
+
+                <!-- Скрытое поле для ID пользователя -->
+                <input type="hidden" id="userId" name="userId" value="@ViewBag.UserChatId">
+
+                <!-- Новое поле для поиска по номеру заказа -->
+                <div class="form-group mr-2 mb-2">
                     <input type="number" name="orderId" class="form-control" placeholder="№ заказа" value="@orderId">
-            </div>
-            
-            <!-- Остальные поля фильтрации -->
-            <div class="form-group mr-2 mb-2">
-                <select name="giveId" class="form-control">
-                    <option value="">Все розыгрыши</option>
-                    @foreach (var give in gives)
-                    {
-                        <option value="@give.Id" selected="@(giveId == give.Id)">@give.Name</option>
-                    }
-                </select>
-            </div>
-            
-            <div class="form-group mr-2 mb-2">
-                <select name="status" class="form-control">
-                    <option value="">Все статусы</option>
-                    @foreach (var st in statuses)
-                    {
-                        <option value="@st" selected="@(status == st)">@st</option>
-                    }
-                </select>
-            </div>
-            
-            <button type="submit" class="btn btn-primary mb-2">Применить фильтры</button>
-            <a href="@Url.Action("PromoCodes")" class="btn btn-secondary mb-2 ml-2">Сбросить</a>
-        </form>
+                </div>
+
+
+                <!-- Остальные поля фильтрации -->
+                <div class="form-group mr-2 mb-2">
+                    <select name="giveId" class="form-control">
+                        <option value="">Все розыгрыши</option>
+                        @foreach (var give in gives)
+                        {
+                            <option value="@give.Id" selected="@(giveId == give.Id)">@give.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- В разделе фильтров добавим новый select -->
+                <div class="form-group mr-2 mb-2">
+                    <select name="prizeName" class="form-control">
+                        <option value="">Все призы</option>
+                        @foreach (var prize in ViewBag.PrizeNames)
+                        {
+                            <option value="@prize" selected="@(ViewBag.PrizeName == prize)">@prize</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group mr-2 mb-2">
+                    <select name="status" class="form-control">
+                        <option value="">Все статусы</option>
+                        @foreach (var st in statuses)
+                        {
+                            <option value="@st" selected="@(status == st)">@st</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2">Применить фильтры</button>
+                <a href="@Url.Action("PromoCodes")" class="btn btn-secondary mb-2 ml-2">Сбросить</a>
+            </form>
+        </div>
     </div>
-</div>
 
     <div class="card shadow mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
@@ -74,6 +108,7 @@
                             <th>№ Заказа</th>
                             <th>Розыгрыш</th>
                             <th>Статус</th>
+                            <th>Приз</th>
                             <th>Дата отправки</th>
                             <th class="text-center">Действие</th>
                         </tr>
@@ -104,6 +139,16 @@
                                     else
                                     {
                                         <span class="badge badge-secondary">Истекший</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(code.PrizeName))
+                                    {
+                                        <span class="text-primary font-italic">@code.PrizeName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
                                     }
                                 </td>
                                 <td>@code.SubmittedAt.ToString("g")</td>
@@ -140,8 +185,11 @@
                         <a class="page-link"
                            href="@Url.Action("PromoCodes", new {
                                search = search,
+                               userId = userChatId,
+                               orderId = orderId,
                                giveId = giveId,
                                status = status,
+                               prizeName = prizeName,
                                page = currentPage - 1
                            })">
                             &laquo; Назад
@@ -155,9 +203,11 @@
                         <a class="page-link"
                            href="@Url.Action("PromoCodes", new {
                                search = search,
-                               orderId = orderId,  // Добавляем параметр
+                               userId = userChatId,
+                               orderId = orderId,
                                giveId = giveId,
                                status = status,
+                               prizeName = prizeName,
                                page = i
                            })">
                             @i
@@ -171,8 +221,11 @@
                         <a class="page-link"
                            href="@Url.Action("PromoCodes", new {
                                search = search,
+                               userId = userChatId,
+                               orderId = orderId,
                                giveId = giveId,
                                status = status,
+                               prizeName = prizeName,
                                page = currentPage + 1
                            })">
                             Вперед &raquo;
@@ -241,24 +294,98 @@
 </div>
 
 @section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <style>
+        .loading {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="%23ccc" stroke-width="10" fill="none"><animate attributeName="stroke-dashoffset" dur="2s" repeatCount="indefinite" from="0" to="502"/><animate attributeName="stroke-dasharray" dur="2s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"/></circle></svg>');
+            background-position: right 10px center;
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+        }
+    </style>
+
     <script>
-        $(function () {
-            // Открытие модалки редактирования
-            $('.edit-btn').click(function () {
-                const id = $(this).data('id');
-                const code = $(this).data('code');
-                const status = $(this).data('status');
+            $(function () {
+                // --- Автокомплит поиска пользователей ---
+            function applyFilters() {
+                $("form[method='get']").submit();
+            }
 
-                $('#editPromoId').val(id);
-                $('#editPromoCode').val(code);
-                $('#editPromoStatus').val(status);
-                $('#editPromoCodeModal').modal('show');
-                registerModalCloseHandlers();
-
+            // Очистка поиска пользователя
+            $(document).on('click', '.clear-user-search', function() {
+                $("#userSearch").val('');
+                $("#userId").val('');
+                applyFilters();
             });
 
-            // Отправка формы редактирования
-            $('#editPromoCodeForm').submit(function (e) {
+            // --- Автокомплит поиска пользователей ---
+                $("#userSearch").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("SearchUsers", "Admin")',
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.name + " (" + item.phone + ")", // Это будет отображаться в выпадающем списке
+                                    value: item.name, // Это значение будет установлено в поле при выборе
+                                    id: item.id
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    // Устанавливаем значение поля равным имени пользователя (ui.item.value)
+                    $(this).val(ui.item.value);
+                    $("#userId").val(ui.item.id);
+                    applyFilters();
+                    return false; // Предотвращаем стандартное поведение
+                },
+                search: function() {
+                    $(this).addClass("loading");
+                    $("#no-results").hide();
+                },
+                response: function(event, ui) {
+                    $(this).removeClass("loading");
+                    if (ui.content.length === 0) {
+                        $("#no-results").show();
+                    } else {
+                        $("#no-results").hide();
+                    }
+
+                    // Добавляем кнопку очистки если есть значение
+                    if ($(this).val()) {
+                        $(this).parent().append('<span class="clear-user-search" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"><i class="fas fa-times"></i></span>');
+                    }
+                },
+                change: function(event, ui) {
+                    // Если поле очищено вручную
+                    if (!ui.item) {
+                        $("#userId").val('');
+                        applyFilters();
+                    }
+                }
+            });
+
+            // --- Открытие модалки редактирования промокода ---
+            $(".edit-btn").on("click", function () {
+                const { id, code, status } = $(this).data();
+
+                $("#editPromoId").val(id);
+                $("#editPromoCode").val(code);
+                $("#editPromoStatus").val(status);
+                $("#editPromoCodeModal").modal("show");
+
+                registerModalCloseHandlers();
+            });
+
+            // --- Отправка формы редактирования ---
+            $("#editPromoCodeForm").on("submit", function (e) {
                 e.preventDefault();
 
                 $.ajax({
@@ -266,38 +393,40 @@
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function () {
-                        $('#editPromoCodeModal').modal('hide');
-                        location.reload(); // Перезагружаем страницу
+                        $("#editPromoCodeModal").modal("hide");
+                        location.reload();
                     },
                     error: function () {
-                        alert('Ошибка при сохранении');
+                        alert("Ошибка при сохранении");
                     }
                 });
             });
 
-            $('.details-btn').click(function () {
-                const id = $(this).data('id');
+            // --- Детали промокода ---
+            $(".details-btn").on("click", function () {
+                const id = $(this).data("id");
 
                 $.ajax({
                     url: '@Url.Action("GetPromoCodeDetails")',
                     type: 'GET',
-                    data: { id: id },
+                    data: { id },
                     success: function (data) {
-                        $('#promoCodeDetailsBody').html(data);
-                        $('#promoCodeDetailsModal').modal('show');
+                        $("#promoCodeDetailsBody").html(data);
+                        $("#promoCodeDetailsModal").modal("show");
                         registerModalCloseHandlers();
                     },
                     error: function () {
-                        alert('Ошибка при загрузке данных');
+                        alert("Ошибка при загрузке данных");
                     }
                 });
             });
         });
-                    // Функция для привязки обработчиков закрытия модальных окон
-            function registerModalCloseHandlers() {
-                $('.modal .close, .modal [data-dismiss="modal"]').on('click', function () {
-                    $(this).closest('.modal').modal('hide');
-                });
-            }
+
+        // --- Обработчики закрытия модалок ---
+        function registerModalCloseHandlers() {
+            $(".modal .close, .modal [data-dismiss='modal']").on("click", function () {
+                $(this).closest(".modal").modal("hide");
+            });
+        }
     </script>
 }

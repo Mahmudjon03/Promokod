@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using PromoRandom.Models;
 using PromoRandom.Services;
 
 namespace PromoRandom.Controllers
@@ -19,15 +20,42 @@ namespace PromoRandom.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var activeGive = await databaseService.GetFirstActiveGiveAsync();
-            if (activeGive == null)
+            // Получаем наиболее релевантный розыгрыш
+            var relevantGive = await databaseService.GetRelevantGiveAsync();
+
+            // Определяем статус розыгрыша
+            string giveawayStatus = "none";
+            DateTime? targetDate = null;
+
+            if (relevantGive != null)
             {
-                return Json(new { Error = "Oops! Looks like no giveaways are active right now" });
+                if (DateTime.Now >= relevantGive.StartDate && DateTime.Now <= relevantGive.EndDate)
+                {
+                    giveawayStatus = "active";
+                    targetDate = relevantGive.EndDate;
+                }
+                else if (DateTime.Now < relevantGive.StartDate)
+                {
+                    giveawayStatus = "upcoming";
+                    targetDate = relevantGive.StartDate;
+                }
+                // Для завершенных, но не отмеченных is_completed
+                else if (DateTime.Now > relevantGive.EndDate)
+                {
+                    giveawayStatus = "finished";
+                }
             }
 
-            ViewBag.EndDate = activeGive.EndDate;
+            ViewBag.GiveawayStatus = giveawayStatus;
+            ViewBag.TargetDate = targetDate;
+            ViewBag.Give = relevantGive;
 
-            var prizes = await databaseService.GetPrizesByGiveIdAsync(activeGive.Id);
+            // Получаем призы, если есть релевантный розыгрыш
+            List<Prize> prizes = null;
+            if (relevantGive != null)
+            {
+                prizes = await databaseService.GetPrizesByGiveIdAsync(relevantGive.Id);
+            }
             ViewBag.Prizes = prizes;
 
             // Получаем последние 3 новости
@@ -35,7 +63,6 @@ namespace PromoRandom.Controllers
                 .OrderByDescending(a => a.CreatedAt)
                 .Take(3)
                 .ToList();
-
             ViewBag.LatestNews = latestNews;
 
             return View();
@@ -46,7 +73,6 @@ namespace PromoRandom.Controllers
             var stats = await databaseService.GetWinnerStatisticsAsync();
             return View(stats);
         }
-
 
         public async Task<IActionResult> News()
         {
@@ -68,5 +94,13 @@ namespace PromoRandom.Controllers
 
             return View(article);
         }
+
+        [Route("site/promo/{chatId:long}")]
+        public async Task<IActionResult> Promo(long chatId)
+        {
+            var promos = await databaseService.GetUserPromoDetailsAsync(chatId);
+            return View(promos);
+        }
+
     }
 }

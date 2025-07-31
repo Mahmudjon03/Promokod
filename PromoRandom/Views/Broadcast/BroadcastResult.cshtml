@@ -1,13 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Результат рассылки";
+    Func<string, string> getLangName = lang => lang switch
+    {
+        "ru" => "Русский",
+        "tj" => "Тоҷикӣ",
+        "uz" => "O‘zbekcha",
+        "en" => "English",
+        "all" => "Все языки",
+        _ => lang
+    };
 }
 
 <div class="container py-4">
     <div class="alert alert-success">
-        <h4 class="alert-heading"><i class="fas fa-check-circle"></i> Рассылка завершена!</h4>
+        <h4 class="alert-heading">
+            <i class="fas fa-check-circle"></i> Рассылка завершена!
+        </h4>
         <p>
             Успешно отправлено: <strong>@ViewBag.SuccessCount</strong> из <strong>@ViewBag.TotalCount</strong> пользователей
         </p>
+        <p>🌐 Язык рассылки: <strong>@getLangName(ViewBag.Language as string ?? "all")</strong></p>
         <hr>
         <p class="mb-0">
             <a href="@Url.Action("SendBroadcast")" class="btn btn-outline-primary">

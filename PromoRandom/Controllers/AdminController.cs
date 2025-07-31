@@ -7,7 +7,7 @@ using PromoRandom.ViewModels;
 namespace PromoRandom.Controllers
 {
     [Authorize]
-    public class AdminController(IWebHostEnvironment environment, DatabaseService databaseService) : Controller
+    public class AdminController(ImageService imageService, DatabaseService databaseService) : Controller
     {
         public IActionResult Index()
         {
@@ -54,11 +54,19 @@ namespace PromoRandom.Controllers
             if (ModelState.IsValid)
             {
                 await databaseService.UpdateGiveAsync(give);
+
+                // Если розыгрыш завершён — истекаем все его активные промокоды
+                if (give.IsCompleted)
+                {
+                    await databaseService.ExpirePromoCodesByGiveIdAsync(give.Id);
+                }
+
                 return RedirectToAction("Gives");
             }
-            // Если есть ошибка валидации, можно вернуть частичное представление с ошибками
+
             return PartialView("_EditGivePartial", give);
         }
+
 
         // Удаление розыгрыша (POST) — вызывается после подтверждения удаления
         [HttpPost]
@@ -107,40 +115,69 @@ namespace PromoRandom.Controllers
                 }
             }
 
-            ViewBag.Gives = await databaseService.GetActiveGivesAsync();
+            ViewBag.Gives = await databaseService.GetAllGivesAsync();
             return View(prizes);
         }
 
-        // Создание приза (POST)
         [HttpPost]
         public async Task<IActionResult> CreatePrize(Prize prize, IFormFile prizeImage)
         {
-            if (ModelState.IsValid && prizeImage != null && prizeImage.Length > 0)
+            if (ModelState.IsValid && prizeImage != null)
             {
-                // Временно сохраняем приз, чтобы получить ID
-                prize.ImagePath = "temp"; // Временное значение
-                prize.Id = await databaseService.AddPrizeAsync(prize);
-
-                // Генерируем имя файла
-                var fileName = $"prize{prize.Id}_{prize.GiveId}{Path.GetExtension(prizeImage.FileName)}";
-                var filePath = Path.Combine(environment.WebRootPath, "images", "prizes", fileName);
-
-                // Сохраняем изображение
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                try
                 {
-                    await prizeImage.CopyToAsync(stream);
+                    // Временное сохранение приза
+                    prize.ImagePath = "temp";
+                    prize.Id = await databaseService.AddPrizeAsync(prize);
+
+                    // Сохранение изображения через сервис
+                    prize.ImagePath = await imageService.SavePrizeImageAsync(prizeImage, prize);
+
+                    // Финальное обновление
+                    await databaseService.UpdatePrizeAsync(prize);
+                    return RedirectToAction("Prizes");
                 }
-
-                // Обновляем путь к изображению
-                prize.ImagePath = $"/images/prizes/{fileName}";
-                await databaseService.UpdatePrizeAsync(prize);
-
-                return RedirectToAction("Prizes");
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError("PrizeImage", ex.Message);
+                }
             }
 
-            // Если ошибка, возвращаемся
             ViewBag.Gives = await databaseService.GetActiveGivesAsync();
             return View("Prizes", await databaseService.GetAllPrizesAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPrize(Prize prize, IFormFile prizeImage)
+        {
+            var existingPrize = await databaseService.GetPrizeByIdAsync(prize.Id);
+            if (existingPrize == null) return NotFound();
+
+            if (prizeImage != null)
+            {
+                try
+                {
+                    // Удаление старого изображения
+                    if (!string.IsNullOrEmpty(existingPrize.ImagePath))
+                    {
+                        imageService.DeleteImage(existingPrize.ImagePath);
+                    }
+
+                    // Сохранение нового через сервис
+                    prize.ImagePath = await imageService.SavePrizeImageAsync(prizeImage, prize);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError("PrizeImage", ex.Message);
+                }
+            }
+            else
+            {
+                prize.ImagePath = existingPrize.ImagePath;
+            }
+
+            await databaseService.UpdatePrizeAsync(prize);
+            return RedirectToAction("Prizes");
         }
 
         // Редактирование приза (GET)
@@ -156,60 +193,18 @@ namespace PromoRandom.Controllers
             return PartialView("_EditPrizePartial", prize);
         }
 
-        // Редактирование приза (POST)
-        [HttpPost]
-        public async Task<IActionResult> EditPrize(Prize prize, IFormFile prizeImage)
-        {
-            // Получаем текущий приз из базы
-            var existingPrize = await databaseService.GetPrizeByIdAsync(prize.Id);
-            if (existingPrize == null)
-            {
-                return NotFound();
-            }
-
-            // Сохраняем текущий путь к изображению
-            var currentImagePath = existingPrize.ImagePath;
-
-            // Если загружено новое изображение
-            if (prizeImage != null && prizeImage.Length > 0)
-            {
-                // Удаляем старое изображение, если оно существует
-                if (!string.IsNullOrEmpty(currentImagePath))
-                {
-                    var oldImagePath = Path.Combine(environment.WebRootPath, currentImagePath.TrimStart('/'));
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
-                }
-
-                // Создаем новое имя файла
-                var fileName = $"prize{prize.Id}_{prize.GiveId}{Path.GetExtension(prizeImage.FileName)}";
-                var filePath = Path.Combine(environment.WebRootPath, "images", "prizes", fileName);
-
-                // Сохраняем новое изображение
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await prizeImage.CopyToAsync(stream);
-                }
-
-                prize.ImagePath = $"/images/prizes/{fileName}";
-            }
-            else
-            {
-                // Если новое изображение не загружено, сохраняем текущее
-                prize.ImagePath = currentImagePath;
-            }
-
-            await databaseService.UpdatePrizeAsync(prize);
-            return RedirectToAction("Prizes");
-        }
-
-
         // Удаление приза (POST)
         [HttpPost]
         public async Task<IActionResult> DeletePrize(int id)
         {
+            var prize = await databaseService.GetPrizeByIdAsync(id);
+            if (prize == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(prize.ImagePath))
+            {
+                imageService.DeleteImage(prize.ImagePath);
+            }
+
             await databaseService.DeletePrizeAsync(id);
             return RedirectToAction("Prizes");
         }
@@ -217,9 +212,12 @@ namespace PromoRandom.Controllers
         // Промокоды
         public async Task<IActionResult> PromoCodes(
             string? search = null,
-            int? orderId = null,  // Добавляем новый параметр
+            int? orderId = null,
+            long? userId = null,
             int? giveId = null,
             string? status = null,
+            string? userSearch = null,
+            string? prizeName = null,  // Добавляем новый параметр фильтрации
             int page = 1)
         {
             const int pageSize = 25;
@@ -227,9 +225,11 @@ namespace PromoRandom.Controllers
             var filter = new PromoCodeFilter
             {
                 Search = search,
-                OrderId = orderId,  // Добавляем в фильтр
+                OrderId = orderId,
+                UserChatId = userId,
                 GiveId = giveId,
                 Status = status,
+                PrizeName = prizeName,  // Добавляем фильтр по призу
                 Page = page,
                 PageSize = pageSize
             };
@@ -237,13 +237,18 @@ namespace PromoRandom.Controllers
             PromoCodeResult result = await databaseService.GetFilteredPromoCodesAsync(filter);
             List<Give> gives = await databaseService.GetAllGivesAsync();
             List<string> statuses = ["active", "won", "expired", "disabled"];
+            List<string> prizeNames = await databaseService.GetAllPrizeNamesAsync();  // Получаем уникальные имена призов
 
+            ViewBag.UserSearch = userSearch;
+            ViewBag.UserChatId = userId;
             ViewBag.Search = search;
-            ViewBag.OrderId = orderId;  // Добавляем в ViewBag
+            ViewBag.OrderId = orderId;
             ViewBag.GiveId = giveId;
             ViewBag.Status = status;
+            ViewBag.PrizeName = prizeName;  // Сохраняем выбранный приз
             ViewBag.Gives = gives;
             ViewBag.Statuses = statuses;
+            ViewBag.PrizeNames = prizeNames;  // Передаем список призов в представление
             ViewBag.Page = page;
             ViewBag.PageSize = pageSize;
             ViewBag.TotalCount = result.TotalCount;
@@ -284,6 +289,17 @@ namespace PromoRandom.Controllers
             return PartialView("_PromoCodeDetailsPartial", viewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SearchUsers(string term)
+        {
+            var users = await databaseService.SearchUsersAsync(term);
+            return Json(users.Select(u => new {
+                id = u.ChatId,
+                name = u.Name ?? "Без имени",
+                phone = u.Phone ?? "Нет телефона"
+            }));
+        }
+
         // POST: Сохранение изменений
         [HttpPost]
         public async Task<IActionResult> EditPromoCode(int id, string status)
@@ -302,6 +318,87 @@ namespace PromoRandom.Controllers
             await databaseService.UpdatePromoCodeAsync(promo);
 
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Settings()
+        {
+            var minimumAmount = await databaseService.GetMinimumAmountAsync();
+            ViewBag.MinimumAmount = minimumAmount;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSettings(int minimumAmount)
+        {
+            if (minimumAmount < 0)
+            {
+                return BadRequest("Минимальная сумма не может быть отрицательной");
+            }
+
+            await databaseService.UpdateMinimumAmountAsync(minimumAmount);
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserManagement(
+            string? search = null,
+            int page = 1,
+            string sortBy = "chat_id", // Добавляем параметры сортировки
+            string sortOrder = "desc")
+        {
+            const int pageSize = 25;
+
+            var filter = new UserFilter
+            {
+                Search = search,
+                Page = page,
+                PageSize = pageSize,
+                SortBy = sortBy,       // Передаем в фильтр
+                SortOrder = sortOrder  // Передаем в фильтр
+            };
+
+            var (users, totalCount) =
+                await databaseService.GetFilteredUserViewModelsAsync(filter);
+
+            // Сохраняем параметры в ViewBag
+            ViewBag.Search = search;
+            ViewBag.Page = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+            ViewBag.SortBy = sortBy;          // Для сохранения состояния
+            ViewBag.SortOrder = sortOrder;    // Для сохранения состояния
+
+            return View(users);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> UserDetails(long chatId)
+        {
+            var user = await databaseService.GetUserByChatIdAsync(chatId);
+            if (user == null) return NotFound();
+
+            // Получаем промокоды пользователя
+            var filter = new PromoCodeFilter
+            {
+                UserChatId = chatId,
+            };
+
+            PromoCodeResult result = await databaseService.GetFilteredPromoCodesAsync(filter);
+
+            // Получаем заказы пользователя
+            var orders = await databaseService.GetOrdersByUserAsync(chatId);
+
+            var viewModel = new UserDetailsViewModel
+            {
+                User = user,
+                PromoCodes = result.PromoCodes,
+                Orders = orders
+            };
+
+            return View(viewModel);
         }
     }
 }

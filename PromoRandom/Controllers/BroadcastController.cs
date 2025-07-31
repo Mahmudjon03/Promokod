@@ -1,77 +1,76 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PromoRandom.Models;
 using PromoRandom.Services;
 
-namespace PromoRandom.Controllers
+namespace PromoRandom.Controllers;
+
+[Authorize]
+public class BroadcastController(
+    DatabaseService databaseService,
+    WinnerNotificationService notificationService,
+    ImageService imageService) : Controller
 {
-    [Authorize]
-    public class BroadcastController(
-        DatabaseService databaseService,
-        WinnerNotificationService notificationService,
-        IWebHostEnvironment env) : Controller
+    [HttpGet]
+    public IActionResult SendBroadcast()
     {
-        [HttpGet]
-        public IActionResult SendBroadcast()
+        return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> BroadcastHistory()
+    {
+        var logs = await databaseService.GetBroadcastLogsAsync();
+        return View(logs);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SendBroadcast(string language, string message, IFormFile image)
+    {
+        string? photoUrl = null;
+
+        if (image != null && image.Length > 0)
         {
-            return View();
+            try
+            {
+                var imagePath = await imageService.SaveBroadcastImageAsync(image);
+                photoUrl = $"{Request.Scheme}://{Request.Host}{imagePath}";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("image", ex.Message);
+                ViewBag.ErrorMessage = ex.Message;
+                return View();
+            }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SendBroadcast(string message, IFormFile image)
+        var chatIds = language == "all"
+            ? await databaseService.GetAllUserChatIdsAsync()
+            : await databaseService.GetUserChatIdsByLanguageAsync(language);
+
+        int successCount = 0;
+        foreach (var chatId in chatIds)
         {
-            string? photoUrl = null;
-
-            // Обработка загруженного изображения
-            if (image != null && image.Length > 0)
-            {
-                // Проверяем тип файла
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    ModelState.AddModelError("image", "Допустимы только JPG, JPEG и PNG изображения");
-                    return View();
-                }
-
-                var uploadsFolder = Path.Combine(env.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-
-                photoUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-            }
-
-            // Получаем всех пользователей
-            var chatIds = await databaseService.GetAllUserChatIdsAsync();
-            int successCount = 0;
-            int totalCount = chatIds.Count;
-
-            // Рассылка сообщений
-            foreach (var chatId in chatIds)
-            {
-                var success = await notificationService.SendBroadcastMessageAsync(chatId, message, photoUrl);
-                if (success) successCount++;
-
-                // Задержка, чтобы не превысить лимиты Telegram
-                await Task.Delay(100);
-            }
-
-            ViewBag.SuccessCount = successCount;
-            ViewBag.TotalCount = totalCount;
-            ViewBag.Message = message;
-            ViewBag.PhotoUrl = photoUrl;
-
-            return View("BroadcastResult");
+            if (await notificationService.SendBroadcastMessageAsync(chatId, message, photoUrl))
+                successCount++;
+            await Task.Delay(100);
         }
+
+        await databaseService.SaveBroadcastLogAsync(new BroadcastLog
+        {
+            Message = message,
+            PhotoUrl = photoUrl,
+            SuccessCount = successCount,
+            TotalCount = chatIds.Count,
+            Language = language
+        });
+
+        ViewBag.SuccessCount = successCount;
+        ViewBag.TotalCount = chatIds.Count;
+        ViewBag.Message = message;
+        ViewBag.PhotoUrl = photoUrl;
+        ViewBag.Language = language;
+
+        return View("BroadcastResult");
     }
 }

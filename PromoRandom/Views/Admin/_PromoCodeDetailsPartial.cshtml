@@ -42,8 +42,19 @@
                 </div>
                 <div class="card-body p-2">
                     <table class="table table-sm mb-0">
-                        <tr><th>Имя:</th><td>@(Model.User?.Name ?? "не указано")</td></tr>
-                        <tr><th>Телефон:</th><td>@(Model.User?.Phone ?? "не указан")</td></tr>
+                        <tr>
+                            <th>Имя:</th>
+                            <td>@(string.IsNullOrWhiteSpace(Model.User?.Name) ? "не указано" : Model.User.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>Телефон:</th>
+                            <td>@(string.IsNullOrWhiteSpace(Model.User?.Phone) ? "не указан" : Model.User.Phone)</td>
+                        </tr>
+                        <tr>
+                            <th>Доп.Телефон:</th>
+                            <td>@(string.IsNullOrWhiteSpace(Model.User?.PersonalPhone) ? "не указан" : Model.User.PersonalPhone)</td>
+                        </tr>
+
                         <tr><th>Chat ID:</th><td>@Model.User?.ChatId</td></tr>
                         <tr><th>Язык:</th><td>@Model.User?.Language</td></tr>
                     </table>

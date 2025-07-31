@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CountdownTitle" xml:space="preserve">
+  <data name="CountdownTitleActive" xml:space="preserve">
     <value>До окончания акции осталось</value>
+  </data>
+  <data name="CountdownTitleUpcoming" xml:space="preserve">
+    <value>До начала акции осталось</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Дней</value>
@@ -141,6 +144,18 @@
   <data name="Minutes" xml:space="preserve">
     <value>Минут</value>
   </data>
+  <data name="News" xml:space="preserve">
+    <value>Новости</value>
+  </data>
+  <data name="NoActiveGiveaway" xml:space="preserve">
+    <value>В настоящее время нет активных или предстоящих акций</value>
+  </data>
+  <data name="NoNews" xml:space="preserve">
+    <value>Новостей пока нет</value>
+  </data>
+  <data name="NoNewsDescription" xml:space="preserve">
+    <value>Следите за обновлениями — скоро появится что-то интересное!</value>
+  </data>
   <data name="NoPrizesDescription" xml:space="preserve">
     <value>Призы не найдены</value>
   </data>
@@ -153,8 +168,17 @@
   <data name="PrizesTitle" xml:space="preserve">
     <value>Наши призы</value>
   </data>
+  <data name="PromoEnded" xml:space="preserve">
+    <value>Акция завершена!</value>
+  </data>
+  <data name="PromoStarted" xml:space="preserve">
+    <value>Акция началась!</value>
+  </data>
   <data name="Seconds" xml:space="preserve">
     <value>Секунд</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Статистика розыгрышей</value>
   </data>
   <data name="StoreAddress" xml:space="preserve">
     <value>ш. Душанбе, куч. Рӯдаки...</value>

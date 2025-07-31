@@ -1,0 +1,36 @@
+﻿@model List<BroadcastLog>
+@{
+    ViewData["Title"] = "История рассылок";
+    Func<string, string> getLanguageName = lang => lang switch
+    {
+        "ru" => "Русский",
+        "tj" => "Тоҷикӣ",
+        "uz" => "O‘zbekcha",
+        "en" => "English",
+        "all" => "Все языки",
+        _ => lang
+    };
+}
+
+<div class="container py-4">
+    <h2>🕓 История рассылок</h2>
+
+    @foreach (var log in Model)
+    {
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>@log.SentAt.ToLocalTime().ToString("g")</span>
+                <span class="text-muted">📤 @log.SuccessCount / @log.TotalCount отправлено</span>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrWhiteSpace(log.PhotoUrl))
+                {
+                    <img src="@log.PhotoUrl" class="img-fluid mb-2 rounded" style="max-height:150px;" alt="Фото рассылки">
+                }
+                <div class="border p-2 mb-2" style="white-space: pre-line;">@Html.Raw(log.Message.Replace("\n", "<br>"))</div>
+
+                <span class="badge bg-light">🌐 Язык: @getLanguageName(log.Language)</span>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,179 @@
+﻿@using PromoRandom.ViewModels
+@model List<UserViewModel>
+
+@{
+    ViewData["Title"] = "Управление пользователями";
+    var search = ViewBag.Search as string;
+    var currentPage = (int)ViewBag.Page;
+    var pageSize = (int)ViewBag.PageSize;
+    var totalCount = (int)ViewBag.TotalCount;
+    var totalPages = (int)ViewBag.TotalPages;
+    var sortBy = ViewBag.SortBy as string ?? "chat_id";
+    var sortOrder = ViewBag.SortOrder as string ?? "desc";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">👥 Управление пользователями</h2>
+
+    <!-- Фильтры -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="form-inline">
+                <input type="hidden" name="sortBy" value="@sortBy" />
+                <input type="hidden" name="sortOrder" value="@sortOrder" />
+
+                <div class="form-group mr-2 mb-2">
+                    <input type="text" name="search" class="form-control"
+                           placeholder="Поиск по имени или телефону" value="@search">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Поиск</button>
+                <a href="@Url.Action("UserManagement")" class="btn btn-secondary mb-2 ml-2">Сбросить</a>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <span>Найдено пользователей: @totalCount</span>
+            <span>Страница @currentPage из @totalPages</span>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                <a asp-action="UserManagement"
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="name"
+                                   asp-route-sortOrder="@(sortBy == "name" && sortOrder == "asc" ? "desc" : "asc")">
+                                    Имя
+                                    @if (sortBy == "name")
+                                    {
+                                        <i class="fas @(sortOrder == "asc" ? "fa-sort-up" : "fa-sort-down")"></i>
+                                    }
+                                </a>
+                            </th>
+                            <th>Телефон</th>
+                            <th>Язык</th>
+                            <th>
+                                <a asp-action="UserManagement"
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="promo_code_count"
+                                   asp-route-sortOrder="@(sortBy == "promo_code_count" && sortOrder == "asc" ? "desc" : "asc")">
+                                    Промо-кодов
+                                    @if (sortBy == "promo_code_count")
+                                    {
+                                        <i class="fas @(sortOrder == "asc" ? "fa-sort-up" : "fa-sort-down")"></i>
+                                    }
+                                </a>
+                            </th>
+                            <th>
+                                <a asp-action="UserManagement"
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="order_count"
+                                   asp-route-sortOrder="@(sortBy == "order_count" && sortOrder == "asc" ? "desc" : "asc")">
+                                    Заказов
+                                    @if (sortBy == "order_count")
+                                    {
+                                        <i class="fas @(sortOrder == "asc" ? "fa-sort-up" : "fa-sort-down")"></i>
+                                    }
+                                </a>
+                            </th>
+                            <th>
+                                <a asp-action="UserManagement"
+                                   asp-route-search="@search"
+                                   asp-route-sortBy="total_order_amount"
+                                   asp-route-sortOrder="@(sortBy == "total_order_amount" && sortOrder == "asc" ? "desc" : "asc")">
+                                    Сумма заказов
+                                    @if (sortBy == "total_order_amount")
+                                    {
+                                        <i class="fas @(sortOrder == "asc" ? "fa-sort-up" : "fa-sort-down")"></i>
+                                    }
+                                </a>
+                            </th>
+                            <th>Дата регистрации</th>
+                            <th class="text-center">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in Model)
+                        {
+                            <tr>
+                                <td>@(string.IsNullOrEmpty(u.Name) ? "N/A" : u.Name)</td>
+                                <td>@(string.IsNullOrEmpty(u.Phone) ? "N/A" : u.Phone)</td>
+                                <td>@u.Language</td>
+                                <td>@u.PromoCodeCount</td>
+                                <td>@u.OrderCount</td>
+                                <td>@u.TotalOrderAmount.ToString("F2")</td>
+                                <td>@u.RegisteredAt</td>
+                                <td class="text-center">
+                                    <a class="btn btn-sm btn-info"
+                                       asp-action="UserDetails"
+                                       asp-route-chatId="@u.ChatId"
+                                       title="Детали">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Пагинация -->
+    @if (totalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                @if (currentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Action("UserManagement", new {
+                               search = search,
+                               page = currentPage - 1,
+                               sortBy = sortBy,
+                               sortOrder = sortOrder
+                           })">
+                            &laquo; Назад
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Action("UserManagement", new {
+                               search = search,
+                               page = i,
+                               sortBy = sortBy,
+                               sortOrder = sortOrder
+                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                @if (currentPage < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="@Url.Action("UserManagement", new {
+                               search = search,
+                               page = currentPage + 1,
+                               sortBy = sortBy,
+                               sortOrder = sortOrder
+                           })">
+                            Вперед &raquo;
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

@@ -3,22 +3,25 @@
 @model List<PromoRandom.ViewModels.WinnerStatModel>
 
 @{
+    ViewData["Title"] = L["Title"];
     Layout = "~/Views/Shared/_SiteLayout.cshtml";
 }
 
-<div class="container py-4">
-    <h2 class="mb-4 text-center">@L["Title"]</h2>
+<div class="container py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">@L["Title"]</h1>
+    </div>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-warning text-center">
-            @L["NoData"]
+        <div class="alert alert-warning text-center py-4">
+            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+            <h4>@L["NoData"]</h4>
         </div>
     }
     else
     {
-        <div id="accordion">
-            <!-- 🧠 Добавил обёртку -->
+        <div class="accordion" id="giveawayAccordion">
             @for (int index = 0; index < Model.Count; index++)
             {
                 var giveaway = Model[index];
@@ -31,49 +34,106 @@
                 string collapseId = $"collapseGiveaway_{index}";
                 bool isFirst = index == 0;
 
-                <div class="card shadow mb-4">
-                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">@giveaway.GiveawayName</h5>
-                            <small>
-                                @String.Format(
-                                         L["GiveawayPeriod"].Value,
-                                         giveaway.StartDate.ToString("dd MMMM yyyy"),
-                                         giveaway.EndDate.ToString("dd MMMM yyyy")
-                                         )
-                            </small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="badge bg-light text-dark me-2">@L[statusKey]</span>
-                            <button class="btn btn-sm btn-light toggle-btn"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#@collapseId"
-                                    aria-expanded="@(isFirst ? "true" : "false")"
-                                    aria-controls="@collapseId"
-                                    title="Показать/Скрыть">
-                                <i class="toggle-icon fas @(isFirst ? "fa-angle-up" : "fa-angle-down")"></i>
-                            </button>
-                        </div>
+                <div class="accordion-item shadow mb-4 border-0">
+                    <div class="accordion-header" id="heading_@index">
+                        <button class="accordion-button bg-dark text-white p-3 @(isFirst ? "" : "collapsed")"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#@collapseId"
+                                aria-expanded="@(isFirst ? "true" : "false")"
+                                aria-controls="@collapseId">
+                            <div class="d-flex justify-content-between w-100 align-items-center">
+                                <div class="flex-grow-1 me-3">
+                                    <h5 class="mb-1">@giveaway.GiveawayName</h5>
+                                    <div class="d-flex flex-wrap gap-2 mt-1">
+                                        <small class="d-flex align-items-center">
+                                            <i class="fas @(statusKey == "Status_Completed" ? "fa-calendar-check" : "fa-calendar-alt") me-1"></i>
+                                            @giveaway.StartDate.ToString("dd MMMM yyyy") - @giveaway.EndDate.ToString("dd MMMM yyyy")
+                                        </small>
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="badge @(statusKey == "Status_Completed" ? "bg-success" : statusKey == "Status_Active" ? "bg-warning" : "bg-info") me-2">
+                                        @L[statusKey]
+                                    </span>
+                                </div>
+                            </div>
+                        </button>
                     </div>
 
-                    <div id="@collapseId" class="collapse @(isFirst ? "show" : "")" data-bs-parent="#accordion">
-                        <div class="card-body p-0">
+                    <div id="@collapseId" class="accordion-collapse collapse @(isFirst ? "show" : "")"
+                         aria-labelledby="heading_@index"
+                         data-bs-parent="#giveawayAccordion">
+                        <div class="accordion-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover table-striped mb-0">
-                                    <thead class="thead-dark">
+                                <table class="table table-hover table-striped align-middle mb-0">
+                                    <thead class="table-dark">
                                         <tr>
+                                            <th>#</th>
+                                            <th>Статус</th>
                                             <th>Приз</th>
                                             <th>Победитель</th>
+                                            <th>Имкон-код</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var w in giveaway.Winners)
-                                        {
-                                            <tr>
-                                                <td><span class="fw-bold">@w.PrizeName</span></td>
-                                                <td>@w.WinnerName</td>
-                                            </tr>
+                                        @{
+                                            int counter = 1;
+                                            foreach (var prize in giveaway.Winners)
+                                            {
+                                                var isWon = !string.IsNullOrEmpty(prize.WinnerName);
+                                                <tr>
+                                                    <td class="fw-bold">@(counter++)</td>
+                                                    <td>
+                                                        @if (isWon)
+                                                        {
+                                                            <span class="badge bg-success">Разыгран</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary">Ожидает</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            @if (!string.IsNullOrEmpty(prize.ImagePath))
+                                                            {
+                                                                <img src="@prize.ImagePath"
+                                                                     alt="@prize.PrizeName"
+                                                                     class="me-2 d-none d-md-block"
+                                                                     style="width: 60px; height: 60px; object-fit: cover;" />
+                                                            }
+                                                            <div>
+                                                                <strong>@prize.PrizeName</strong>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if (isWon)
+                                                        {
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-user-circle me-2 text-primary"></i>
+                                                                <span>@prize.WinnerName</span>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">-</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (!string.IsNullOrEmpty(prize.PromoCode))
+                                                        {
+                                                            <code class="bg-light p-1 rounded">@prize.PromoCode</code>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">-</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
                                     </tbody>
                                 </table>
@@ -82,61 +142,77 @@
                     </div>
                 </div>
             }
-        </div> <!-- 🧠 Закрытие обёртки -->
+        </div>
     }
 </div>
 
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Обработчик для аккордеона
-            document.querySelectorAll('.collapse').forEach(collapse => {
-                collapse.addEventListener('show.bs.collapse', event => {
-                    const target = event.target;
-                    const button = document.querySelector(`[data-bs-target="#${target.id}"]`);
-                    if (button) {
-                        const icon = button.querySelector('.toggle-icon');
-                        icon.classList.remove('fa-angle-down');
-                        icon.classList.add('fa-angle-up');
-                    }
-                });
-
-                collapse.addEventListener('hide.bs.collapse', event => {
-                    const target = event.target;
-                    const button = document.querySelector(`[data-bs-target="#${target.id}"]`);
-                    if (button) {
-                        const icon = button.querySelector('.toggle-icon');
-                        icon.classList.remove('fa-angle-up');
-                        icon.classList.add('fa-angle-down');
-                    }
-                });
-            });
-        });
-    </script>
-}
-
-
 @section Styles {
     <style>
-        .toggle-icon {
-            transition: all 0.3s ease;
+        .accordion-button::after {
+            content: '\f078'; /* Font Awesome chevron-down */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            color: #fff;
         }
 
-        .table-hover tbody tr:hover {
-            background-color: rgba(0,0,0,.075);
+        .accordion-button:not(.collapsed)::after {
+            transform: rotate(180deg);
         }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0,0,0,.02);
+        .accordion-button:focus {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
         }
 
-        .bg-dark {
-            background-color: #343a40 !important;
+        .accordion-item {
+            border-radius: 0.5rem !important;
+            overflow: hidden;
         }
 
-        .card-header.bg-dark {
-            border-bottom: 1px solid rgba(0,0,0,.125);
+        .table-striped > tbody > tr:nth-of-type(odd) > * {
+            background-color: rgba(0,0,0,.015);
+        }
+
+        .table-hover > tbody > tr:hover > * {
+            background-color: rgba(0,0,0,.03) !important;
+        }
+
+        .badge {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Адаптация для мобильных */
+        @@media (max-width: 767.98px) {
+            .accordion-button {
+                padding: 0.75rem;
+            }
+
+                .accordion-button h5 {
+                    font-size: 1rem;
+                }
+
+                .accordion-button small {
+                    font-size: 0.75rem;
+                }
+
+            .table {
+                font-size: 0.85rem;
+            }
+
+                .table th, .table td {
+                    padding: 0.75rem 0.5rem;
+                }
+
+            .badge {
+                font-size: 0.75rem;
+                padding: 0.25em 0.4em;
+            }
+
+            .d-none.d-md-block {
+                display: none !important;
+            }
         }
     </style>
 }

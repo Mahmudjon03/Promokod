@@ -1,0 +1,169 @@
+﻿@model PromoRandom.ViewModels.UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "Детали пользователя";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>👤 Детали пользователя</h2>
+        <a href="@Url.Action("UserManagement")" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Назад
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-user"></i> Информация о пользователе
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Chat ID:</th>
+                            <td>@Model.User.ChatId</td>
+                        </tr>
+                        <tr>
+                            <th>Имя:</th>
+                            <td>@(string.IsNullOrEmpty(Model.User.Name) ? "N/A" : Model.User.Name)</td>
+                        </tr>
+                        <tr>
+                            <th>Телефон:</th>
+                            <td>@(string.IsNullOrEmpty(Model.User.Phone) ? "N/A" : Model.User.Phone)</td>
+                        </tr>
+                        <tr>
+                            <th>Доп. телефон:</th>
+                            <td>@(string.IsNullOrEmpty(Model.User.PersonalPhone) ? "N/A" : Model.User.PersonalPhone)</td>
+                        </tr>
+                        <tr>
+                            <th>Язык:</th>
+                            <td>@Model.User.Language</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-shopping-cart"></i> Заказы пользователя
+                </div>
+                <div class="card-body">
+                    @if (Model.Orders.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Дата</th>
+                                        <th>Сумма</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Orders)
+                                    {
+                                        <tr>
+                                            <td>@order.OrderId</td>
+                                            <td>@order.Date.ToString("g")</td>
+                                            <td>@order.Amount.ToString("0.00")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-secondary mt-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Всего заказов:</strong> @Model.Orders.Count
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <strong>Общая сумма:</strong> @Model.Orders.Sum(o => o.Amount).ToString("0.00")
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info mb-0">
+                            У пользователя нет заказов
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+            <i class="fas fa-ticket-alt"></i> Промокоды пользователя
+        </div>
+        <div class="card-body">
+            @if (Model.PromoCodes.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Промо-код</th>
+                                <th>Розыгрыш</th>
+                                <th>№ Заказа</th>
+                                <th>Статус</th>
+                                <th>Приз</th>
+                                <th>Дата отправки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var code in Model.PromoCodes)
+                            {
+                                <tr>
+                                    <td>@code.Code</td>
+                                    <td>@code.GiveName</td>
+                                    <td>@code.OrderId</td>
+                                    <td>
+                                        @if (code.Status == "active")
+                                        {
+                                            <span class="badge badge-success">Активен</span>
+                                        }
+                                        else if (code.Status == "won")
+                                        {
+                                            <span class="badge badge-warning">Победитель</span>
+                                        }
+                                        else if (code.Status == "disabled")
+                                        {
+                                            <span class="badge badge-dark">Отключён</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">Истекший</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(code.PrizeName))
+                                        {
+                                            <span class="text-primary font-italic">@code.PrizeName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>@code.SubmittedAt.ToString("g")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info mb-0">
+                    У пользователя нет промокодов
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

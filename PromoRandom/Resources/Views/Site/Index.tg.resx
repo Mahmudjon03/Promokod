@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CountdownTitle" xml:space="preserve">
+  <data name="CountdownTitleActive" xml:space="preserve">
     <value>То поёни озмун мондааст</value>
+  </data>
+  <data name="CountdownTitleUpcoming" xml:space="preserve">
+    <value>То оғози озмун мондааст</value>
   </data>
   <data name="Days" xml:space="preserve">
     <value>Руз</value>
@@ -141,6 +144,18 @@
   <data name="Minutes" xml:space="preserve">
     <value>Дақиқа</value>
   </data>
+  <data name="News" xml:space="preserve">
+    <value>Хабарҳо</value>
+  </data>
+  <data name="NoActiveGiveaway" xml:space="preserve">
+    <value>Дар айни ҳол ягон озмуни фаъол ё наздикшаванда вуҷуд надорад.</value>
+  </data>
+  <data name="NoNews" xml:space="preserve">
+    <value>Ҳоло ягон хабар нест</value>
+  </data>
+  <data name="NoNewsDescription" xml:space="preserve">
+    <value>Навгониҳоро интизор шавед — ба зудӣ хабарҳои ҷолиб пайдо мешаванд!</value>
+  </data>
   <data name="NoPrizesDescription" xml:space="preserve">
     <value>Ҷоизаҳо ёфт нашуданд</value>
   </data>
@@ -153,8 +168,17 @@
   <data name="PrizesTitle" xml:space="preserve">
     <value>Ҷоизаҳои мо</value>
   </data>
+  <data name="PromoEnded" xml:space="preserve">
+    <value>Озмун ба анҷом расид!</value>
+  </data>
+  <data name="PromoStarted" xml:space="preserve">
+    <value>Озмун оғоз ёфт!</value>
+  </data>
   <data name="Seconds" xml:space="preserve">
     <value>Сония</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Натиҷаи озмунҳо</value>
   </data>
   <data name="StoreAddress" xml:space="preserve">
     <value>ш. Душанбе, куч. Рӯдаки...</value>

@@ -59,13 +59,37 @@
 @section Scripts {
     <script src="~/lib/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
-        tinymce.init({
+                tinymce.init({
             selector: '#Content',
-            plugins: 'lists link image table code preview fullscreen',
-            toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | link fullscreen preview',
+            plugins: 'lists link image table code preview fullscreen media textpattern advlist charmap',
+                        toolbar: 'undo redo | styleselect fontfamily fontsize | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table link image | preview',
             menubar: false,
             branding: false,
             height: 500,
+
+            // Размеры шрифта
+            font_size_input: true,
+            font_size_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt',
+
+            // Шрифты
+        font_family_formats:
+            'Arial=arial,helvetica,sans-serif;' +
+            'Calibri=calibri,sans-serif;' +
+            'Courier New=courier new,courier,monospace;' +
+            'Georgia=georgia,palatino;' +
+            'Lato=lato,sans-serif;' +
+            'Montserrat=montserrat,sans-serif;' +
+            'Open Sans=open sans,sans-serif;' +
+            'Roboto=roboto,sans-serif;' +
+            'Tahoma=tahoma,arial,helvetica,sans-serif;' +
+            'Times New Roman=times new roman,times;' +
+            'Verdana=verdana,geneva;',
+
+            content_style: `
+                body { font-family:Arial,Helvetica,sans-serif; font-size:14px }
+                img { max-width: 100%; height: auto; }
+            `,
+
             setup: function (editor) {
                 editor.on('PostProcess', function (e) {
                     e.content = e.content.replace(/<img/g, '<img class="img-fluid"');

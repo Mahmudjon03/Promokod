@@ -17,6 +17,7 @@ public class PromoCodeViewModel
     public User User { get; set; }
     public Give Give { get; set; }
     public Prize Prize { get; set; }
+    public string PrizeName { get; internal set; }
 }
 
 
@@ -24,10 +25,12 @@ public class PromoCodeFilter
 {
     public string? Search { get; set; }
     public int? GiveId { get; set; }
+    public long? UserChatId { get; set; }
     public string? Status { get; set; }
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 25;
     public int? OrderId { get; internal set; }
+    public string? PrizeName { get; internal set; }
 }
 
 public class PromoCodeResult

@@ -1,13 +1,35 @@
-﻿@{
-    ViewData["Title"] = "Массовая рассылка";
-}
+﻿<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📢 Массовая рассылка сообщений</h2>
+        <a href="@Url.Action("BroadcastHistory")" class="btn btn-outline-secondary">
+            <i class="fas fa-history"></i> История рассылок
+        </a>
+    </div>
 
-<div class="container py-4">
-    <h2 class="mb-4">📢 Массовая рассылка сообщений</h2>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @ViewBag.ErrorMessage
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
 
     <div class="card">
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="language">Язык рассылки</label>
+                    <select class="form-control" id="language" name="language" required>
+                        <option value="all">Всем пользователям</option>
+                        <option value="ru">Русский язык</option>
+                        <option value="tj">Таджикский язык</option>
+                        <option value="uz">Узбекский язык</option>
+                        <option value="en">Английский язык</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="message">Текст сообщения</label>
                     <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
@@ -16,13 +38,17 @@
                 <div class="form-group">
                     <label for="image">Изображение (опционально)</label>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" name="image">
-                        <label class="custom-file-label" for="image">Выберите файл</label>
+                        <input type="file" class="custom-file-input" id="image" name="image"
+                               accept=".jpg,.jpeg,.png,.gif,.webp">
+                        <label class="custom-file-label" for="image">Выберите файл (JPG, PNG, GIF, WebP до 5MB)</label>
                     </div>
+                    <small class="form-text text-muted">
+                        Поддерживаемые форматы: JPG, JPEG, PNG, GIF, WebP. Максимальный размер: 5MB.
+                    </small>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Отправить всем пользователям
+                    <i class="fas fa-paper-plane"></i> Отправить
                 </button>
             </form>
         </div>
@@ -33,9 +59,14 @@
     <script>
         // Показываем имя выбранного файла
         document.querySelector('.custom-file-input').addEventListener('change', function(e) {
-            var fileName = document.getElementById("image").files[0].name;
+            var fileName = document.getElementById("image").files[0]?.name || "Выберите файл";
             var nextSibling = e.target.nextElementSibling;
             nextSibling.innerText = fileName;
+        });
+
+        // Плавное скрытие алерта
+        $(document).ready(function() {
+            $(".alert").alert();
         });
     </script>
 }

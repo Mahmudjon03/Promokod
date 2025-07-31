@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>«ИМКОН» - Акция</title>
+    <title>«ИМКОН» - Шоу</title>
 
     <!-- Font Awesome for fas fa-* icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -13,66 +13,56 @@
     <!-- Bootstrap 5.3.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap 5.3.3 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom CSS -->
+    <link href="~/css/site-styles.css" rel="stylesheet" />
 
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <style>
-        body {
-            scroll-behavior: smooth;
-        }
-
-        .flag-btn img {
-            width: 32px;
-        }
-    </style>
-
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
-<body>
-    <header class="bg-primary text-white py-2">
+<body class="d-flex flex-column min-vh-100">
+    <header class="bg-dark text-white py-2">
         <div class="container d-flex justify-content-between align-items-center">
-            <h1 class="h4 m-0">
-                <a href="/Site/Index" class="text-white text-decoration-none">
-                    «ИМКОН» - Акция
+            <div class="d-flex align-items-center">
+                <a href="/Site/Index" class="d-flex align-items-center text-white text-decoration-none">
+                    <img src="~/images/logo.png" alt="«ИМКОН ШОУ»" class="logo-img me-2">
+                    <h1 class="h3 m-0 text-uppercase logo-title">«ИМКОН ШОУ»</h1>
                 </a>
-            </h1>
+            </div>
 
             <div class="d-flex align-items-center">
-                <a href="/Site/Statistics" class="btn btn-outline-light me-3">
-                    <i class="bi bi-bar-chart"></i> Статистика
-                </a>
-                <div class="language-switcher text-end">
-                    <a href="/Site/SetLanguage?culture=ru&returnUrl=@Context.Request.Path">
-                        <img src="~/images/flag-ru.png" alt="Русский" width="32" />
+                <div class="language-switcher">
+                    <a href="/Site/SetLanguage?culture=ru&returnUrl=@Context.Request.Path"
+                       class="@(CultureInfo.CurrentUICulture.Name.StartsWith("ru") ? "active" : "")"
+                       title="Русский">
+                        <img src="~/images/flag-ru.png" alt="Русский" />
                     </a>
-                    <a href="/Site/SetLanguage?culture=tg&returnUrl=@Context.Request.Path" class="ms-2">
-                        <img src="~/images/flag-tj.png" alt="Тоҷикӣ" width="32" />
+                    <a href="/Site/SetLanguage?culture=tg&returnUrl=@Context.Request.Path"
+                       class="@(CultureInfo.CurrentUICulture.Name.StartsWith("tg") ? "active" : "")"
+                       title="Тоҷикӣ">
+                        <img src="~/images/flag-tj.png" alt="Тоҷикӣ" />
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <main>
+    <main class="flex-grow-1">
         @RenderBody()
     </main>
 
-    <footer class="bg-light text-center py-4 mt-5">
+    <footer class="bg-light text-center py-4 mt-auto">
         &copy; 2025 Магазин «Имкон». Все права защищены.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         AOS.init({ once: true });
     </script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

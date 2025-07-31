@@ -53,19 +53,25 @@ public class DatabaseService
         return chatIds;
     }
 
-    // Добавление нового пользователя
-    public async Task RegisterUserAsync(string name, string phone, long chatId)
+    public async Task<List<long>> GetUserChatIdsByLanguageAsync(string language)
     {
-        const string sql = @"
-            INSERT INTO users (name, phone, role, chat_id)
-            VALUES (@name, @phone, 'client', @chatId)";
+        var chatIds = new List<long>();
+        const string sql = "SELECT DISTINCT chat_id FROM users WHERE language = @language";
+
         using var conn = new MySqlConnection(_connectionString);
         await conn.OpenAsync();
+
         using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@name", name);
-        cmd.Parameters.AddWithValue("@phone", phone);
-        cmd.Parameters.AddWithValue("@chatId", chatId);
-        await cmd.ExecuteNonQueryAsync();
+        cmd.Parameters.AddWithValue("@language", language);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            chatIds.Add(reader.GetInt64("chat_id"));
+        }
+
+        return chatIds;
     }
 
     public async Task<User?> GetUserByChatIdAsync(long chatId)
@@ -84,55 +90,39 @@ public class DatabaseService
                 ChatId = reader.GetInt64("chat_id"),
                 Language = reader.GetString("language"),
                 Name = reader.GetString("name"),
-                Phone = reader.GetString("phone"),
+                Phone = reader.IsDBNull(reader.GetOrdinal("phone"))
+                    ? string.Empty
+                    : reader.GetString("phone"),
+                PersonalPhone = reader.IsDBNull(reader.GetOrdinal("personal_phone"))
+                    ? string.Empty
+                    : reader.GetString("personal_phone")
             };
         }
-        return null;
-    }
-
-    public async Task<User?> GetUserByIdAsync(int userId)
-    {
-        const string sql = @"
-                SELECT id, name, phone, language, chat_id 
-                FROM users 
-                WHERE id = @userId";
-
-        using var conn = new MySqlConnection(_connectionString);
-        await conn.OpenAsync();
-
-        using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@userId", userId);
-
-        using var reader = await cmd.ExecuteReaderAsync();
-        if (await reader.ReadAsync())
-        {
-            return new User
-            {
-                Name = reader["name"] as string ?? string.Empty,
-                Phone = reader["phone"] as string,
-                Language = reader["language"] as string ?? "tj",
-                ChatId = reader.GetInt64("chat_id")
-            };
-        }
-
         return null;
     }
 
     // Обновление данных пользователя
-    public async Task UpdateUserAsync(string name, string phone, long chatId)
+    public async Task UpdateUserAsync(string name, string phone, string? personalPhone, long chatId)
     {
         const string sql = @"
             UPDATE users
-            SET name = @name, phone = @phone
+            SET name = @name,
+                phone = @phone,
+                personal_phone = @personalPhone
             WHERE chat_id = @chatId";
+
         using var conn = new MySqlConnection(_connectionString);
         await conn.OpenAsync();
+
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@name", name);
         cmd.Parameters.AddWithValue("@phone", phone);
+        cmd.Parameters.AddWithValue("@personalPhone", personalPhone ?? (object)DBNull.Value);
         cmd.Parameters.AddWithValue("@chatId", chatId);
+
         await cmd.ExecuteNonQueryAsync();
     }
+
 
     // Получение языка пользователя
     public async Task<string> GetUserLanguageAsync(long chatId)
@@ -143,21 +133,6 @@ public class DatabaseService
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@chatId", chatId);
         return (string?)await cmd.ExecuteScalarAsync() ?? "tj";
-    }
-
-    // Установка языка пользователя
-    public async Task SetUserLanguageAsync(long chatId, string lang)
-    {
-        const string sql = @"
-            INSERT INTO users (chat_id, language)
-            VALUES (@chatId, @lang)
-            ON DUPLICATE KEY UPDATE language = @lang";
-        using var conn = new MySqlConnection(_connectionString);
-        await conn.OpenAsync();
-        using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@chatId", chatId);
-        cmd.Parameters.AddWithValue("@lang", lang);
-        await cmd.ExecuteNonQueryAsync();
     }
 
     // Создание заказа
@@ -176,12 +151,12 @@ public class DatabaseService
     }
 
 
-    internal async Task<Order?> GetOrderByIdAsync(int id)
+    public async Task<Order?> GetOrderByIdAsync(int id)
     {
         const string sql = @"
-        SELECT id, order_id, amount, date
-        FROM orders
-        WHERE id = @id";
+            SELECT id, order_id, amount, date
+            FROM orders
+            WHERE id = @id";
 
         using var conn = new MySqlConnection(_connectionString);
         await conn.OpenAsync();
@@ -203,8 +178,6 @@ public class DatabaseService
 
         return null;
     }
-
-
 
     // Добавление промокода
     public async Task AddPromoCodeAsync(long userChatId, int orderId, string code, int giveId)
@@ -244,7 +217,7 @@ public class DatabaseService
             {
                 Id = reader.GetInt32("id"),
                 Code = reader.GetString("code"),
-                UserChatId = reader.GetInt32("user_chat_id"),
+                UserChatId = reader.GetInt64("user_chat_id"),
                 OrderId = reader.GetInt32("order_id"),
                 GiveId = reader.GetInt32("give_id"),
                 Status = reader.GetString("status"),
@@ -365,7 +338,7 @@ public class DatabaseService
             {
                 Id = reader.GetInt32("id"),
                 Code = reader.GetString("code"),
-                UserChatId = reader.GetInt32("user_chat_id"),
+                UserChatId = reader.GetInt64("user_chat_id"),
                 OrderId = reader.GetInt32("order_id"),
                 GiveId = reader.GetInt32("give_id"),
                 Status = reader.GetString("status"),
@@ -442,27 +415,37 @@ public class DatabaseService
         var result = new PromoCodeResult();
         var promoCodes = new List<PromoCodeViewModel>();
 
-        // Базовый SQL запрос
         var sql = new StringBuilder(@"
         SELECT 
-            pc.id, pc.code, pc.status, pc.submitted_at,
+            pc.id, 
+            pc.code, 
+            pc.status, 
+            pc.submitted_at,
             u.name AS user_name,
             g.name AS give_name,
-            o.order_id
+            o.order_id,
+            p.name AS prize_name
         FROM promo_codes pc
         LEFT JOIN users u ON pc.user_chat_id = u.chat_id
         LEFT JOIN gives g ON pc.give_id = g.id
         LEFT JOIN orders o ON o.id = pc.order_id
+        LEFT JOIN winners w ON w.promo_code_id = pc.id
+        LEFT JOIN prizes p ON w.prize_id = p.id
         WHERE 1=1");
 
-        // Параметры для запроса
         var parameters = new List<MySqlParameter>();
 
-        // Добавляем условия фильтрации
+        // Условия фильтрации
         if (!string.IsNullOrEmpty(filter.Search))
         {
             sql.Append(" AND pc.code LIKE @search");
             parameters.Add(new MySqlParameter("@search", $"%{filter.Search}%"));
+        }
+
+        if (filter.UserChatId.HasValue)
+        {
+            sql.Append(" AND u.chat_id = @userId");
+            parameters.Add(new MySqlParameter("@userId", filter.UserChatId.Value));
         }
 
         if (filter.OrderId.HasValue)
@@ -483,19 +466,31 @@ public class DatabaseService
             parameters.Add(new MySqlParameter("@status", filter.Status));
         }
 
-        // Получаем общее количество записей
-        var countSql = new StringBuilder(@"
-    SELECT COUNT(*) 
-    FROM promo_codes pc
-    LEFT JOIN users u ON pc.user_chat_id = u.chat_id
-    LEFT JOIN gives g ON pc.give_id = g.id
-    LEFT JOIN orders o ON o.id = pc.order_id
-    WHERE 1=1");
+        if (!string.IsNullOrEmpty(filter.PrizeName))
+        {
+            sql.Append(" AND p.name = @prize_name");
+            parameters.Add(new MySqlParameter("@prize_name", filter.PrizeName));
+        }
 
-        // Добавляем те же условия фильтрации для countSql
+        // Подсчёт общего количества
+        var countSql = new StringBuilder(@"
+        SELECT COUNT(DISTINCT pc.id)
+        FROM promo_codes pc
+        LEFT JOIN users u ON pc.user_chat_id = u.chat_id
+        LEFT JOIN gives g ON pc.give_id = g.id
+        LEFT JOIN orders o ON o.id = pc.order_id
+        LEFT JOIN winners w ON w.promo_code_id = pc.id
+        LEFT JOIN prizes p ON w.prize_id = p.id
+        WHERE 1=1");
+
         if (!string.IsNullOrEmpty(filter.Search))
         {
             countSql.Append(" AND pc.code LIKE @search");
+        }
+
+        if (filter.UserChatId.HasValue)
+        {
+            countSql.Append(" AND u.chat_id = @userId");
         }
 
         if (filter.OrderId.HasValue)
@@ -513,49 +508,65 @@ public class DatabaseService
             countSql.Append(" AND pc.status = @status");
         }
 
-        using (var conn = new MySqlConnection(_connectionString))
+        if (!string.IsNullOrEmpty(filter.PrizeName))
         {
-            await conn.OpenAsync();
+            countSql.Append(" AND p.name = @prize_name");
+        }
 
-            // Получаем общее количество
-            using (var countCmd = new MySqlCommand(countSql.ToString(), conn))
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        // Выполняем подсчёт количества
+        using (var countCmd = new MySqlCommand(countSql.ToString(), conn))
+        {
+            if (!string.IsNullOrEmpty(filter.Search))
+                countCmd.Parameters.AddWithValue("@search", $"%{filter.Search}%");
+
+            if (filter.UserChatId.HasValue)
+                countCmd.Parameters.AddWithValue("@userId", filter.UserChatId.Value);
+
+            if (filter.OrderId.HasValue)
+                countCmd.Parameters.AddWithValue("@order_id", filter.OrderId.Value);
+
+            if (filter.GiveId.HasValue)
+                countCmd.Parameters.AddWithValue("@give_id", filter.GiveId.Value);
+
+            if (!string.IsNullOrEmpty(filter.Status))
+                countCmd.Parameters.AddWithValue("@status", filter.Status);
+
+            if (!string.IsNullOrEmpty(filter.PrizeName))
+                countCmd.Parameters.AddWithValue("@prize_name", filter.PrizeName);
+
+            result.TotalCount = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
+        }
+
+        // Сортировка и пагинация
+        sql.Append(" GROUP BY pc.id, pc.code, pc.status, pc.submitted_at, u.name, g.name, o.order_id, p.name");
+        sql.Append(" ORDER BY pc.submitted_at DESC");
+        sql.Append(" LIMIT @offset, @page_size");
+
+        parameters.Add(new MySqlParameter("@offset", (filter.Page - 1) * filter.PageSize));
+        parameters.Add(new MySqlParameter("@page_size", filter.PageSize));
+
+        // Выполняем основной запрос
+        using (var cmd = new MySqlCommand(sql.ToString(), conn))
+        {
+            cmd.Parameters.AddRange(parameters.ToArray());
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                if (!string.IsNullOrEmpty(filter.Search))
-                    countCmd.Parameters.AddWithValue("@search", $"%{filter.Search}%");
-                if (filter.OrderId.HasValue)
-                    countCmd.Parameters.AddWithValue("@order_id", filter.OrderId.Value);
-                if (filter.GiveId.HasValue)
-                    countCmd.Parameters.AddWithValue("@give_id", filter.GiveId.Value);
-                if (!string.IsNullOrEmpty(filter.Status))
-                    countCmd.Parameters.AddWithValue("@status", filter.Status);
-
-                result.TotalCount = Convert.ToInt32(await countCmd.ExecuteScalarAsync());
-            }
-
-            // Добавляем сортировку и пагинацию
-            sql.Append(" ORDER BY pc.submitted_at DESC LIMIT @offset, @page_size");
-            parameters.Add(new MySqlParameter("@offset", (filter.Page - 1) * filter.PageSize));
-            parameters.Add(new MySqlParameter("@page_size", filter.PageSize));
-
-            // Получаем данные
-            using (var cmd = new MySqlCommand(sql.ToString(), conn))
-            {
-                cmd.Parameters.AddRange(parameters.ToArray());
-
-                using var reader = await cmd.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
+                promoCodes.Add(new PromoCodeViewModel
                 {
-                    promoCodes.Add(new PromoCodeViewModel
-                    {
-                        Id = reader.GetInt32("id"),
-                        Code = reader.GetString("code"),
-                        OrderId = reader.GetInt32("order_id"),
-                        UserName = reader.IsDBNull(reader.GetOrdinal("user_name")) ? "" : reader.GetString("user_name"),
-                        GiveName = reader.GetString("give_name"),
-                        Status = reader.GetString("status"),
-                        SubmittedAt = reader.GetDateTime("submitted_at")
-                    });
-                }
+                    Id = reader.GetInt32("id"),
+                    Code = reader.GetString("code"),
+                    OrderId = reader.IsDBNull(reader.GetOrdinal("order_id")) ? 0 : reader.GetInt32("order_id"),
+                    UserName = reader.IsDBNull(reader.GetOrdinal("user_name")) ? "" : reader.GetString("user_name"),
+                    GiveName = reader.IsDBNull(reader.GetOrdinal("give_name")) ? "" : reader.GetString("give_name"),
+                    Status = reader.GetString("status"),
+                    SubmittedAt = reader.GetDateTime("submitted_at"),
+                    PrizeName = reader.IsDBNull(reader.GetOrdinal("prize_name")) ? "" : reader.GetString("prize_name")
+                });
             }
         }
 
@@ -563,41 +574,53 @@ public class DatabaseService
         return result;
     }
 
-
-    public async Task<List<UserPromoCodeDto>> GetPromoCodeDisplayListAsync(long chatId)
+    public async Task<List<PromoCodeViewModel>> GetAllPromoCodesViewModelAsync()
     {
-        const string sql = @"
-                SELECT 
-                    pc.code AS Code,
-                    pc.submitted_at AS IssuedAt,
-                    o.amount AS OrderPrice
-                FROM promo_codes pc
-                INNER JOIN users u ON pc.user_chat_id = u.chat_id
-                INNER JOIN orders o ON pc.order_id = o.id
-                WHERE u.chat_id = @chatId
-                ORDER BY pc.submitted_at DESC";
+        var promoCodes = new List<PromoCodeViewModel>();
 
-
-        var result = new List<UserPromoCodeDto>();
+        var sql = @"
+            SELECT 
+                pc.id, pc.code, pc.status, pc.submitted_at,
+                u.name AS user_name,
+                g.name AS give_name,
+                o.order_id,
+                (
+                    SELECT p.name 
+                    FROM winners w
+                    JOIN prizes p ON w.prize_id = p.id
+                    WHERE w.promo_code_id = pc.id
+                    LIMIT 1
+                ) AS prize_name
+            FROM promo_codes pc
+            LEFT JOIN users u ON pc.user_chat_id = u.chat_id
+            LEFT JOIN gives g ON pc.give_id = g.id
+            LEFT JOIN orders o ON o.id = pc.order_id
+            ORDER BY pc.submitted_at DESC";
 
         using var conn = new MySqlConnection(_connectionString);
         await conn.OpenAsync();
-        using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@chatId", chatId);
 
+        using var cmd = new MySqlCommand(sql, conn);
         using var reader = await cmd.ExecuteReaderAsync();
+
         while (await reader.ReadAsync())
         {
-            result.Add(new UserPromoCodeDto
+            promoCodes.Add(new PromoCodeViewModel
             {
-                Code = reader.GetString("Code"),
-                IssuedAt = reader.GetDateTime("IssuedAt"),
-                OrderPrice = reader.GetDouble("OrderPrice")
+                Id = reader.GetInt32("id"),
+                Code = reader.GetString("code"),
+                OrderId = reader.GetInt32("order_id"),
+                UserName = reader.IsDBNull(reader.GetOrdinal("user_name")) ? "" : reader.GetString("user_name"),
+                GiveName = reader.IsDBNull(reader.GetOrdinal("give_name")) ? "" : reader.GetString("give_name"),
+                Status = reader.GetString("status"),
+                SubmittedAt = reader.GetDateTime("submitted_at"),
+                PrizeName = reader.IsDBNull(reader.GetOrdinal("prize_name")) ? "" : reader.GetString("prize_name")
             });
         }
 
-        return result;
+        return promoCodes;
     }
+
 
 
     // Получение настроек промо
@@ -709,6 +732,41 @@ public class DatabaseService
         return adminChatIds;
     }
 
+    public async Task<Give?> GetRelevantGiveAsync()
+    {
+        const string sql = @"
+        SELECT id, name, start_date, end_date, is_completed
+        FROM gives 
+        WHERE is_completed = 0
+        ORDER BY 
+            CASE 
+                WHEN start_date <= NOW() AND end_date >= NOW() THEN 1  -- активные
+                WHEN start_date > NOW() THEN 2  -- будущие
+                ELSE 3  -- прошедшие (но не завершенные)
+            END,
+            start_date ASC
+        LIMIT 1";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+        using var cmd = new MySqlCommand(sql, conn);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            return new Give
+            {
+                Id = reader.GetInt32("id"),
+                Name = reader.GetString("name"),
+                StartDate = reader.GetDateTime("start_date"),
+                EndDate = reader.GetDateTime("end_date"),
+                IsCompleted = reader.GetBoolean("is_completed")
+            };
+        }
+
+        return null;
+    }
+
     public async Task<Give?> GetFirstActiveGiveAsync()
     {
         const string sql = @"
@@ -736,6 +794,23 @@ public class DatabaseService
         }
 
         return null;
+    }
+
+    public async Task<int> ExpirePromoCodesByGiveIdAsync(int giveId)
+    {
+        const string sql = @"
+        UPDATE promo_codes
+        SET status = 'expired'
+        WHERE give_id = @GiveId AND status = 'active'";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@GiveId", giveId);
+
+        int rowsAffected = await cmd.ExecuteNonQueryAsync();
+        return rowsAffected;
     }
 
     public async Task<int?> GetFirstActiveGiveIdAsync()
@@ -968,22 +1043,23 @@ public class DatabaseService
         await connection.OpenAsync();
 
         var query = @"
-                SELECT 
-                    g.id AS GiveawayId,
-                    g.name AS GiveawayName,
-                    g.start_date,
-                    g.end_date,
-                    g.is_completed,
-                    p.id AS PrizeId,
-                    p.name AS PrizeName,
-                    u.name AS WinnerName
-                FROM gives g
-                LEFT JOIN prizes p ON p.give_id = g.id
-                LEFT JOIN winners w ON w.prize_id = p.id
-                LEFT JOIN promo_codes pc ON pc.id = w.promo_code_id
-                LEFT JOIN users u ON u.chat_id = pc.user_chat_id
-                ORDER BY g.start_date DESC, g.id, p.id;
-            ";
+                    SELECT 
+            g.id AS GiveawayId,
+            g.name AS GiveawayName,
+            g.start_date,
+            g.end_date,
+            g.is_completed,
+            p.id AS PrizeId,
+            p.name AS PrizeName,
+            p.image_path,
+            pc.code AS PromoCode,
+            u.name AS WinnerName
+        FROM gives g
+        LEFT JOIN prizes p ON p.give_id = g.id
+        LEFT JOIN winners w ON w.prize_id = p.id
+        LEFT JOIN promo_codes pc ON pc.id = w.promo_code_id
+        LEFT JOIN users u ON u.chat_id = pc.user_chat_id
+        ORDER BY g.start_date DESC, g.id, p.id;";
 
         using var cmd = new MySqlCommand(query, connection);
         using var reader = await cmd.ExecuteReaderAsync();
@@ -1011,6 +1087,12 @@ public class DatabaseService
             if (!reader.IsDBNull(reader.GetOrdinal("PrizeName")))
             {
                 var prizeName = reader.GetString("PrizeName");
+                var promoCode = reader.IsDBNull(reader.GetOrdinal("PromoCode"))
+                    ? "-"
+                    : reader.GetString("PromoCode");
+                var imagePath = reader.IsDBNull(reader.GetOrdinal("image_path"))
+                    ? ""
+                    : reader.GetString("image_path");
                 var winnerName = reader.IsDBNull(reader.GetOrdinal("WinnerName"))
                     ? "-"
                     : reader.GetString("WinnerName");
@@ -1018,7 +1100,9 @@ public class DatabaseService
                 giveaway.Winners.Add(new PrizeWinner
                 {
                     PrizeName = prizeName,
-                    WinnerName = winnerName
+                    WinnerName = winnerName,
+                    PromoCode = promoCode,
+                    ImagePath = imagePath
                 });
             }
         }
@@ -1344,4 +1428,319 @@ public class DatabaseService
         await cmd.ExecuteNonQueryAsync();
     }
 
+    public async Task SaveBroadcastLogAsync(BroadcastLog log)
+    {
+        const string sql = @"
+        INSERT INTO broadcast_logs (message, photo_url, success_count, total_count, sent_at, language)
+        VALUES (@message, @photoUrl, @successCount, @totalCount, @sentAt, @language)";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@message", log.Message);
+        cmd.Parameters.AddWithValue("@photoUrl", (object?)log.PhotoUrl ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@successCount", log.SuccessCount);
+        cmd.Parameters.AddWithValue("@totalCount", log.TotalCount);
+        cmd.Parameters.AddWithValue("@sentAt", log.SentAt);
+        cmd.Parameters.AddWithValue("@language", log.Language);
+
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    public async Task<List<BroadcastLog>> GetBroadcastLogsAsync()
+    {
+        const string sql = "SELECT * FROM broadcast_logs ORDER BY sent_at DESC";
+        var logs = new List<BroadcastLog>();
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            logs.Add(new BroadcastLog
+            {
+                Id = reader.GetInt32("id"),
+                Message = reader.GetString("message"),
+                PhotoUrl = reader["photo_url"] as string,
+                SuccessCount = reader.GetInt32("success_count"),
+                TotalCount = reader.GetInt32("total_count"),
+                SentAt = reader.GetDateTime("sent_at"),
+                Language = reader.GetString("language")
+            });
+        }
+
+        return logs;
+    }
+
+
+    public async Task<List<UserPromoDetailsViewModel>> GetUserPromoDetailsAsync(long chatId)
+    {
+        const string sql = @"
+        SELECT 
+            pc.code AS Code,
+            pc.status AS Status,
+            pc.submitted_at AS SubmittedAt,
+            o.order_id AS OrderNumber,
+            o.amount AS OrderAmount,
+            o.date AS OrderDate,
+            g.name AS GiveName
+        FROM promo_codes pc
+        INNER JOIN orders o ON pc.order_id = o.id
+        INNER JOIN gives g ON pc.give_id = g.id
+        WHERE pc.user_chat_id = @chatId
+        ORDER BY pc.submitted_at DESC";
+
+        var list = new List<UserPromoDetailsViewModel>();
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@chatId", chatId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            list.Add(new UserPromoDetailsViewModel
+            {
+                Code = reader.GetString("Code"),
+                Status = reader.GetString("Status"),
+                SubmittedAt = reader.GetDateTime("SubmittedAt"),
+                OrderNumber = reader.GetInt32("OrderNumber"),
+                OrderAmount = reader.GetDouble("OrderAmount"),
+                OrderDate = reader.GetDateTime("OrderDate"),
+                GiveName = reader.GetString("GiveName")
+            });
+        }
+
+        return list;
+    }
+
+    public async Task<List<User>> SearchUsersAsync(string searchTerm, int limit = 20)
+    {
+        var users = new List<User>();
+        const string sql = @"
+        SELECT chat_id, name, phone
+        FROM users
+        WHERE name LIKE @search OR phone LIKE @search
+        LIMIT @limit";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@search", $"%{searchTerm}%");
+        cmd.Parameters.AddWithValue("@limit", limit);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            users.Add(new User
+            {
+                ChatId = reader.GetInt64("chat_id"),
+                Name = reader.IsDBNull("name") ? null : reader.GetString("name"),
+                Phone = reader.IsDBNull("phone") ? null : reader.GetString("phone")
+            });
+        }
+
+        return users;
+    }
+
+    public async Task<(List<UserViewModel> Users, int TotalCount)> GetFilteredUserViewModelsAsync(UserFilter filter)
+    {
+        const string baseSql = @"
+        WITH user_promocodes AS (
+            SELECT 
+                p.user_chat_id,
+                COUNT(DISTINCT p.id) AS promo_code_count
+            FROM promo_codes p
+            GROUP BY p.user_chat_id
+        ),
+        user_orders AS (
+            SELECT 
+                p.user_chat_id,
+                COUNT(DISTINCT o.id) AS order_count,
+                SUM(DISTINCT o.amount) AS total_order_amount
+            FROM orders o
+            JOIN promo_codes p ON o.id = p.order_id
+            GROUP BY p.user_chat_id
+        )
+        SELECT SQL_CALC_FOUND_ROWS
+            u.chat_id,
+            u.name,
+            u.phone,
+            u.personal_phone,
+            u.language,
+            u.registered_at,
+            COALESCE(up.promo_code_count, 0) AS promo_code_count,
+            COALESCE(uo.order_count, 0) AS order_count,
+            COALESCE(uo.total_order_amount, 0) AS total_order_amount
+        FROM users u
+        LEFT JOIN user_promocodes up ON up.user_chat_id = u.chat_id
+        LEFT JOIN user_orders uo ON uo.user_chat_id = u.chat_id
+        WHERE 1=1";
+
+        var sql = new StringBuilder(baseSql);
+
+        if (!string.IsNullOrEmpty(filter.Search))
+        {
+            sql.Append(@"
+            AND (u.name LIKE @search 
+                OR u.phone LIKE @search 
+                OR u.personal_phone LIKE @search)");
+        }
+
+        // Динамическая сортировка
+        var safeSortColumns = new Dictionary<string, string>
+    {
+        { "order_count", "uo.order_count" },
+        { "total_order_amount", "uo.total_order_amount" },
+        { "promo_code_count", "up.promo_code_count" },
+        { "chat_id", "u.chat_id" }
+    };
+
+        var sortColumn = safeSortColumns.ContainsKey(filter.SortBy)
+            ? safeSortColumns[filter.SortBy]
+            : "u.chat_id";
+
+        var sortDir = filter.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+            ? "ASC"
+            : "DESC";
+
+        sql.Append($@"
+        ORDER BY {sortColumn} {sortDir}
+        LIMIT @offset, @pageSize;
+        SELECT FOUND_ROWS();");
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql.ToString(), conn);
+        if (!string.IsNullOrEmpty(filter.Search))
+            cmd.Parameters.AddWithValue("@search", $"%{filter.Search}%");
+
+        cmd.Parameters.AddWithValue("@offset", (filter.Page - 1) * filter.PageSize);
+        cmd.Parameters.AddWithValue("@pageSize", filter.PageSize);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        var users = new List<UserViewModel>();
+
+        while (await reader.ReadAsync())
+        {
+            users.Add(new UserViewModel
+            {
+                ChatId = reader.GetInt64("chat_id"),
+                Name = reader.GetString("name"),
+                Phone = reader.GetString("phone"),
+                PersonalPhone = reader.IsDBNull("personal_phone") ? null : reader.GetString("personal_phone"),
+                Language = reader.GetString("language"),
+                RegisteredAt = reader.GetDateTime("registered_at"),
+                PromoCodeCount = reader.GetInt32("promo_code_count"),
+                OrderCount = reader.GetInt32("order_count"),
+                TotalOrderAmount = reader.GetDouble("total_order_amount")
+            });
+        }
+
+        var totalCount = 0;
+        if (await reader.NextResultAsync() && await reader.ReadAsync())
+        {
+            totalCount = reader.GetInt32(0);
+        }
+
+        return (users, totalCount);
+    }
+
+    public async Task<List<PromoCode>> GetPromoCodesByUserAsync(long chatId)
+    {
+        var promoCodes = new List<PromoCode>();
+
+        const string sql = @"
+            SELECT id, code, give_id, status, submitted_at, user_chat_id
+            FROM promo_codes
+            WHERE user_chat_id = @chatId
+            ORDER BY submitted_at DESC";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@chatId", chatId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            promoCodes.Add(new PromoCode
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("id")),
+                Code = reader.GetString(reader.GetOrdinal("code")),
+                GiveId = reader.GetInt32(reader.GetOrdinal("give_id")),
+                Status = reader.GetString(reader.GetOrdinal("status")),
+                SubmittedAt = reader.GetDateTime(reader.GetOrdinal("submitted_at")),
+                UserChatId = reader.GetInt64(reader.GetOrdinal("user_chat_id"))
+            });
+        }
+
+        return promoCodes;
+    }
+
+
+    public async Task<List<Order>> GetOrdersByUserAsync(long chatId)
+    {
+        var orders = new List<Order>();
+
+        const string sql = @"
+            SELECT DISTINCT o.id, o.order_id, o.amount, o.date
+                FROM orders o
+                INNER JOIN promo_codes p ON o.id = p.order_id
+                WHERE p.user_chat_id = @chatId
+                ORDER BY o.date DESC";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@chatId", chatId);
+
+        using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            var order = new Order
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("id")),
+                OrderId = reader.GetInt32(reader.GetOrdinal("order_id")),
+                Amount = reader.GetDouble(reader.GetOrdinal("amount")),
+                Date = reader.GetDateTime(reader.GetOrdinal("date"))
+            };
+
+            orders.Add(order);
+        }
+
+        return orders;
+    }
+
+    public async Task<List<string>> GetAllPrizeNamesAsync()
+    {
+        var prizeNames = new List<string>();
+
+        const string sql = @"
+        SELECT DISTINCT name 
+        FROM prizes
+        ORDER BY name";
+
+        using var conn = new MySqlConnection(_connectionString);
+        await conn.OpenAsync();
+
+        using var cmd = new MySqlCommand(sql, conn);
+        using var reader = await cmd.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            prizeNames.Add(reader.GetString("name"));
+        }
+
+        return prizeNames;
+    }
 }

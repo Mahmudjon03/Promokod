@@ -1,0 +1,103 @@
+﻿@using PromoRandom.ViewModels
+@model List<UserPromoDetailsViewModel>
+
+@{
+    ViewData["Title"] = "Ваши промокоды";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+
+    // Текстовое обозначение статуса
+    string GetStatusText(string status) => status switch
+    {
+        "active" => "Активный",
+        "won" => "Выигран",
+        "expired" => "Истёк",
+        "disabled" => "Отключён",
+        _ => "Неизвестно"
+    };
+
+    // Bootstrap-класс границы/бейджа по статусу
+    string GetStatusClass(string status) => status switch
+    {
+        "active" => "warning",
+        "won" => "success",
+        "expired" => "danger",
+        "disabled" => "secondary",
+        _ => "dark"
+    };
+}
+
+<style>
+    /* Плавный подъём карточки на ховере */
+    .promo-card {
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .promo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,0.15);
+        }
+</style>
+
+<div class="container py-4">
+    <h3 class="mb-4 text-center">Ваши промокоды</h3>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            У вас пока нет промокодов.
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var promo in Model)
+            {
+                var sc = GetStatusClass(promo.Status);
+                <div class="col-12">
+                    <div class="card promo-card border-@sc shadow-sm">
+                        <div class="card-body">
+                            <!-- Код + копирование -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="card-title mb-0">
+                                    <span class="me-2">@promo.Code</span>
+                                    <button class="btn btn-outline-@sc btn-sm"
+                                            onclick="navigator.clipboard.writeText('@promo.Code')"
+                                            title="Скопировать код">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </h5>
+                                <span class="badge bg-@sc">
+                                    @GetStatusText(promo.Status)
+                                </span>
+                            </div>
+
+                            <!-- Список деталей -->
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item p-2">
+                                    <small class="text-muted">Получен:</small>
+                                    <div>@promo.SubmittedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                                </li>
+                                <li class="list-group-item p-2">
+                                    <small class="text-muted">Заказ №</small>
+                                    <div class="fw-semibold">#@promo.OrderNumber</div>
+                                </li>
+                                <li class="list-group-item p-2">
+                                    <small class="text-muted">Сумма заказа</small>
+                                    <div class="fw-semibold">@promo.OrderAmount.ToString("F2")</div>
+                                </li>
+                                <li class="list-group-item p-2">
+                                    <small class="text-muted">Дата заказа</small>
+                                    <div>@promo.OrderDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                </li>
+                                <li class="list-group-item p-2">
+                                    <small class="text-muted">Розыгрыш</small>
+                                    <div>@promo.GiveName</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
